@@ -11,7 +11,6 @@ require('./database/mongo_connect');
 
 const authRoutes = require("./routes/userRoutes");
 
-
 app.use('/static/images', express.static('static/images'));
 app.use(express.static('front/build'));
 
