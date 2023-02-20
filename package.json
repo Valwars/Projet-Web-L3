@@ -1,11 +1,18 @@
 {
-  "name": "projet-web-l3",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "projet-web-l3",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node server.js",
+        "back": "nodemon server.js",
+        "front": "cd front && npm run start"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "mongoose": "^6.9.2",
+        "nodemon": "^2.0.20"
+    }
 }
