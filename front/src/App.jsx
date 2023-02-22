@@ -6,17 +6,29 @@ import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 
 function App() {
+  // les const de types[x, setX] = useState() :
+  // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
+
+  //  const user -> représente l'utilisateur courant et ses données.
   const [user, setUser] = useState(undefined);
+
+  //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(undefined);
+
+  //  const dataFetchedRef -> permet de vérifier que on fetch les data une seule fois.
   const dataFetchedRef = useRef(false);
 
   // GET USER DATA
+  // userEffect permet d'exécuter du code à chaque chargement du composant, ou en fonction de si la variable
+  // mis dans le ,[] est modifié ou pas.
+
   useEffect(() => {
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
     fetchData();
   }, []);
 
+  //  const fetchData -> fonction qui récupères les données utilisateurs si il est co.
   const fetchData = async () => {
     const token = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
     if (token) {
@@ -29,14 +41,16 @@ function App() {
       });
 
       if (data.status === "ok") {
-        // CONNEXION RÉUSSIE.
+        // CONNEXION RÉUSSIE, on set l'user.
         setUser(data.user);
       }
     }
+    // On affiche.
 
     setDone(true);
   };
 
+  // Le code dans le return est le code html classique qu'affichera le composant.
   return (
     <div className="App">
       {!done ? (
