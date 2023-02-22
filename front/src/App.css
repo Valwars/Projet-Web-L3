@@ -1,0 +1,16 @@
+/* ROOT : variables globale de style. */
+
+:root {
+    --background-color: #FFFFFF;
+    --text-color: rgba(32, 27, 38, 0.87);
+    --main-color: #9A86FD;
+    --secondary-color: #E8DCF7;
+    --big-font: ;
+    --medium-font: ;
+    --little-font: ;
+}
+
+.dark_mode {
+    --background-color: hsl(0, 0%, 8.5%);
+    --text-color: #FFFFFF;
+}
