@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { userRoute } from "./utils/APIRoutes";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
-
+import Home from "./pages/Home";
 function App() {
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -54,7 +54,9 @@ function App() {
     <div className="App">
       {!done ? (
         // mettre un loader.
-        <></>
+        <>
+          <Home></Home>
+        </>
       ) : (
         // reste de l'application.
         <>
