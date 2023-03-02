@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { userRoute } from "./utils/APIRoutes";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
-import Menubar from "./components/Formulaires/menu_bar/menu";
-import Home from "./pages/Home";
 
 function App() {
   // les const de types[x, setX] = useState() :
@@ -56,10 +54,7 @@ function App() {
     <div className="App">
       {!done ? (
         // mettre un loader.
-        <>
-          <Home></Home>
-          <Menubar></Menubar>
-        </>
+        <></>
       ) : (
         // reste de l'application.
         <>

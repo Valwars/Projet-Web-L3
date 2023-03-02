@@ -1,5 +1,7 @@
-const Home = ({ user }) => {
-  return <div className="home_bg"></div>;
+import { useEffect } from "react";
+
+const Home = () => {
+  return <div></div>;
 };
 
 export default Home;
