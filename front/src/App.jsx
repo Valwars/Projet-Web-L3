@@ -15,7 +15,7 @@ function App() {
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
 
   //  const user -> représente l'utilisateur courant et ses données.
-  const [user, setUser] = useState(undefined);
+  const [user, setUser] = useState({});
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);
