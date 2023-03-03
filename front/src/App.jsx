@@ -7,6 +7,9 @@ import axios from "axios";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Swipe from "./pages/Swipe";
+
+import NavBar from "./components/navigation/NavigationBar";
 function App() {
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -60,11 +63,21 @@ function App() {
       ) : (
         // reste de l'application.
         <>
-          <Routes>
-            <Route path="/" element={<Home></Home>}></Route>
-            <Route path="/login" element={<Login></Login>}></Route>
-            <Route path="/register" element={<Register></Register>}></Route>
-          </Routes>
+          {!user ? (
+            <Routes>
+              <Route path="/" element={<Home></Home>}></Route>
+              <Route path="/login" element={<Login></Login>}></Route>
+              <Route path="/register" element={<Register></Register>}></Route>
+            </Routes>
+          ) : (
+            <div className="app-container">
+              <NavBar></NavBar>
+
+              <Routes>
+                <Route path="/" element={<Swipe></Swipe>}></Route>
+              </Routes>
+            </div>
+          )}
         </>
       )}
     </div>

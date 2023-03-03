@@ -41,7 +41,7 @@ const Home = () => {
           conçue pour faciliter la connexion entre les célibataires du monde
           entier.
         </p>
-        <button className="btn" onClick={() => navigate("/login")}>
+        <button className="btn" onClick={() => navigate("/register")}>
           Créer un compte
         </button>{" "}
       </div>
@@ -161,7 +161,7 @@ const Home = () => {
       <div className="trap">
         <h1 className="bigtitle">Sparkly.</h1>
         <h1>Convaincu ?</h1>
-        <button className="btn" onClick={() => navigate("/login")}>
+        <button className="btn" onClick={() => navigate("/register")}>
           Créer un compte
         </button>{" "}
       </div>

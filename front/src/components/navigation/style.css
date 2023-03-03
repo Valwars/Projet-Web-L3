@@ -1,0 +1,68 @@
+.nav {
+    width: 20%;
+    height: 100vh;
+    background: rgba(40, 40, 40, 0);
+    box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.25);
+}
+
+.selected,
+.selected span i {
+    background: linear-gradient(94.3deg, rgba(255, 122, 122, 0.8) 11.07%, rgba(157, 77, 196, 0.8) 92.35%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.content {
+    width: 85%;
+    margin: auto;
+    padding: 25px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav i {
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.pdp-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 80px;
+}
+
+.pdp-container img {
+    width: 55%;
+    border-radius: 100%;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.menu-items-container li {
+    cursor: pointer;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    font-size: clamp(1.8rem, 1.9vw + .1rem, 3rem);
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.menu-items-container li a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu-items-container li span {
+    margin-right: 10px;
+}
+
+.menu-items-container ul {
+    padding: 0;
+    width: 90%;
+    margin: auto;
+}
