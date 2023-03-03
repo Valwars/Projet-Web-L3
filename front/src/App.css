@@ -389,7 +389,7 @@
     }
     
     .bigtitle {
-        background: linear-gradient(94.3deg, rgba(255, 122, 122, 0.95) 11.07%, rgba(157, 77, 196, 0.95) 92.35%);
+        background: linear-gradient(94.3deg, rgba(255, 122, 122, 1) 11.07%, rgba(157, 77, 196, 1) 92.35%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
