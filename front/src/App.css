@@ -35,13 +35,17 @@
         font-weight: 700;
     }
     
-    h2 {
+    h2,
+    label,
+    .l-but {
         font-size: var(--medium-font);
         font-family: FontMedium;
         font-weight: 500;
     }
     
-    p {
+    p,
+    .left button,
+    .redirect div button {
         font-size: var(--little-font);
         font-family: FontRegular;
         font-weight: 400;
@@ -86,6 +90,7 @@
         border: 0;
         padding: 10px 25px;
         margin-left: auto;
+        cursor: pointer;
     }
     
     .present-text .btn {
@@ -318,6 +323,18 @@
         font-size: var(--title);
     }
     
+    .trap {
+        width: 90%;
+        margin: auto;
+        text-align: center;
+        margin-bottom: 10%;
+    }
+    
+    .trap .bigtitle {
+        font-size: clamp(3rem, 7vw + .1rem, 8rem);
+        margin: 0;
+    }
+    
     @media (max-width: 767px) {
         .card-resp {
             display: none;
@@ -336,5 +353,125 @@
         }
         .img-info {
             display: none;
+        }
+    }
+    /* LOGIN ET REGISTER */
+    
+    .page-container {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        height: 100vh;
+    }
+    
+    .page-container .left {
+        width: 45%;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .form-container {
+        min-width: 500px;
+        width: 45%;
+        height: 100%;
+        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.38) 2.24%, rgba(177, 79, 255, 0.38) 104.45%);
+    }
+    
+    .bigtitle {
+        background: linear-gradient(94.3deg, rgba(255, 122, 122, 0.8) 11.07%, rgba(157, 77, 196, 0.8) 92.35%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        opacity: 0.8;
+        font-size: clamp(3rem, 4vw + .1rem, 5rem);
+        transform: rotate(-0.55deg);
+    }
+    
+    .page-container .left main h1 {
+        margin: 0;
+        margin-bottom: 15px;
+    }
+    
+    .page-container .left main {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .page-container .left button {
+        background-color: var(--background-color);
+        color: white;
+        border: 0;
+        border-left: 2px solid var(--main-color);
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .login {
+        width: 80%;
+        margin: auto;
+        position: relative;
+        height: 100%;
+    }
+    
+    .login form {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .login form .labs {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 50px;
+    }
+    
+    .login form .labs label {
+        margin-bottom: 10px;
+    }
+    
+    .login input {
+        background: white;
+        height: 36px;
+        border-radius: 10px;
+        padding-left: 2%;
+        border: 0;
+    }
+    
+    .l-but {
+        display: block;
+        margin-left: auto;
+        color: var(--text-color);
+        background-color: rgba(0, 0, 0, 0);
+        border: 0;
+        cursor: pointer;
+    }
+    
+    .redirect {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .redirect div button {
+        width: fit-content;
+        color: var(--text-color);
+        background-color: rgba(0, 0, 0, 0);
+        border: 0;
+        cursor: pointer;
+        padding: 0;
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 767px) {
+        .left {
+            display: none;
+        }
+        .form-container {
+            width: 100%;
         }
     }

@@ -1,12 +1,15 @@
 import "./form.css";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { useState } from "react";
 import { loginRoute } from "../../utils/APIRoutes";
 
 const Login_Form = ({ setUser }) => {
+  const navigate = useNavigate();
+
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -59,48 +62,39 @@ const Login_Form = ({ setUser }) => {
   };
 
   return (
-    <div className="login" id="login">
+    <div className="login">
       <form action="" onSubmit={(event) => login(event)}>
-        <h1>Log in</h1>
-        <input
-          type="text"
-          name="email"
-          placeholder="E-mail adress"
-          onChange={(e) => handleChange(e)}
-        ></input>
+        <div className="labs">
+          <label>Adresse mail</label>
+          <input
+            type="text"
+            name="email"
+            placeholder="E-mail adress"
+            onChange={(e) => handleChange(e)}
+          ></input>
+        </div>
+        <div className="labs">
+          <label>Mot de passe</label>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={(e) => handleChange(e)}
-        ></input>
-
-        <div
-          style={{
-            width: "100%",
-
-            textAlign: "center",
-          }}
-        >
-          <button className="login_button">Log in</button>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={(e) => handleChange(e)}
+          ></input>
         </div>
 
-        <div className="user_interact">
+        <div className="redirect">
           <div>
-            <p>
-              Don't have any account ? <br></br>
-              <span>
-                <u onClick={() => flip()}>Register</u>
-              </span>
-            </p>
+            <p>Vous n'avez pas encore de compte ?</p>
+            <button onClick={() => navigate("/register")}>
+              Créer un compte
+            </button>
           </div>
 
-          <div>
-            <p className="pass" onClick={() => forgetPass()}>
-              Forget your password ?
-            </p>
-          </div>
+          <button className="l-but" type="submit">
+            Connexion →
+          </button>
         </div>
       </form>
     </div>

@@ -5,6 +5,8 @@ import { userRoute } from "./utils/APIRoutes";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 function App() {
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -13,7 +15,7 @@ function App() {
   const [user, setUser] = useState(undefined);
 
   //  const done -> permet de définir si l'application charge ou pas.
-  const [done, setDone] = useState(undefined);
+  const [done, setDone] = useState(true);
 
   //  const dataFetchedRef -> permet de vérifier que on fetch les data une seule fois.
   const dataFetchedRef = useRef(false);
@@ -54,25 +56,14 @@ function App() {
     <div className="App">
       {!done ? (
         // mettre un loader.
-        <>
-          <Home></Home>
-        </>
+        <></>
       ) : (
         // reste de l'application.
         <>
-          <header></header>
           <Routes>
-            {
-              {
-                /* <Route exact path="/" element={<Home></Home>}></Route>
-<Route
-  path="/User"
-  element={<User_page user={user} setUser={setUser}></User_page>}
-></Route>
-   <Route status={404} element={<NotFound></NotFound>}></Route>
-   <Route path="*" element={<NotFound></NotFound>}></Route> */
-              }
-            }
+            <Route path="/" element={<Home></Home>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/register" element={<Register></Register>}></Route>
           </Routes>
         </>
       )}

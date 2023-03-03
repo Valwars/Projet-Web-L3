@@ -1,9 +1,12 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const data = {
     datasets: [
       {
@@ -19,7 +22,9 @@ const Home = () => {
     <div>
       <header>
         <i class="fas fa-hand-holding-heart"></i>
-        <button className="btn">Se connecter</button>{" "}
+        <button className="btn" onClick={() => navigate("/login")}>
+          Se connecter
+        </button>{" "}
       </header>
       <div className="present-text">
         <h1 className="sparkly">Sparkly</h1>
@@ -36,7 +41,9 @@ const Home = () => {
           conçue pour faciliter la connexion entre les célibataires du monde
           entier.
         </p>
-        <button className="btn">Créer un compte</button>{" "}
+        <button className="btn" onClick={() => navigate("/login")}>
+          Créer un compte
+        </button>{" "}
       </div>
 
       <div className="card-containers">
@@ -149,6 +156,14 @@ const Home = () => {
         <div className="img-info">
           <Pie data={data} />
         </div>
+      </div>
+
+      <div className="trap">
+        <h1 className="bigtitle">Sparkly.</h1>
+        <h1>Convaincu ?</h1>
+        <button className="btn" onClick={() => navigate("/login")}>
+          Créer un compte
+        </button>{" "}
       </div>
 
       <footer>
