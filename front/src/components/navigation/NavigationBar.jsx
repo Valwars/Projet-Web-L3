@@ -32,6 +32,12 @@ const NavBar = () => {
               </span>
               Chat
             </CustomLink>
+            <CustomLink to="/dates">
+              <span>
+                <i className="fas fa-users"></i>
+              </span>
+              Dates
+            </CustomLink>
             <CustomLink to="/map">
               <span>
                 <i className="fas fa-map-marker-alt"></i>
