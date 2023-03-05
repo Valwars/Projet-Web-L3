@@ -92,7 +92,31 @@ const Login_Form = ({ setUser }) => {
             </button>
           </div>
 
-          <button className="l-but" type="submit">
+          <button
+            className="l-but"
+            type="submit"
+            onClick={() =>
+              setUser({
+                nom: "Merault",
+                prenom: "Valentin",
+                adress: "123 Rue des pavillons 81000 Albi France",
+                matchs: [
+                  {
+                    id: "34",
+                    nom: "Jane",
+                    prenom: "Cooper",
+                    pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+                  },
+                  {
+                    id: "33",
+                    nom: "Janou",
+                    prenom: "Lapinou",
+                    pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+                  },
+                ],
+              })
+            }
+          >
             Connexion →
           </button>
         </div>

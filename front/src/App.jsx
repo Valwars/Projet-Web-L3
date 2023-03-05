@@ -8,14 +8,36 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Swipe from "./pages/Swipe";
-
+import Matchs from "./pages/Matchs";
 import NavBar from "./components/navigation/NavigationBar";
+import Profile from "./pages/Profile";
+import Chat from "./pages/Chat";
 function App() {
+  const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
 
   //  const user -> représente l'utilisateur courant et ses données.
-  const [user, setUser] = useState({});
+
+  const [user, setUser] = useState({
+    nom: "Merault",
+    prenom: "Valentin",
+    adress: "123 Rue des pavillons 81000 Albi France",
+    matchs: [
+      {
+        id: "34",
+        nom: "Jane",
+        prenom: "Cooper",
+        pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+      },
+      {
+        id: "33",
+        nom: "Janou",
+        prenom: "Lapinou",
+        pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+      },
+    ],
+  });
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);
@@ -71,10 +93,24 @@ function App() {
             </Routes>
           ) : (
             <div className="app-container">
-              <NavBar></NavBar>
+              <NavBar setUser={setUser}></NavBar>
 
               <Routes>
-                <Route path="/" element={<Swipe></Swipe>}></Route>
+                <Route
+                  path="/"
+                  element={<Swipe user={user} setLocate={setLocate}></Swipe>}
+                ></Route>
+                <Route
+                  path="/matchs"
+                  element={<Matchs user={user} setLocate={setLocate}></Matchs>}
+                ></Route>
+
+                <Route
+                  path="/user-profile"
+                  element={<Profile user={user} locate={locate}></Profile>}
+                ></Route>
+
+                <Route path="/chat" element={<Chat user={user}></Chat>}></Route>
               </Routes>
             </div>
           )}

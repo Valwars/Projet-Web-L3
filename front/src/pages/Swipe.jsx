@@ -1,8 +1,18 @@
-const Swipe = ({ user }) => {
+import { useNavigate } from "react-router-dom";
+
+const Swipe = ({ user, setLocate }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="app-page">
       <div className="swipe-container">
-        <div className="card">
+        <div
+          className="card"
+          onClick={() => {
+            setLocate("/swipe");
+            navigate("/user-profile?i=2");
+          }}
+        >
           <img
             src="https://xsgames.co/randomusers/avatar.php?g=female"
             alt=""

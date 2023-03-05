@@ -1,12 +1,15 @@
 import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ setUser }) => {
   return (
     <div className="nav">
       <div className="content">
         <div className="logout-container">
-          <i className="fas fa-sign-out-alt"></i>
+          <i
+            className="fas fa-sign-out-alt"
+            onClick={() => setUser(undefined)}
+          ></i>
         </div>
         <div className="pdp-container">
           <img src="https://xsgames.co/randomusers/avatar.php?g=male" alt="" />
@@ -20,13 +23,13 @@ const NavBar = () => {
               Swipe
             </CustomLink>
 
-            <CustomLink to="/match">
+            <CustomLink to="/matchs">
               <span>
                 <i className="fas fa-kiss-wink-heart"></i>
               </span>
               Match
             </CustomLink>
-            <CustomLink to="/messages">
+            <CustomLink to="/chat">
               <span>
                 <i className="fab fa-facebook-messenger"></i>
               </span>
