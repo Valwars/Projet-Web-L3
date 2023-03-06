@@ -56,7 +56,7 @@
         font-weight: 400;
     }
     
-    span {
+    span:not( .menu-items-container span) {
         color: var(--main-color);
     }
     

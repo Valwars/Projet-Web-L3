@@ -17,41 +17,31 @@ const NavBar = ({ setUser }) => {
         <div className="menu-items-container">
           <ul>
             <CustomLink to="/">
-              <span>
-                <i className="fas fa-heart"></i>
-              </span>
-              Swipe
+              <i className="fas fa-heart"></i>
+              <span>Swipe</span>
             </CustomLink>
 
             <CustomLink to="/matchs">
-              <span>
-                <i className="fas fa-kiss-wink-heart"></i>
-              </span>
-              Match
+              <i className="fas fa-kiss-wink-heart"></i>
+              <span>Match </span>
             </CustomLink>
             <CustomLink to="/chat">
-              <span>
-                <i className="fab fa-facebook-messenger"></i>
-              </span>
-              Chat
+              <i className="fab fa-facebook-messenger"></i>
+
+              <span>Chat</span>
             </CustomLink>
             <CustomLink to="/dates">
-              <span>
-                <i className="fas fa-users"></i>
-              </span>
-              Dates
+              <i className="fas fa-users"></i>
+
+              <span>Dates </span>
             </CustomLink>
             <CustomLink to="/map">
-              <span>
-                <i className="fas fa-map-marker-alt"></i>
-              </span>
-              Map
+              <i className="fas fa-map-marker-alt"></i>
+              <span>Map</span>
             </CustomLink>
             <CustomLink to="/profile">
-              <span>
-                <i className="fas fa-user-alt"></i>
-              </span>
-              Profile
+              <i className="fas fa-user-alt"></i>
+              <span>Profile</span>
             </CustomLink>
           </ul>
         </div>
