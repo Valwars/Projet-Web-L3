@@ -8,8 +8,8 @@ const Chat = ({ user, conv }) => {
     <div className="app-page">
       {conv === undefined ? (
         <>
-          <div>
-            <h1>Selectionne une conversation !</h1>
+          <div className="no_conv">
+            <h1>Tu n'as pas encore engagé de conversations !</h1>
           </div>
         </>
       ) : (
