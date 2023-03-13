@@ -8,7 +8,6 @@ const cors = require("cors");
 const path = require("path")
 require('./database/mongo_connect');
 
-
 const authRoutes = require("./routes/userRoutes");
 
 app.use('/static/images', express.static('static/images'));

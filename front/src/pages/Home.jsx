@@ -25,7 +25,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div className="home-page">
       <header>
         <i class="fas fa-hand-holding-heart"></i>
         <button className="btn" onClick={() => navigate("/login")}>
