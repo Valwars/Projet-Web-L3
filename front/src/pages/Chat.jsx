@@ -58,7 +58,8 @@ const Chat = ({ user }) => {
           ) : (
             <div className="match-content">
               <div className="top">
-                <h1>Vos conversations : </h1>
+                <h1>Vos conversations</h1>
+                <input type="text" placeholder="Rechercher..." />
               </div>
               <div className="matchs-container">
                 {conversations.map((conv) => {

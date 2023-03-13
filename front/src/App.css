@@ -616,7 +616,9 @@
         min-height: 100vh;
         overflow-y: auto;
         margin-left: auto;
-        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+        /*background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+    */
+        background: rgba(40, 40, 40, 0.2);
     }
     
     .swipe-container {
@@ -688,6 +690,10 @@
         margin-top: 10vh;
     }
     
+    .profile-content {
+        width: 90%;
+    }
+    
     .user-data {
         width: 70%;
         margin: auto;
@@ -756,28 +762,46 @@
     }
     
     .btn-cont :nth-child(1) {
-        background: rgba(25, 25, 25, 0.42);
         margin-right: 20px;
     }
     
     .btn-cont :nth-child(2) {
-        background: #FF7A7A;
+        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(177, 79, 255, 0.5) 104.45%);
+        ;
     }
     /* MATCHS */
     
     .match-content .top {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         border-bottom: 2px solid #FF7A7A;
         margin-bottom: 50px;
+    }
+    
+    .match-content .top input {
+        width: 40%;
+        height: fit-content;
+        font-size: 16px;
+        margin: auto 0;
+        border: 0;
+        padding: 10px;
+        border-radius: 25px;
+        background: #282828;
+        color: white;
+        padding-left: 25px;
     }
     
     .match-content .match {
         width: 47%;
         min-width: 306px;
         display: flex;
-        background: rgba(25, 25, 25, 0.42);
+        /* background: rgba(25, 25, 25, 0.42);*/
+        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 25px;
-        padding: 2% 5%;
+        padding: 1% 2%;
         margin-bottom: 40px;
     }
     
@@ -790,9 +814,10 @@
     }
     
     .match img {
-        width: 20%;
-        height: auto;
+        width: 85px;
+        height: 85px;
         border-radius: 100%;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
     
     .match h2 {

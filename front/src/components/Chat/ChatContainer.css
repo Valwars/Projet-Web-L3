@@ -1,5 +1,5 @@
 .chat-container {
-    width: 80%;
+    width: 90%;
     margin: auto;
 }
 
@@ -89,6 +89,10 @@
     padding: 5px 20px;
 }
 
+.message .content p {
+    opacity: 0.85;
+}
+
 .sended {
     background-color: #FF7A7A;
     margin-left: auto;
@@ -97,4 +101,18 @@
 .recieved {
     background-color: #59406F;
     margin-right: auto;
+}
+
+.chat-messages:-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Hide scrollbar for IE, Edge and Firefox */
+
+.chat-messages {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
