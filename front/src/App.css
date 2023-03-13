@@ -61,17 +61,65 @@
     }
     
     .present-text {
-        width: 80%;
-        max-width: 700px;
+        width: 59%;
+        height: 75vh;
+        min-width: 500px;
         margin: auto;
+        text-align: center;
+        position: relative;
+        top: 50%;
+        transform: translateY(10%);
     }
     
-    .present-text p {
-        margin-bottom: 25px;
+    .present-text h2 {
+        text-align: left;
+        margin-bottom: 50px;
     }
     
     .present-text h1 {
         text-align: center;
+        margin-bottom: 50px;
+        /* animation: animate 2s alternate infinite ease-in-out;*/
+    }
+    
+    .text-anim {
+        position: relative;
+        left: 50%;
+        display: flex;
+        margin-bottom: 120px;
+    }
+    
+    .text-anim h1 {
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+    
+    .text-anim h1:nth-child(1) {
+        background: linear-gradient(94.3deg, rgba(255, 122, 122, 1) 11.07%, rgba(157, 77, 196, 1) 92.35%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        opacity: 0.35;
+        text-fill-color: transparent;
+    }
+    
+    .text-anim h1:nth-child(2) {
+        background: linear-gradient(94.3deg, rgba(255, 122, 122, 1) 11.07%, rgba(157, 77, 196, 1) 92.35%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        animation: animate-txt 4s ease-in-out infinite;
+    }
+    
+    @keyframes animate-txt {
+        0%,
+        100% {
+            clip-path: polygon( 0% 45%, 16% 44%, 33% 50%, 54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%);
+        }
+        50% {
+            clip-path: polygon( 0% 60%, 15% 65%, 34% 66%, 51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%);
+        }
     }
     
     header {
@@ -104,6 +152,25 @@
         margin-top: 25px;
     }
     
+    .background {
+        z-index: -4;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(177, 79, 255, 0.5) 104.45%);
+    }
+    
+    @keyframes moveBackground {
+        0% {
+            transform: translate3d(0, -100%, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
     .sparkly {
         position: absolute;
         top: 0;
@@ -124,10 +191,10 @@
     
     @keyframes animate {
         from {
-            opacity: 0.38;
+            opacity: 0.5;
         }
         to {
-            opacity: 0.8;
+            opacity: 1;
         }
     }
     
@@ -181,15 +248,14 @@
     }
     
     .how {
-        position: relative;
         z-index: -2;
         width: 100%;
         background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(177, 79, 255, 0.5) 104.45%);
         height: fit-content;
         text-align: center;
-        padding-top: 100px;
-        top: -60px;
+        padding-top: 70px;
         padding-bottom: 70px;
+        margin-bottom: 100px;
     }
     
     .how h1 {
@@ -206,6 +272,7 @@
     }
     
     .bloc {
+        display: block;
         width: 28%;
         min-width: 300px;
         height: fit-content;
@@ -214,6 +281,19 @@
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
         border-radius: 50px;
         margin-bottom: 50px;
+        transition: all 0.4s;
+        z-index: 1;
+        cursor: pointer;
+    }
+    
+    .bloc-container:hover .bloc {
+        transform: translate3d(0px, 0px, 0px) scale3d(0.9, 0.9, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+        transform-style: preserve-3d;
+    }
+    
+    .bloc-container:hover .bloc:hover {
+        transform: translate3d(0px, 0px, 0px) scale3d(1.05, 1.05, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+        transform-style: preserve-3d;
     }
     
     .bloc-content {
@@ -263,7 +343,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin-bottom: 10%;
+        margin-bottom: 12.5%;
     }
     
     .text-info {
@@ -304,6 +384,7 @@
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         height: fit-content;
         padding: 5% 0;
+        margin-top: 200px;
     }
     
     .footer-content {
@@ -343,7 +424,7 @@
     }
     
     .trap .bigtitle {
-        font-size: clamp(3rem, 7vw + .1rem, 8rem);
+        font-size: clamp(3rem, 8vw + .1rem, 8rem);
         margin: 0;
     }
     

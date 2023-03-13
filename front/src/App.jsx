@@ -19,7 +19,8 @@ function App() {
 
   //  const user -> représente l'utilisateur courant et ses données.
 
-  const [user, setUser] = useState({
+  const [user, setUser] = useState(
+    /*{
     nom: "Merault",
     prenom: "Valentin",
     adress: "123 Rue des pavillons 81000 Albi France",
@@ -37,7 +38,8 @@ function App() {
         pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
       },
     ],
-  });
+  }*/ undefined
+  );
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);

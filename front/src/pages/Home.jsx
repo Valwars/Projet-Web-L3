@@ -1,7 +1,9 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Home = () => {
@@ -17,6 +19,10 @@ const Home = () => {
       },
     ],
   };
+  useEffect(() => {
+    AOS.init();
+    AOS.refresh();
+  }, []);
 
   return (
     <div>
@@ -26,44 +32,62 @@ const Home = () => {
           Se connecter
         </button>{" "}
       </header>
-      <div className="present-text">
-        <h1 className="sparkly">Sparkly</h1>
-        <h1>
-          Ça n’a jamais été aussi facile <span>d’aimer</span>.
-        </h1>
-        <p>
-          Bienvenue sur notre application de rencontre, un endroit où vous
-          pouvez rencontrer de nouvelles personnes intéressantes, discuter et
-          peut-être trouver l'amour de votre vie.
-        </p>
-        <p>
-          Nous sommes ravis de vous présenter cette plateforme de rencontres,
-          conçue pour faciliter la connexion entre les célibataires du monde
-          entier.
-        </p>
-        <button className="btn" onClick={() => navigate("/register")}>
-          Créer un compte
-        </button>{" "}
-      </div>
 
-      <div className="card-containers">
-        <div className="card">
-          <img src="https://xsgames.co/randomusers/avatar.php?g=male" alt="" />
-        </div>
-        <div className="card card-resp">
-          <img
-            src="https://xsgames.co/randomusers/avatar.php?g=female"
-            alt=""
-          />
-        </div>
-        <div className="card card-resp">
-          <img src="https://xsgames.co/randomusers/avatar.php?g=male" alt="" />
+      <div className="present-text">
+        <div className="trap">
+          <div
+            className="text-anim"
+            data-aos="fade-up"
+            data-aos-duration="500"
+            data-aos-offset="-1000"
+            data-aos-easing="ease-in-out"
+            data-aos-once="true"
+          >
+            {" "}
+            <h1 className="bigtitle">Sparkly.</h1>
+            <h1 className="bigtitle">Sparkly.</h1>
+          </div>
+          <h2
+            data-aos="fade-up"
+            data-aos-duration="500"
+            data-aos-offset="-1000"
+            data-aos-delay="300"
+            data-aos-easing="ease-in-out"
+            data-aos-once="true"
+          >
+            Bienvenue sur notre application de rencontre, un endroit où vous
+            pouvez rencontrer de nouvelles personnes intéressantes, discuter et
+            peut-être trouver l'amour de votre vie.
+            <br></br>
+            <br></br>
+            Nous sommes ravis de vous présenter cette plateforme de rencontres,
+            conçue pour faciliter la connexion entre les célibataires du monde
+            entier.
+          </h2>
+          <button
+            className="btn"
+            onClick={() => navigate("/register")}
+            data-aos="fade-up"
+            data-aos-duration="500"
+            data-aos-offset="-1000"
+            data-aos-delay="700"
+            data-aos-easing="ease-in-out"
+            data-aos-once="true"
+          >
+            Créer un compte
+          </button>{" "}
         </div>
       </div>
 
       <div className="how">
         <h1>Comment ça marche ?</h1>
-        <div className="bloc-container">
+        <div
+          className="bloc-container"
+          data-aos="zoom-in"
+          data-aos-easing="ease-in-out"
+          data-aos-once="true"
+          data-aos-duration="1000"
+        >
           <div className="bloc">
             <div className="bloc-content">
               <i className="fas fa-user-alt"></i>
@@ -101,7 +125,11 @@ const Home = () => {
       </div>
 
       <div className="info">
-        <div className="text-info">
+        <div
+          className="text-info"
+          data-aos="fade-right"
+          data-aos-easing="ease-in-out"
+        >
           <h1>
             Trouve ton <span>amour</span> près de chez toi !
           </h1>
@@ -116,16 +144,31 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="img-info">
+        <div
+          className="img-info"
+          data-aos="fade-left"
+          data-aos-duration="700"
+          data-aos-easing="ease-in-out"
+        >
           <img src="./img/map.png" alt="" />
         </div>
       </div>
 
       <div className="info">
-        <div className="img-info calender">
+        <div
+          className="img-info calender"
+          data-aos="fade-right"
+          data-aos-duration="700"
+          data-aos-easing="ease-in-out"
+        >
           <img src="./img/calender.png" alt="" />
         </div>
-        <div className="text-info">
+        <div
+          className="text-info"
+          data-aos="fade-left"
+          data-aos-duration="700"
+          data-aos-easing="ease-in-out"
+        >
           <h1>
             Planifie tes <span>dates</span> comme tu le souhaite !
           </h1>
@@ -141,7 +184,12 @@ const Home = () => {
       </div>
 
       <div className="info">
-        <div className="text-info">
+        <div
+          className="text-info"
+          data-aos="fade-right"
+          data-aos-duration="700"
+          data-aos-easing="ease-in-out"
+        >
           <h1>
             Analyse ton profil pour voir si tu est <span>attirant</span> !
           </h1>
@@ -153,12 +201,22 @@ const Home = () => {
             <p>Statistiques, graphiques... Tout est fait pour t’aider !</p>
           </div>
         </div>
-        <div className="img-info">
+        <div
+          className="img-info"
+          data-aos="fade-left"
+          data-aos-duration="700"
+          data-aos-easing="ease-in-out"
+        >
           <Pie data={data} />
         </div>
       </div>
 
-      <div className="trap">
+      <div
+        className="trap"
+        data-aos="zoom-in"
+        data-aos-duration="700"
+        data-aos-easing="ease-in-out"
+      >
         <h1 className="bigtitle">Sparkly.</h1>
         <h1>Convaincu ?</h1>
         <button className="btn" onClick={() => navigate("/register")}>
