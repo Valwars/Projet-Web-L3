@@ -12,6 +12,7 @@ import Matchs from "./pages/Matchs";
 import NavBar from "./components/navigation/NavigationBar";
 import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
+import Map from "./pages/Map";
 
 function App() {
   const [locate, setLocate] = useState("/");
@@ -100,6 +101,11 @@ function App() {
                 ></Route>
 
                 <Route path="/chat" element={<Chat user={user}></Chat>}></Route>
+
+                <Route
+                  path="/Map"
+                  element={<Map user={user} locate={locate}></Map>}
+                ></Route>
               </Routes>
             </div>
           )}
