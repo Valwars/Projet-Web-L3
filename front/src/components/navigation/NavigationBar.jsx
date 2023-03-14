@@ -1,16 +1,11 @@
 import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
+import DarkModeButton from "../dark_mode/toogle";
 
 const NavBar = ({ setUser }) => {
   return (
     <div className="nav">
       <div className="content">
-        <div className="logout-container">
-          <i
-            className="fas fa-sign-out-alt"
-            onClick={() => setUser(undefined)}
-          ></i>
-        </div>
         <div className="pdp-container">
           <img src="https://xsgames.co/randomusers/avatar.php?g=male" alt="" />
         </div>
@@ -44,6 +39,9 @@ const NavBar = ({ setUser }) => {
               <span>Profile</span>
             </CustomLink>
           </ul>
+        </div>
+        <div className="others-btn">
+          <DarkModeButton></DarkModeButton>
         </div>
       </div>
     </div>

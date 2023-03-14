@@ -2,11 +2,14 @@
     
      :root {
         --background-color: #0F0F0F;
+        --background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.38) 2.24%, rgba(157, 77, 196, 0.38) 104.45%);
         --text-color: #FFFFFF;
+        --div_bg: rgba(25, 25, 25, 0.42);
         --main-color: #FF7A7A;
         --title: clamp(2rem, 2.5vw + .1rem, 4rem);
         --medium-font: clamp(1rem, 1.1vw + .1rem, 2rem);
         --little-font: clamp(0.8rem, 1vw + .1rem, 1.5rem);
+        --search-bg: rgba(25, 25, 25, 0.42);
     }
     
     @font-face {
@@ -22,6 +25,12 @@
     @font-face {
         font-family: FontRegular;
         src: url('../public/DM_Sans/DMSans-Regular.ttf');
+    }
+    
+    .dark-mode {
+        --background: rgba(40, 40, 40, 0.2);
+        --div_bg: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+        --search-bg: #282828;
     }
     
     * {
@@ -612,13 +621,13 @@
     }
     
     .app-page {
-        width: 80%;
+        width: 85%;
         min-height: 100vh;
         overflow-y: auto;
         margin-left: auto;
         /*background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
     */
-        background: rgba(40, 40, 40, 0.2);
+        background: var(--background);
     }
     
     .swipe-container {
@@ -788,7 +797,7 @@
         border: 0;
         padding: 10px;
         border-radius: 25px;
-        background: #282828;
+        background: var(--search-bg);
         color: white;
         padding-left: 25px;
     }
@@ -798,7 +807,7 @@
         min-width: 306px;
         display: flex;
         /* background: rgba(25, 25, 25, 0.42);*/
-        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+        background: var(--div_bg);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 25px;
         padding: 1% 2%;
