@@ -21,19 +21,19 @@ function App() {
 
   //  const user -> représente l'utilisateur courant et ses données.
 
-  const [user, setUser] = useState(
-    {
-      nom: "Merault",
-      prenom: "Valentin",
-      adress: "123 Rue des pavillons 81000 Albi France",
-    } // undefined
-  );
+  const [user, setUser] = useState({
+    nom: "Merault",
+    prenom: "Valentin",
+    adress: "123 Rue des pavillons 81000 Albi France",
+  });
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);
 
   //  const dataFetchedRef -> permet de vérifier que on fetch les data une seule fois.
   const dataFetchedRef = useRef(false);
+
+  const [form_complete, useForm] = useState(true);
 
   // GET USER DATA
   // userEffect permet d'exécuter du code à chaque chargement du composant, ou en fonction de si la variable

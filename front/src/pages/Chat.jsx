@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContainer from "../components/Chat/ChatContainer";
+
 const Chat = ({ user }) => {
   const socket = useRef();
 

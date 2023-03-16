@@ -36,6 +36,7 @@ const ChatContainer = ({ currentChat, setConv, socket }) => {
         "Cupidatat enim laboris adipisicing laboris irure excepteur duis ea minim commodo pariatur sint. Ex qui ullamco do consequat. Ex ipsum excepteur nostrud adipisicing irure deserunt ea. Sunt aliqua sunt fugiat dolore. Tempor ut incididunt ullamco do pariatur nisi cillum culpa. Lorem aute mollit ex velit deserunt. Minim nisi fugiat velit eu ullamco excepteur ad cillum est consectetur esse eu officia aute.",
     },
   ]);
+
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
