@@ -6,7 +6,8 @@ function MapWithLoader({ user }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const [dates, setDates] = useState([
-    { adress: "", date: "", personne: "valérie mabite" },
+    { adress: "68 rue de Bernis Albi", date: "resto", personne: "Valérie" },
+    {adress: "57 St Juéry Albi", date: "resto", personne: "Marine" }
   ]);
 
   const [startCoordinates, setStartCoordinates] = useState({
@@ -27,6 +28,7 @@ function MapWithLoader({ user }) {
 
     loader.load().then(() => {
       fetch_data();
+      
     });
   }, []);
 
@@ -60,15 +62,64 @@ function MapWithLoader({ user }) {
                     lat: startCoordinates.lat,
                     lng: startCoordinates.lng,
                   },
-                  zoom: 12,
+                  styles: [
+                    {
+                      featureType: "poi",
+                      stylers:[{visibility: "off"}]
+                    },{
+                      featureType: "poi.school",
+                      stylers: [{visibility: "off"}]
+                    },{
+                      featureType: "transit",
+                      stylers: [{visibility: "off"}]
+                    }
+                    ],
+
+                  zoom: 14,
                 });
-                new window.google.maps.Marker({
+                
+
+                const marqer = new window.google.maps.Marker({
                   position: {
                     lat: startCoordinates.lat,
                     lng: startCoordinates.lng,
                   },
                   map: map,
+                  title: "Mon adresse wesh",
+                  icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                  
                 });
+                dates.map((date, index) => {
+                  const geocoder = new window.google.maps.Geocoder();
+                  geocoder.geocode(
+                    { address: date.adress },
+                    (results, status) => {
+                      if (status === "OK") {
+                        const infoWindowOptions = {
+                          content: '<h3 class= "map_content">Date avec '+ date.personne +'</h3>'
+                              + '<p class= "map_content_desc">Lieu:'+' '+'<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>'+'<br>Date: 16/12<br>Heure: 18h30 </p>'
+                              + '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px" />'
+                      };
+                        const infoWindow = new window.google.maps.InfoWindow(infoWindowOptions);
+                        const marker = new window.google.maps.Marker({
+                          position: results[0].geometry.location,
+                          map: map,
+                          title: date.date,
+                          icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                        });
+                        window.google.maps.event.addListener(marker,'mouseover', function() {
+                          infoWindow.open(map, marker);
+                        });
+                        window.google.maps.event.addListener(marker,'mouseout', function() {
+
+                          infoWindow.close();
+                        });
+                      }
+                    }
+                  );
+                });
+
+                
 
                 const directionsService =
                   new window.google.maps.DirectionsService();

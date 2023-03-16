@@ -180,6 +180,13 @@
             transform: translate3d(0, 0, 0);
         }
     }
+
+    .map_content{
+        color : black;
+    }
+    .map_content_desc{
+        color : black;
+    }
     
     .sparkly {
         position: absolute;
