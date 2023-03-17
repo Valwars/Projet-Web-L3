@@ -2,11 +2,14 @@
     
      :root {
         --background-color: #0F0F0F;
+        --background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.38) 2.24%, rgba(157, 77, 196, 0.38) 104.45%);
         --text-color: #FFFFFF;
+        --div_bg: rgba(25, 25, 25, 0.42);
         --main-color: #FF7A7A;
         --title: clamp(2rem, 2.5vw + .1rem, 4rem);
         --medium-font: clamp(1rem, 1.1vw + .1rem, 2rem);
         --little-font: clamp(0.8rem, 1vw + .1rem, 1.5rem);
+        --search-bg: rgba(25, 25, 25, 0.42);
     }
     
     @font-face {
@@ -24,6 +27,12 @@
         src: url('../public/DM_Sans/DMSans-Regular.ttf');
     }
     
+    .dark-mode {
+        --background: rgba(40, 40, 40, 0.2);
+        --div_bg: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+        --search-bg: #282828;
+    }
+    
     * {
         box-sizing: border-box;
     }
@@ -31,6 +40,7 @@
     body {
         background-color: var(--background-color);
         color: var(--text-color);
+        overflow-x: hidden;
     }
     
     h1 {
@@ -169,6 +179,13 @@
         100% {
             transform: translate3d(0, 0, 0);
         }
+    }
+
+    .map_content{
+        color : black;
+    }
+    .map_content_desc{
+        color : black;
     }
     
     .sparkly {
@@ -611,11 +628,13 @@
     }
     
     .app-page {
-        width: 80%;
+        width: 85%;
         min-height: 100vh;
         overflow-y: auto;
         margin-left: auto;
-        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+        /*background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(157, 77, 196, 0.5) 104.45%);
+    */
+        background: var(--background);
     }
     
     .swipe-container {
@@ -687,6 +706,10 @@
         margin-top: 10vh;
     }
     
+    .profile-content {
+        width: 90%;
+    }
+    
     .user-data {
         width: 70%;
         margin: auto;
@@ -708,6 +731,7 @@
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        justify-content: space-evenly;
         gap: 5%
     }
     
@@ -754,28 +778,46 @@
     }
     
     .btn-cont :nth-child(1) {
-        background: rgba(25, 25, 25, 0.42);
         margin-right: 20px;
     }
     
     .btn-cont :nth-child(2) {
-        background: #FF7A7A;
+        background: linear-gradient(77.28deg, rgba(255, 122, 122, 0.5) 2.24%, rgba(177, 79, 255, 0.5) 104.45%);
+        ;
     }
     /* MATCHS */
     
     .match-content .top {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
         border-bottom: 2px solid #FF7A7A;
         margin-bottom: 50px;
+    }
+    
+    .match-content .top input {
+        width: 40%;
+        height: fit-content;
+        font-size: 16px;
+        margin: auto 0;
+        border: 0;
+        padding: 10px;
+        border-radius: 25px;
+        background: var(--search-bg);
+        color: white;
+        padding-left: 25px;
     }
     
     .match-content .match {
         width: 47%;
         min-width: 306px;
         display: flex;
-        background: rgba(25, 25, 25, 0.42);
+        /* background: rgba(25, 25, 25, 0.42);*/
+        background: var(--div_bg);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 25px;
-        padding: 2% 5%;
+        padding: 1% 2%;
         margin-bottom: 40px;
     }
     
@@ -788,9 +830,10 @@
     }
     
     .match img {
-        width: 20%;
-        height: auto;
+        width: 85px;
+        height: 85px;
         border-radius: 100%;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     }
     
     .match h2 {

@@ -8,7 +8,6 @@ const cors = require("cors");
 const path = require("path")
 
 
-
 const authRoutes = require("./routes/userRoutes");
 const { url } = require('inspector');
 

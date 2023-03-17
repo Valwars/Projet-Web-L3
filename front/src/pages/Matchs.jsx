@@ -35,7 +35,8 @@ const Matchs = ({ user, setLocate }) => {
     <div className="app-page">
       <div className="match-content">
         <div className="top">
-          <h1>Vos matchs : </h1>
+          <h1>Vos matchs</h1>
+          <input type="text" placeholder="Rechercher..." />
         </div>
         <div className="matchs-container">
           {matchs.map((match) => {
