@@ -12,7 +12,7 @@ const Login_Form = ({ setUser }) => {
 
   const [values, setValues] = useState({
     email: "",
-    password: "",
+    password: ""
   });
 
   const toastOptions = {
@@ -25,52 +25,49 @@ const Login_Form = ({ setUser }) => {
   };
 
   const login = async (event) => {
-    // fonction a appeler quand l'user clique sur "créer"
+    // fonction a appeler quand l'user clique sur "connexion"
     event.preventDefault();
 
-    const { email, password } = values;
-
-    const { data } = await axios.post(loginRoute, {
-      email,
-      password,
+    
+    const response = await axios.post(loginRoute, {
+      values
     });
+    console.log(response.message)
+    // if (response.status === "error") {
+    //   toast.error(response.error, toastOptions);
+    // }
+    // if (response.status === "ok") {
+    //   // compte crée, on redirige sur la page de connexion.
 
-    if (data.status === "error") {
-      toast.error(data.error, toastOptions);
-    }
-    if (data.status === "ok") {
-      // compte crée, on redirige sur la page de connexion.
+    //   toast.success("You are connected !", toastOptions);
+    //   local_user(response);
 
-      toast.success("You are connected !", toastOptions);
-      local_user(data);
-
-      // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
-      setUser(data.user);
-      //navigate('/Home')
-    }
+    //   // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
+    //   setUser(response.user);
+    //   //navigate('/Home')
+    // }
   };
 
-  const local_user = (data) => {
+  const local_user = (response) => {
     localStorage.setItem(
       process.env.REACT_APP_LOCALHOST_KEY,
-      JSON.stringify(data.token)
+      JSON.stringify(response.token)
     );
   };
 
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
 
   return (
     <div className="login">
-      <form action="" onSubmit={(event) => login(event)}>
+      <form action="" onSubmit={login}>
         <div className="labs">
-          <label>Adresse mail</label>
+          <label>Identifiant</label>
           <input
             type="text"
-            name="email"
-            placeholder="E-mail adress"
-            onChange={(e) => handleChange(e)}
+            name="identifiant"
+            placeholder="Identifiant"
+            value={values.email}
+            onChange={(e) => setValues({ ...values, email: e.target.value })}
+            required="required"
           ></input>
         </div>
         <div className="labs">
@@ -79,48 +76,38 @@ const Login_Form = ({ setUser }) => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
-            onChange={(e) => handleChange(e)}
+            placeholder="Mot de passe"
+            value={values.password}
+            onChange={(e) => setValues({ ...values, password: e.target.value })}
+            required="required"
           ></input>
         </div>
+        
+        <button
+          className="l-but"
+          type="submit"
+        // onClick={() =>
+        //   setUser({
 
-        <div className="redirect">
-          <div>
-            <p>Vous n'avez pas encore de compte ?</p>
-            <button onClick={() => navigate("/register")}>
-              Créer un compte
-            </button>
-          </div>
+        //   }
+        //     )
+        // }
+        >
+          Connexion →
+        </button>
+      </form>
 
-          <button
-            className="l-but"
-            type="submit"
-            onClick={() =>
-              setUser({
-                nom: "Merault",
-                prenom: "Valentin",
-                adress: "123 Rue des pavillons 81000 Albi France",
-                matchs: [
-                  {
-                    id: "34",
-                    nom: "Jane",
-                    prenom: "Cooper",
-                    pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-                  },
-                  {
-                    id: "33",
-                    nom: "Janou",
-                    prenom: "Lapinou",
-                    pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-                  },
-                ],
-              })
-            }
-          >
-            Connexion →
+
+      <div className="redirect">
+        <div>
+          <p>Vous n'avez pas encore de compte ?</p>
+          <button onClick={() => navigate("/register")}>
+            Créer un compte
           </button>
         </div>
-      </form>
+
+      </div>
+
     </div>
   );
 };
