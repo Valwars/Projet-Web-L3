@@ -36,6 +36,8 @@ function App() {
 
   const [form_complete, useForm] = useState(true);
 
+  const [isDark, setIsDark] = useState(false);
+
   // GET USER DATA
   // userEffect permet d'exécuter du code à chaque chargement du composant, ou en fonction de si la variable
   // mis dans le ,[] est modifié ou pas.
@@ -88,7 +90,11 @@ function App() {
             </Routes>
           ) : (
             <div className="app-container">
-              <NavBar user={user} setUser={setUser}></NavBar>
+              <NavBar
+                user={user}
+                setIsDark={setIsDark}
+                isDark={isDark}
+              ></NavBar>
 
               <Routes>
                 <Route
@@ -104,7 +110,9 @@ function App() {
 
                 <Route
                   path="/Map"
-                  element={<Map user={user} locate={locate}></Map>}
+                  element={
+                    <Map user={user} locate={locate} isDark={isDark}></Map>
+                  }
                 ></Route>
 
                 <Route

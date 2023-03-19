@@ -2,7 +2,7 @@ import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
 import DarkModeButton from "../dark_mode/toogle";
 
-const NavBar = ({ user, setLocate }) => {
+const NavBar = ({ user, setIsDark, isDark }) => {
   return (
     <div className="nav">
       <div className="content">
@@ -41,7 +41,10 @@ const NavBar = ({ user, setLocate }) => {
           </ul>
         </div>
         <div className="others-btn">
-          <DarkModeButton></DarkModeButton>
+          <DarkModeButton
+            setIsDark={setIsDark}
+            isDark={isDark}
+          ></DarkModeButton>
         </div>
       </div>
     </div>

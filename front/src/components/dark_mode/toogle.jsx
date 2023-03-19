@@ -1,16 +1,14 @@
 import { useState } from "react";
 
-const DarkModeButton = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
+const DarkModeButton = ({ setIsDark, isDark }) => {
   const handleToggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+    setIsDark(!isDark);
     document.body.classList.toggle("dark-mode");
   };
 
   return (
     <div className="dark-mode">
-      {isDarkMode ? (
+      {isDark ? (
         <i onClick={() => handleToggleDarkMode()} class="fas fa-sun"></i>
       ) : (
         <i onClick={() => handleToggleDarkMode()} class="fas fa-moon"></i>
