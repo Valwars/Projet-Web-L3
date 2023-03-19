@@ -2,12 +2,13 @@ import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
 import DarkModeButton from "../dark_mode/toogle";
 
-const NavBar = ({ setUser }) => {
+const NavBar = ({ user, setLocate }) => {
+
   return (
     <div className="nav">
       <div className="content">
         <div className="pdp-container">
-          <img src="https://xsgames.co/randomusers/avatar.php?g=male" alt="" />
+          <img src={user.pdp} alt="" />
         </div>
         <div className="menu-items-container">
           <ul>

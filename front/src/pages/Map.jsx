@@ -37,7 +37,7 @@ function MapWithLoader({ user }) {
       "https://maps.googleapis.com/maps/api/geocode/json",
       {
         params: {
-          address: user.adress,
+          address: user.localisation,
           key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
         },
       }

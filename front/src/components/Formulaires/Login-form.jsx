@@ -32,20 +32,26 @@ const Login_Form = ({ setUser }) => {
     const response = await axios.post(loginRoute, {
       values
     });
-    console.log(response.message)
-    // if (response.status === "error") {
-    //   toast.error(response.error, toastOptions);
-    // }
-    // if (response.status === "ok") {
-    //   // compte crée, on redirige sur la page de connexion.
+    const data = response.data.message;
+    const u = response.data.uti;
+  
+    console.log(data)
 
-    //   toast.success("You are connected !", toastOptions);
-    //   local_user(response);
+    if (data==false) {
+      toast.error("response.error", toastOptions);
+    }
+    if (data) {
+      // compte crée, on redirige sur la page de connexion.
 
-    //   // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
-    //   setUser(response.user);
-    //   //navigate('/Home')
-    // }
+      toast.success("You are connected !", toastOptions);
+      local_user(u);
+
+      // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
+   
+        setUser(u);
+         navigate('/profile');
+      
+    }
   };
 
   const local_user = (response) => {
@@ -95,10 +101,8 @@ const Login_Form = ({ setUser }) => {
         >
           Connexion →
         </button>
-      </form>
-
-
-      <div className="redirect">
+        
+          <div className="redirect">
         <div>
           <p>Vous n'avez pas encore de compte ?</p>
           <button onClick={() => navigate("/register")}>
@@ -107,6 +111,10 @@ const Login_Form = ({ setUser }) => {
         </div>
 
       </div>
+      </form>
+
+
+    
 
     </div>
   );

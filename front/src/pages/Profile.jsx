@@ -5,19 +5,7 @@ const Profile = ({ user_id, locate }) => {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState({
-    nom: "Jane",
-    prenom: "Cooper",
-    age: 20,
-    adress: "2 Rue des Pavillons 81000 Albi France",
-    description:
-      "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-    pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-    photos: [
-      "https://xsgames.co/randomusers/avatar.php?g=female",
-      "https://xsgames.co/randomusers/avatar.php?g=female",
-      "https://xsgames.co/randomusers/avatar.php?g=female",
-      "https://xsgames.co/randomusers/avatar.php?g=female",
-    ],
+   locate
   });
 
   return (

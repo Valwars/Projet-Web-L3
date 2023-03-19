@@ -1,7 +1,7 @@
 import LoginForm from "../components/Formulaires/Login-form";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({setUser}) => {
   const navigate = useNavigate();
 
   return (
@@ -12,7 +12,7 @@ const Login = () => {
         </header>
         <main>
           <h1>Sparkly,</h1>
-          <h1 className="bigtitle">Connecter vous.</h1>
+          <h1 className="bigtitle">Connectez-vous.</h1>
           <p className="resume">
             Une fois connecté vous aurez accès à toutes vos informations et a
             une interface dédié à la recherche de partenaire en ligne.
@@ -23,7 +23,7 @@ const Login = () => {
         </main>
       </div>
       <div className="form-container">
-        <LoginForm></LoginForm>
+        <LoginForm setUser={setUser}/>
       </div>
     </div>
   );

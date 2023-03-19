@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 const Swipe = ({ user, setLocate }) => {
   const navigate = useNavigate();
-
+  
   return (
     <div className="app-page">
       <div className="swipe-container">
