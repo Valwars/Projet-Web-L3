@@ -25,6 +25,7 @@ function App() {
     name: "valentin",
     username: "merault",
     localisation: "123 Rue des pavillons 81000 Albi",
+    pdp: "https://xsgames.co/randomusers/avatar.php?g=male",
   });
 
   //  const done -> permet de définir si l'application charge ou pas.

@@ -87,7 +87,7 @@ function MapWithLoader({ user }) {
                   map: map,
                   title: "Mon adresse wesh",
                   icon: {
-                    url: "https://xsgames.co/randomusers/avatar.php?g=male",
+                    url: user.pdp,
                     scaledSize: {
                       width: 80,
                       height: 80,
