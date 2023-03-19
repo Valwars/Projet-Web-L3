@@ -7,17 +7,12 @@ function MapWithLoader({ user }) {
 
   const [dates, setDates] = useState([
     { adress: "68 rue de Bernis Albi", date: "resto", personne: "Valérie" },
-    { adress: "57 St Juéry Albi", date: "resto", personne: "Marine" },
+    {adress: "57 St Juéry Albi", date: "resto", personne: "Marine" }
   ]);
 
   const [startCoordinates, setStartCoordinates] = useState({
     lat: null,
     lng: null,
-  });
-
-  const [endCoordinates, setEndCoordinates] = useState({
-    lat: 37.7749,
-    lng: -122.4194,
   });
 
   useEffect(() => {
@@ -28,6 +23,7 @@ function MapWithLoader({ user }) {
 
     loader.load().then(() => {
       fetch_data();
+      
     });
   }, []);
 
@@ -64,20 +60,19 @@ function MapWithLoader({ user }) {
                   styles: [
                     {
                       featureType: "poi",
-                      stylers: [{ visibility: "off" }],
-                    },
-                    {
+                      stylers:[{visibility: "off"}]
+                    },{
                       featureType: "poi.school",
-                      stylers: [{ visibility: "off" }],
-                    },
-                    {
+                      stylers: [{visibility: "off"}]
+                    },{
                       featureType: "transit",
-                      stylers: [{ visibility: "off" }],
-                    },
-                  ],
+                      stylers: [{visibility: "off"}]
+                    }
+                    ],
 
-                  zoom: 14,
+                  zoom: 13,
                 });
+                
 
                 const marqer = new window.google.maps.Marker({
                   position: {
@@ -87,102 +82,101 @@ function MapWithLoader({ user }) {
                   map: map,
                   title: "Mon adresse wesh",
                   icon: {
-                    url: user.pdp,
+                    url: process.env.PUBLIC_URL + "https://xsgames.co/randomusers/avatar.php?g=male",
                     scaledSize: {
                       width: 80,
-                      height: 80,
+                      height: 70,
                     },
-                  },
-                  shape: {
-                    coords: [10, 10, 10],
-                    type: "circle",
-                  },
+                  }
+                  
                 });
+                let previousClickEvent;
+                let previousDirectionsRenderer;
+                const directionsService = new window.google.maps.DirectionsService();
 
-                dates.map((date, index) => {
+                dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
                     { address: date.adress },
                     (results, status) => {
                       if (status === "OK") {
                         const infoWindowOptions = {
-                          content:
-                            '<h3 class= "map_content">Date avec ' +
-                            date.personne +
-                            "</h3>" +
-                            '<p class= "map_content_desc">Lieu:' +
-                            " " +
-                            '<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>' +
-                            "<br>Date: 16/12<br>Heure: 18h30 </p>" +
-                            '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px" />',
-                        };
-                        const infoWindow = new window.google.maps.InfoWindow(
-                          infoWindowOptions
-                        );
+                          content: '<h3 class= "map_content">Date avec '+ date.personne +'</h3>'
+                              + '<p class= "map_content_desc">Lieu:'+' '+'<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>'+'<br>Date: 16/12<br>Heure: 18h30 </p>'
+                              + '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px"/>'
+                      };
 
+                        const infoWindow = new window.google.maps.InfoWindow(infoWindowOptions);
                         const marker = new window.google.maps.Marker({
                           position: results[0].geometry.location,
                           map: map,
                           title: date.date,
+                          clickable: false, // Désactiver l'effet de zoom au clic
+                          label: "", // Supprimer les marqueurs A et B
                           optimized: false,
-
                           icon: {
-                            url: "https://xsgames.co/randomusers/avatar.php?g=female",
+                            url: process.env.PUBLIC_URL + "https://xsgames.co/randomusers/avatar.php?g=female",
                             scaledSize: {
                               width: 80,
                               height: 80,
                             },
-                          },
+                          }
+
                         });
 
-                        window.google.maps.event.addListener(
-                          marker,
-                          "mouseover",
-                          function () {
-                            infoWindow.open(map, marker);
+                        window.google.maps.event.addListener(marker, 'click', function() {
+                          // Supprimez l'événement de clic précédent
+                          if (previousClickEvent) {
+                            window.google.maps.event.removeListener(previousClickEvent);
                           }
-                        );
-                        window.google.maps.event.addListener(
-                          marker,
-                          "mouseout",
-                          function () {
-                            infoWindow.close();
+                          // Supprimez le tracé de la destination cliquée précédemment
+                          if (previousDirectionsRenderer) {
+                            previousDirectionsRenderer.setMap(null);
                           }
-                        );
+                          
+                          // Ajoutez le nouvel événement de clic
+                          const directionsRenderer = new window.google.maps.DirectionsRenderer({
+                            suppressMarkers: true,
+                          });
+                          const request = {
+                            origin: {
+                              lat: startCoordinates.lat,
+                              lng: startCoordinates.lng,
+                            },
+                            destination: results[0].geometry.location,
+                            travelMode: "DRIVING",
+                          };
+                          
+                          directionsService.route(request, (result, status) => {
+                            if (status === "OK") {
+                              directionsRenderer.setDirections(result);
+                            }
+                          });
+                          
+                          directionsRenderer.setMap(map);
+                          
+                          // Stockez la référence de l'événement de clic actuel
+                          previousClickEvent = window.google.maps.event.addListener(marker, 'click', function() {
+                          });
+                          
+                          // Stockez la référence du tracé de la destination cliquée actuellement
+                          previousDirectionsRenderer = directionsRenderer;
+                        });
+                        window.google.maps.event.addListener(marker,'mouseover', function() {
+                          infoWindow.open(map, marker);
+                        });
+                        window.google.maps.event.addListener(marker,'mouseout', function() {
+                          infoWindow.close();
+                        });
+                        var myoverlay = new window.google.maps.OverlayView();
+                        myoverlay.draw = function () {
+                          this.getPanes().markerLayer.id = "myMarker";
+                        };
+                        myoverlay.setMap(map);
                       }
                     }
                   );
                 });
-
-                const directionsService =
-                  new window.google.maps.DirectionsService();
-                const directionsRenderer =
-                  new window.google.maps.DirectionsRenderer();
-
-                const request = {
-                  origin: {
-                    lat: startCoordinates.lat,
-                    lng: startCoordinates.lng,
-                  },
-                  destination: {
-                    lat: endCoordinates.lat,
-                    lng: endCoordinates.lng,
-                  },
-                  travelMode: "DRIVING",
-                };
-
-                directionsService.route(request, (result, status) => {
-                  if (status === "OK") {
-                    directionsRenderer.setDirections(result);
-                  }
-                });
-
-                directionsRenderer.setMap(map);
-                var myoverlay = new window.google.maps.OverlayView();
-                myoverlay.draw = function () {
-                  this.getPanes().markerLayer.id = "myMarker";
-                };
-                myoverlay.setMap(map);
               }
             }}
           ></div>
