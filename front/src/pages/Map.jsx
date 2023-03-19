@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import axios from "axios";
-
+import Loader_transition from "../components/Loading";
 function MapWithLoader({ user, isDark }) {
   useEffect(() => {
     if (isDark) {
@@ -163,7 +163,7 @@ function MapWithLoader({ user, isDark }) {
     <div className="app-page">
       <div>
         {isLoading ? (
-          <p>Loading map...</p>
+          <Loader_transition></Loader_transition>
         ) : (
           <div
             className="google_map"
