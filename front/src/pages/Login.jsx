@@ -1,7 +1,7 @@
 import LoginForm from "../components/Formulaires/Login-form";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setUser }) => {
   const navigate = useNavigate();
 
   return (

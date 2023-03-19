@@ -22,9 +22,9 @@ function App() {
   //  const user -> représente l'utilisateur courant et ses données.
 
   const [user, setUser] = useState({
-    nom: "Merault",
-    prenom: "Valentin",
-    adress: "123 Rue des pavillons 81000 Albi France",
+    name: "valentin",
+    username: "merault",
+    localisation: "123 Rue des pavillons 81000 Albi",
   });
 
   //  const done -> permet de définir si l'application charge ou pas.
@@ -78,12 +78,15 @@ function App() {
           {!user ? (
             <Routes>
               <Route path="/" element={<Home></Home>}></Route>
-              <Route path="/login" element={<Login></Login>}></Route>
+              <Route
+                path="/login"
+                element={<Login setUser={setUser}></Login>}
+              ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
             </Routes>
           ) : (
             <div className="app-container">
-              <NavBar setUser={setUser}></NavBar>
+              <NavBar user={user} setUser={setUser}></NavBar>
 
               <Routes>
                 <Route

@@ -102,4 +102,7 @@
     .menu-items-container li {
         text-align: center;
     }
+    .others-btn {
+        display: none;
+    }
 }

@@ -7,7 +7,7 @@ function MapWithLoader({ user }) {
 
   const [dates, setDates] = useState([
     { adress: "68 rue de Bernis Albi", date: "resto", personne: "Valérie" },
-    {adress: "57 St Juéry Albi", date: "resto", personne: "Marine" }
+    { adress: "57 St Juéry Albi", date: "resto", personne: "Marine" },
   ]);
 
   const [startCoordinates, setStartCoordinates] = useState({
@@ -28,7 +28,6 @@ function MapWithLoader({ user }) {
 
     loader.load().then(() => {
       fetch_data();
-      
     });
   }, []);
 
@@ -37,7 +36,7 @@ function MapWithLoader({ user }) {
       "https://maps.googleapis.com/maps/api/geocode/json",
       {
         params: {
-          address: user.adress,
+          address: user.localisation,
           key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
         },
       }
@@ -65,19 +64,20 @@ function MapWithLoader({ user }) {
                   styles: [
                     {
                       featureType: "poi",
-                      stylers:[{visibility: "off"}]
-                    },{
+                      stylers: [{ visibility: "off" }],
+                    },
+                    {
                       featureType: "poi.school",
-                      stylers: [{visibility: "off"}]
-                    },{
+                      stylers: [{ visibility: "off" }],
+                    },
+                    {
                       featureType: "transit",
-                      stylers: [{visibility: "off"}]
-                    }
-                    ],
+                      stylers: [{ visibility: "off" }],
+                    },
+                  ],
 
                   zoom: 14,
                 });
-                
 
                 const marqer = new window.google.maps.Marker({
                   position: {
@@ -86,9 +86,19 @@ function MapWithLoader({ user }) {
                   },
                   map: map,
                   title: "Mon adresse wesh",
-                  icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                  
+                  icon: {
+                    url: "https://xsgames.co/randomusers/avatar.php?g=male",
+                    scaledSize: {
+                      width: 80,
+                      height: 80,
+                    },
+                  },
+                  shape: {
+                    coords: [10, 10, 10],
+                    type: "circle",
+                  },
                 });
+
                 dates.map((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
@@ -96,30 +106,53 @@ function MapWithLoader({ user }) {
                     (results, status) => {
                       if (status === "OK") {
                         const infoWindowOptions = {
-                          content: '<h3 class= "map_content">Date avec '+ date.personne +'</h3>'
-                              + '<p class= "map_content_desc">Lieu:'+' '+'<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>'+'<br>Date: 16/12<br>Heure: 18h30 </p>'
-                              + '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px" />'
-                      };
-                        const infoWindow = new window.google.maps.InfoWindow(infoWindowOptions);
+                          content:
+                            '<h3 class= "map_content">Date avec ' +
+                            date.personne +
+                            "</h3>" +
+                            '<p class= "map_content_desc">Lieu:' +
+                            " " +
+                            '<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>' +
+                            "<br>Date: 16/12<br>Heure: 18h30 </p>" +
+                            '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px" />',
+                        };
+                        const infoWindow = new window.google.maps.InfoWindow(
+                          infoWindowOptions
+                        );
+
                         const marker = new window.google.maps.Marker({
                           position: results[0].geometry.location,
                           map: map,
                           title: date.date,
-                          icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                        });
-                        window.google.maps.event.addListener(marker,'mouseover', function() {
-                          infoWindow.open(map, marker);
-                        });
-                        window.google.maps.event.addListener(marker,'mouseout', function() {
+                          optimized: false,
 
-                          infoWindow.close();
+                          icon: {
+                            url: "https://xsgames.co/randomusers/avatar.php?g=female",
+                            scaledSize: {
+                              width: 80,
+                              height: 80,
+                            },
+                          },
                         });
+
+                        window.google.maps.event.addListener(
+                          marker,
+                          "mouseover",
+                          function () {
+                            infoWindow.open(map, marker);
+                          }
+                        );
+                        window.google.maps.event.addListener(
+                          marker,
+                          "mouseout",
+                          function () {
+                            infoWindow.close();
+                          }
+                        );
                       }
                     }
                   );
                 });
-
-                
 
                 const directionsService =
                   new window.google.maps.DirectionsService();
@@ -145,6 +178,11 @@ function MapWithLoader({ user }) {
                 });
 
                 directionsRenderer.setMap(map);
+                var myoverlay = new window.google.maps.OverlayView();
+                myoverlay.draw = function () {
+                  this.getPanes().markerLayer.id = "myMarker";
+                };
+                myoverlay.setMap(map);
               }
             }}
           ></div>

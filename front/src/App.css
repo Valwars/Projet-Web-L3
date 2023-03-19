@@ -180,12 +180,13 @@
             transform: translate3d(0, 0, 0);
         }
     }
-
-    .map_content{
-        color : black;
+    
+    .map_content {
+        color: black;
     }
-    .map_content_desc{
-        color : black;
+    
+    .map_content_desc {
+        color: black;
     }
     
     .sparkly {
@@ -854,4 +855,39 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+    
+    @media (max-width: 767px) {
+        .match-content .match {
+            width: 100%;
+        }
+        .match-content {
+            width: 85%;
+        }
+        .pic {
+            width: 100%;
+            height: auto;
+        }
+        .app-container {
+            height: 100%;
+        }
+    }
+    
+    @-moz-document url-prefix() {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        button {
+            /*reset for mobile browsers */
+            font-weight: normal !important;
+        }
+    }
+    
+    #myMarker img {
+        border-radius: 100% !important;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }

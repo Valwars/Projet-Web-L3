@@ -116,3 +116,21 @@
     scrollbar-width: none;
     /* Firefox */
 }
+
+@media (max-width: 767px) {
+    .chat-messages {
+        height: 72vh;
+    }
+    .user-details {
+        transform: translateX(-25%);
+    }
+    .message {
+        max-width: 70%;
+    }
+    .input-container input {
+        width: 90%;
+    }
+    .input-container button {
+        width: 10%;
+    }
+}

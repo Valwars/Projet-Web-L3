@@ -2,7 +2,7 @@ import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
 import DarkModeButton from "../dark_mode/toogle";
 
-const NavBar = ({ setUser }) => {
+const NavBar = ({ user, setUser }) => {
   return (
     <div className="nav">
       <div className="content">
