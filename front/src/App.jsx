@@ -100,16 +100,16 @@ function App() {
                   element={<Matchs user={user} setLocate={setLocate}></Matchs>}
                 ></Route>
 
-                <Route
-                  path="/profile"
-                  element={<Profile user={user} locate={locate}></Profile>}
-                ></Route>
-
                 <Route path="/chat" element={<Chat user={user}></Chat>}></Route>
 
                 <Route
                   path="/Map"
                   element={<Map user={user} locate={locate}></Map>}
+                ></Route>
+
+                <Route
+                  path="/user-profile"
+                  element={<Profile user={user} locate={locate}></Profile>}
                 ></Route>
               </Routes>
             </div>
