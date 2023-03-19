@@ -85,7 +85,7 @@ function MapWithLoader({ user }) {
                     url: process.env.PUBLIC_URL + "https://xsgames.co/randomusers/avatar.php?g=male",
                     scaledSize: {
                       width: 80,
-                      height: 70,
+                      height: 80,
                     },
                   }
                   
