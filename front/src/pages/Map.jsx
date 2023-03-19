@@ -210,14 +210,7 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<h3 class= "map_content">Date avec ' +
-                            date.personne +
-                            "</h3>" +
-                            '<p class= "map_content_desc">Lieu:' +
-                            " " +
-                            '<a href="http://www.locronan-tourisme.com/" target="_blank">Macdo</a>' +
-                            "<br>Date: 16/12<br>Heure: 18h30 </p>" +
-                            '<br/><img src="https://xsgames.co/randomusers/avatar.php?g=female" width="200px"/>',
+                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>Jane Cooper</h2><p>Macdo</p><p>04/05 - 18h30</p></div></div>',
                         };
 
                         const infoWindow = new window.google.maps.InfoWindow(
