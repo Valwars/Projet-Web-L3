@@ -78,9 +78,10 @@ function App() {
           {!user ? (
             <Routes>
               <Route path="/" element={<Home></Home>}></Route>
+
               <Route
                 path="/login"
-                element={<Login setUser={setUser}></Login>}
+                element={<Login setUser={setUser} />}
               ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
             </Routes>
@@ -99,7 +100,7 @@ function App() {
                 ></Route>
 
                 <Route
-                  path="/user-profile"
+                  path="/profile"
                   element={<Profile user={user} locate={locate}></Profile>}
                 ></Route>
 
