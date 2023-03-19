@@ -260,6 +260,10 @@ function MapWithLoader({ user, isDark }) {
                             const directionsRenderer =
                               new window.google.maps.DirectionsRenderer({
                                 suppressMarkers: true,
+                                polylineOptions: {
+                                  strokeColor: "#FF7A7A",
+                                  strokeWeight: 6,
+                                },
                               });
                             const request = {
                               origin: {
