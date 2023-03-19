@@ -92,7 +92,7 @@ function App() {
                 ></Route>
 
                 <Route
-                  path="/user-profile"
+                  path="/profile"
                   element={<Profile user={user} locate={locate}></Profile>}
                 ></Route>
 

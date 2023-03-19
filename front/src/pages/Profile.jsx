@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Profile = ({ user_id, locate }) => {
+const User = ({ user, locate }) => {
   const navigate = useNavigate();
 
-  const [profile, setProfile] = useState({
-   locate
-  });
+  // const [user, setuser] = useState({
+  //  user
+  // });
 
   return (
     <div className="app-page">
-      <div className="profile-content">
+      <div className="user-content">
         <div className="inputs-container">
           <button onClick={() => navigate("/")}>Retour</button>
           {locate === "/match" ? (
@@ -24,15 +24,15 @@ const Profile = ({ user_id, locate }) => {
         </div>
 
         <div className="user-data">
-          <img className="pdp" src={profile.pdp} alt="" />
-          <h1>{profile.nom + " " + profile.prenom}</h1>
-          <h2>{profile.age + " ans - " + profile.adress}</h2>
-          <p>{profile.description}</p>
+          <img className="pdp" src={user.pdp} alt="" />
+          <h1>{user.name + " " + user.fistname}</h1>
+          <h2>{user.age + " ans - " + user.localisation}</h2>
+          <p>{user.description}</p>
         </div>
         <div className="user-pics">
           <h2>Photos :</h2>
           <div className="pics-container">
-            {profile.photos.map((photo) => {
+            {user.photos.map((photo) => {
               return (
                 <div className="pic">
                   <img src={photo} alt="" />
@@ -46,4 +46,4 @@ const Profile = ({ user_id, locate }) => {
   );
 };
 
-export default Profile;
+export default User;
