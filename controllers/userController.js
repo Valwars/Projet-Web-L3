@@ -40,3 +40,23 @@ const dbo = client.db('Sparkly');
   }
 
 };
+
+
+module.exports.dates = async(req, res, next) => {
+  const client =await  MongoClient.connect(url_db);
+  const dbo = client.db('Sparkly');
+  console.log(req.u);
+    // try {
+     
+    //   const admin = await dbo.collection('Admin').findOne({"" :});
+  
+    //   if(!admin){
+    //     return res.json({message : false});
+    //   }
+    //   console.log('profil visité')
+    //   res.send(admin);
+    // } catch (error) {
+    //   next(error);;
+    // }
+
+}

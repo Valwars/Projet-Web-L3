@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
 import Map from "./pages/Map";
 import UserProfile from "./pages/userProfile";
+import Dates from "./pages/Dates";
 function App() {
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
@@ -120,6 +121,11 @@ function App() {
                   path="/profile"
                   element={<UserProfile user={user} locate={locate}></UserProfile>}
                 ></Route>
+                <Route
+                  path="/dates"
+                  element={<Dates user={user} locate={locate}></Dates>}
+                ></Route>
+
               </Routes>
             </div>
           )}

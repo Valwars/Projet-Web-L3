@@ -1,7 +1,7 @@
 const {
     login,
     profile,
-    Dates
+    dates
 } = require("../controllers/userController.js");
 
 
@@ -9,8 +9,8 @@ const router = require("express").Router();
 
 router.post("/login", login)
 
-router.post("/profile",profile)
+router.get("/profile",profile)
 
-// router.post("")
+router.get("/dates", dates)
 
 module.exports = router;
