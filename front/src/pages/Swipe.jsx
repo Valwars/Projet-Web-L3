@@ -1,7 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import $ from "jquery";
+import { userRoute } from "../utils/APIRoutes";
 
 const Swipe = ({ user, setLocate }) => {
+
   const navigate = useNavigate();
+  $(async function(){
+    const data = await window.fetch(userRoute);
+   const jason = await data.json();
+  })
+
   
   return (
     <div className="app-page">

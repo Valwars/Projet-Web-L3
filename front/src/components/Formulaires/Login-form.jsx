@@ -49,7 +49,7 @@ const Login_Form = ({ setUser }) => {
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
    
         setUser(u);
-         navigate('/profile');
+         navigate('/');
       
     }
   };

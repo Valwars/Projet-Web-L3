@@ -13,7 +13,7 @@ import NavBar from "./components/navigation/NavigationBar";
 import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
 import Map from "./pages/Map";
-
+import UserProfile from "./pages/userProfile";
 function App() {
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
@@ -21,12 +21,8 @@ function App() {
 
   //  const user -> représente l'utilisateur courant et ses données.
 
-  const [user, setUser] = useState({
-    name: "valentin",
-    username: "merault",
-    localisation: "123 Rue des pavillons 81000 Albi",
-    pdp: "https://xsgames.co/randomusers/avatar.php?g=male",
-  });
+  const [user, setUser] = useState(undefined
+  );
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);
@@ -118,6 +114,11 @@ function App() {
                 <Route
                   path="/user-profile"
                   element={<Profile user={user} locate={locate}></Profile>}
+                ></Route>
+
+                <Route
+                  path="/profile"
+                  element={<UserProfile user={user} locate={locate}></UserProfile>}
                 ></Route>
               </Routes>
             </div>
