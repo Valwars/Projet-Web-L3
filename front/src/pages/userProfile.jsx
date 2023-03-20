@@ -3,10 +3,25 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import { userRoute } from "../utils/APIRoutes";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 const UserProfile = ({user,locate}) => {
     const navigate = useNavigate();
+    
+    const data = {
+      labels: ["Red", "Blue", "Yellow"],
+      datasets: [
+      {
+      label: "My First Dataset",
+      data: [300, 50, 100],
+      backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      },
+      ],
+      };
  
   
 
@@ -48,6 +63,7 @@ const UserProfile = ({user,locate}) => {
              )
     
               })}</ul>
+            <Pie data={data}/>
            
           </div>
         </div>

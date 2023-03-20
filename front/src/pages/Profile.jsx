@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const Profile = ({ user_id, locate }) => {
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const Profile = ({ user_id, locate }) => {
 
   return (
     <div className="app-page">
-      <div className="profile-content">
+      <div className="profile-content"> 
         <div className="inputs-container">
           <button onClick={() => navigate("/")}>Retour</button>
           {locate === "/match" ? (

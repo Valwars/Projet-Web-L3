@@ -124,8 +124,8 @@ function MapWithLoader({ user, isDark }) {
   ]);
 
   const [dates, setDates] = useState([
-    { adress: "68 rue de Bernis Albi", date: "resto", personne: "Valérie" },
-    { adress: "57 St Juéry Albi", date: "resto", personne: "Marine" },
+    { adress: "68 rue de Bernis Albi", date: "Resto", personne: "Valérie", heure:"12h30", jour:"12/05"},
+    { adress: "57 St Juéry Albi", date: "Macdo", personne: "Marine", heure:"18h30", jour:"18/05"},
   ]);
 
   const [startCoordinates, setStartCoordinates] = useState({
@@ -186,11 +186,9 @@ function MapWithLoader({ user, isDark }) {
                     lng: startCoordinates.lng,
                   },
                   map: map,
-                  title: "Mon adresse wesh",
+                  title: "Mon adresse",
                   icon: {
-                    url:
-                      process.env.PUBLIC_URL +
-                      "https://xsgames.co/randomusers/avatar.php?g=male",
+                    url: user.pdp,
                     scaledSize: {
                       width: 80,
                       height: 80,
@@ -210,7 +208,7 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>Jane Cooper</h2><p>Macdo</p><p>04/05 - 18h30</p></div></div>',
+                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>'+ date.personne+'</h2><p>'+date.date+'</p><p>'+date.jour+' - '+ date.heure +'</p></div></div>',
                         };
 
                         const infoWindow = new window.google.maps.InfoWindow(
