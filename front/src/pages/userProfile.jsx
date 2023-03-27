@@ -23,16 +23,11 @@ const UserProfile = ({user,locate}) => {
       ],
       };
  
-  
-
-
+      
     return(
         <div className="app-page">
         <div className="profile-content">
-          <div className="inputs-container">
-            <button onClick={() => navigate("/")}>Retour</button>
-                      
-          </div>
+         
   
           <div className="user-data">
             <img className="pdp" src={user.pdp} alt="" />

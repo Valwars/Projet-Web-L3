@@ -23,18 +23,13 @@ const dbo = client.db('Sparkly');
 };
 
 
-module.exports.profile = async(req, res, next) => {
+module.exports.swipe = async(req, res, next) => {
   const client =await  MongoClient.connect(url_db);
 const dbo = client.db('Sparkly');
   try {
-   
-    const admin = await dbo.collection('Admin').findOne();
-
-    if(!admin){
-      return res.json({message : false});
-    }
-    console.log('profil visité')
-    res.send(admin);
+   const resultat = await dbo.collection('users').find({}).toArray();
+     res.send(resultat);
+     
   } catch (error) {
     next(error);;
   }
@@ -45,7 +40,7 @@ const dbo = client.db('Sparkly');
 module.exports.dates = async(req, res, next) => {
   const client =await  MongoClient.connect(url_db);
   const dbo = client.db('Sparkly');
-  console.log(req.u);
+  console.log(req.query.user);
     // try {
      
     //   const admin = await dbo.collection('Admin').findOne({"" :});
@@ -59,4 +54,23 @@ module.exports.dates = async(req, res, next) => {
     //   next(error);;
     // }
 
+}
+
+
+module.exports.profil = async(req,res,next)=>{
+  const client =await  MongoClient.connect(url_db);
+const dbo = client.db('Sparkly');
+console.log(req.query.myString);
+  try {
+    const theid = req.query.myString;
+    const admin = await dbo.collection('users').findOne({ _id: new ObjectId(theid)});
+
+    if(!admin){
+      return res.json({message : false});
+    }
+    console.log(admin)
+    res.send({ message: true, uti: admin });
+  } catch (error) {
+    next(error);;
+  }
 }
