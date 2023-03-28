@@ -4,23 +4,23 @@ import axios from "axios";
 import $ from "jquery";
 import { datesRoute } from "../utils/APIRoutes";
 import UserProfile from "./userProfile";
-const Dates = ({user,locate}) => {
-    const navigate = useNavigate();    
-   const [leuser, setLeuser] = useState({});
-   const [date , setDate] = useState({});
-   const [tab , setTab] = useState([]);
-   useEffect(()=> {
-     setLeuser(user)
-        const fetchData = async () => {
-            setLeuser(user)
-           console.log(leuser._id);
-           var unid = leuser._id;
-            try {
-                const response = await axios.get(datesRoute, {
-                    params: {
-                        lid : unid
-                    }
-                });
+const Dates = ({ user, locate }) => {
+  const navigate = useNavigate();
+  const [leuser, setLeuser] = useState({});
+  const [date, setDate] = useState({});
+  const [tab, setTab] = useState([]);
+  useEffect(() => {
+    setLeuser(user);
+    const fetchData = async () => {
+      setLeuser(user);
+      console.log(leuser._id);
+      var unid = leuser._id;
+      try {
+        const response = await axios.get(datesRoute, {
+          params: {
+            lid: unid,
+          },
+        });
 
                 // console.log(response.data.uti);
                 // var premier = response.data.uti.premier;
@@ -46,11 +46,9 @@ const Dates = ({user,locate}) => {
          
         <div className="dates">
         <h2>La liste de vos dates</h2>
-        
-     </div>      
-          </div>
-   
-    )
-}
+      </div>
+    </div>
+  );
+};
 
 export default Dates;

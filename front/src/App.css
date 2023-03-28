@@ -1125,6 +1125,7 @@ footer {
     background-clip: text;
     /* découpe le fond du texte en forme de texte */
     color: transparent;
+    opacity: 0.7;
     /* rend le texte invisible */
 }
 

@@ -4,48 +4,41 @@ import $ from "jquery";
 import { userRoute } from "../utils/APIRoutes";
 import axios from "axios";
 
-
 const Profile = ({ user_id, locate }) => {
   const navigate = useNavigate();
   const [userID, setuserID] = useState("");
- const [profile, setProfile] = useState({photos : [], interests : []});
+  const [profile, setProfile] = useState({ photos: [], interests: [] });
 
+  useEffect(() => {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const userIDparams = params.get("user_id");
+    setuserID(userIDparams);
 
-useEffect(() => {
-  const queryString = window.location.search;    
-  const params = new URLSearchParams(queryString);   
-  const userIDparams = params.get('user_id');
-  setuserID(userIDparams);
-   const fetchData =async ()=> {
-   
+    const fetchData = async () => {
       try {
-   const response = await axios.get(userRoute,{
-    params: {
-      myString: userID
-    }
-   })  
-      console.log(response.data.uti);
-   console.log(response.data.message);
-   if (response.data.message){
-        var u = response.data.uti;
-         setProfile(u)
-         console.log(profile)
-   }
-
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  fetchData();
-},[navigate,userID, locate])
- 
-  
+        const response = await axios.get(userRoute, {
+          params: {
+            myString: userID,
+          },
+        });
+        console.log(response.data.uti);
+        console.log(response.data.message);
+        if (response.data.message) {
+          var u = response.data.uti;
+          setProfile(u);
+          console.log(profile);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [navigate, userID, locate]);
 
   return (
-   
     <div className="app-page">
-      <div className="profile-content"> 
+      <div className="profile-content">
         <div className="inputs-container">
           <button onClick={() => navigate("/")}>Retour</button>
           {locate === "/match" ? (
@@ -76,12 +69,10 @@ useEffect(() => {
             })}
 
             <ul>
-             {profile.interests.map((inte) => {
-                return (
-                 <li>{inte}</li>
-                );
+              {profile.interests.map((inte) => {
+                return <li>{inte}</li>;
               })}
-              </ul>
+            </ul>
           </div>
         </div>
       </div>
