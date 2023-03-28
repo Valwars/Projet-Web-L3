@@ -22,6 +22,7 @@
     flex-direction: row;
     position: absolute;
     left: 50%;
+    z-index: 10000;
 }
 
 .user-details img {
@@ -132,5 +133,11 @@
     }
     .input-container button {
         width: 10%;
+    }
+    .chat-header {
+        flex-direction: column;
+    }
+    .chat-header .user-details {
+        width: fit-content;
     }
 }

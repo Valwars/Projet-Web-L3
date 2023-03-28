@@ -41,7 +41,7 @@ const Chat = ({ user }) => {
   ]);
 
   return (
-    <div className="app-page">
+    <div className="app-page chat-page">
       {conversations.length == 0 ? (
         <>
           <div className="no_conv">

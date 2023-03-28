@@ -12,7 +12,7 @@ const Login_Form = ({ setUser }) => {
 
   const [values, setValues] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const toastOptions = {
@@ -28,16 +28,15 @@ const Login_Form = ({ setUser }) => {
     // fonction a appeler quand l'user clique sur "connexion"
     event.preventDefault();
 
-    
     const response = await axios.post(loginRoute, {
-      values
+      values,
     });
     const data = response.data.message;
     const u = response.data.uti;
-  
-    console.log(data)
 
-    if (data==false) {
+    console.log(data);
+
+    if (data == false) {
       toast.error("response.error", toastOptions);
     }
     if (data) {
@@ -47,10 +46,9 @@ const Login_Form = ({ setUser }) => {
       local_user(u);
 
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
-   
-        setUser(u);
-         navigate('/');
-      
+
+      setUser(u);
+      navigate("/");
     }
   };
 
@@ -60,7 +58,6 @@ const Login_Form = ({ setUser }) => {
       JSON.stringify(response.token)
     );
   };
-
 
   return (
     <div className="login">
@@ -88,34 +85,29 @@ const Login_Form = ({ setUser }) => {
             required="required"
           ></input>
         </div>
-        
+
         <button
           className="l-but"
           type="submit"
-        // onClick={() =>
-        //   setUser({
+          // onClick={() =>
+          //   setUser({
 
-        //   }
-        //     )
-        // }
+          //   }
+          //     )
+          // }
         >
           Connexion →
         </button>
-        
-          <div className="redirect">
-        <div>
-          <p>Vous n'avez pas encore de compte ?</p>
-          <button onClick={() => navigate("/register")}>
-            Créer un compte
-          </button>
+
+        <div className="redirect">
+          <div>
+            <p>Vous n'avez pas encore de compte ?</p>
+            <button onClick={() => navigate("/register")}>
+              Créer un compte
+            </button>
+          </div>
         </div>
-
-      </div>
       </form>
-
-
-    
-
     </div>
   );
 };

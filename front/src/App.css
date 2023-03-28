@@ -8,7 +8,6 @@
     --medium-font: clamp(1rem, 1.1vw + .1rem, 2rem);
     --little-font: clamp(0.8rem, 1vw + .1rem, 1.5rem);
     --search-bg: rgba(25, 25, 25, 0.42);
-
 }
 
 @font-face {
@@ -31,6 +30,7 @@
 }
 
 body {
+    width: 100vw;
     background-color: var(--background-color);
     color: var(--text-color);
     overflow-x: hidden;
@@ -86,7 +86,7 @@ span:not( .menu-items-container span) {
 }
 
 .text-anim {
-    position: relative;
+    position: absolute;
     left: 50%;
     display: flex;
     margin-bottom: 120px;
@@ -204,7 +204,7 @@ span:not( .menu-items-container span) {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    opacity: 0.35;
+    opacity: 0.45;
     text-fill-color: transparent;
 }
 
@@ -537,7 +537,7 @@ footer {
 }
 
 .trap .bigtitle {
-    font-size: clamp(3rem, 8vw + .1rem, 8rem);
+    font-size: clamp(4.5rem, 8vw + .1rem, 8rem);
     margin: 0;
 }
 
@@ -976,19 +976,6 @@ footer {
     }
 }
 
-@-moz-document url-prefix() {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    button {
-        font-weight: normal !important;
-    }
-}
-
 #myMarker img {
     border-radius: 100% !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -1083,33 +1070,31 @@ footer {
 
 /* Page profil utilisateur */
 
-.haut-profil{    
+.haut-profil {
     width: 70%;
     margin: auto;
-    text-align: center;   
+    text-align: center;
 }
 
-.profil-information{
+.profil-information {
     display: flex;
     flex-direction: row;
-   width: 100%;
-
+    width: 100%;
 }
 
-.profil-information h2, .profil-information span{
+.profil-information h2,
+.profil-information span {
     width: fit-content;
     margin: auto;
-
 }
 
-
-.profil-interests ul{
+.profil-interests ul {
     display: flex;
     flex-direction: row;
     list-style: none;
 }
 
-.profil-interests li{
+.profil-interests li {
     background-color: var(--div_bg);
     margin: auto;
     padding: 1vw;
@@ -1118,35 +1103,37 @@ footer {
 }
 
 .graphiques {
-    width: 20vw !important; 
+    width: 20vw !important;
     height: 20vw !important;
     margin: auto;
     margin-right: 5vw;
 }
 
-.profile-stats{
+.profile-stats {
     display: flex;
     flex-direction: column;
     max-width: 100%;
 }
 
-.stat h1{
+.stat h1 {
     font-size: 15vw;
-    background: linear-gradient(90deg,#FF7A7A , #B14FFF);
-    -webkit-background-clip: text; /* découpe le fond du texte en forme de texte pour les navigateurs WebKit */
-    -moz-background-clip: text; /* découpe le fond du texte en forme de texte pour les navigateurs Mozilla */
-    background-clip: text; /* découpe le fond du texte en forme de texte */
-    color: transparent; /* rend le texte invisible */
+    background: linear-gradient(90deg, #FF7A7A, #B14FFF);
+    -webkit-background-clip: text;
+    /* découpe le fond du texte en forme de texte pour les navigateurs WebKit */
+    -moz-background-clip: text;
+    /* découpe le fond du texte en forme de texte pour les navigateurs Mozilla */
+    background-clip: text;
+    /* découpe le fond du texte en forme de texte */
+    color: transparent;
+    /* rend le texte invisible */
 }
 
-
-.stat *{
+.stat * {
     width: fit-content;
     margin: auto;
-
 }
 
-.stat{
+.stat {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -1154,8 +1141,7 @@ footer {
     margin-bottom: 10vw;
 }
 
-
-.photos-container{
+.photos-container {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -1163,20 +1149,16 @@ footer {
     gap: 5%
 }
 
-.photo{
-    width:12vw;
-    height:16vw ;
+.photo {
+    width: 12vw;
+    height: 16vw;
     margin-bottom: 5vw;
 }
 
-
-.photo img{
-
+.photo img {
     width: 100%;
     height: 100%;
     background: rgba(25, 25, 25, 0.42);
     border-radius: 25px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
 }
-

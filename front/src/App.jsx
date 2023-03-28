@@ -22,22 +22,14 @@ function App() {
 
   //  const user -> représente l'utilisateur courant et ses données.
 
-  const [user, setUser] = useState(undefined
-  );
-  /*const [user, setUser] = useState({
-    name: "valentin",
-    username: "merault",
-    localisation: "123 Rue des pavillons 81000 Albi",
-    pdp: "https://xsgames.co/randomusers/avatar.php?g=male",
-  } undefined);*/
+  const [user, setUser] = useState(undefined);
+  /*const [user, setUser] = useState({  */
 
   //  const done -> permet de définir si l'application charge ou pas.
   const [done, setDone] = useState(true);
 
   //  const dataFetchedRef -> permet de vérifier que on fetch les data une seule fois.
   const dataFetchedRef = useRef(false);
-
-  const [form_complete, useForm] = useState(true);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -125,13 +117,14 @@ function App() {
 
                 <Route
                   path="/profile"
-                  element={<UserProfile user={user} locate={locate}></UserProfile>}
+                  element={
+                    <UserProfile user={user} locate={locate}></UserProfile>
+                  }
                 ></Route>
                 <Route
                   path="/dates"
                   element={<Dates user={user} locate={locate}></Dates>}
                 ></Route>
-
               </Routes>
             </div>
           )}

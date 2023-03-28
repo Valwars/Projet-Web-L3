@@ -105,4 +105,10 @@
     .others-btn {
         display: none;
     }
+    .content {
+        width: 100%;
+    }
+    .chat-page {
+        height: 90%;
+    }
 }
