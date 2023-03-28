@@ -2,13 +2,16 @@ const {
     login,
     swipe,
     dates,
-    profil
+    profil,
+    register
 } = require("../controllers/userController.js");
 
 
 const router = require("express").Router();
 
 router.post("/login", login)
+
+router.post("/register", register)
 
 router.get("/",swipe)
 
