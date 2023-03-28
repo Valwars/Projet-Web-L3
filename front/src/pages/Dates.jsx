@@ -22,17 +22,17 @@ const Dates = ({user,locate}) => {
                     }
                 });
 
-                console.log(response.data.uti);
-                var premier = response.data.uti.premier;
-                var second = response.data.uti.second;
-                const recup = await axios.get(UserProfile, 
-                    {
-                        params: {
-                            myString : premier
-                        }
-                    })
-                    setTab(tab.concat(recup.data.uti))
-                    console.log(tab)
+                // console.log(response.data.uti);
+                // var premier = response.data.uti.premier;
+                // var second = response.data.uti.second;
+                // const recup = await axios.get(UserProfile, 
+                //     {
+                //         params: {
+                //             myString : premier
+                //         }
+                //     })
+                //     setTab(tab.concat(recup.data.uti))
+                //     console.log(tab)
             } catch (error) {
                 console.error(error);
             }
