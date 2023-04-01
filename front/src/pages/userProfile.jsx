@@ -3,25 +3,132 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import { userRoute } from "../utils/APIRoutes";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
-ChartJS.register(ArcElement, Tooltip, Legend);
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  TimeScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  TimeScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 const UserProfile = ({user,locate}) => {
     const navigate = useNavigate();
+
     
-    const data = {
-      labels: ["Red", "Blue", "Yellow"],
+
+    const [nombre_match, setnombre_match ] = useState([
+      { date: "10/02/2021", count: 0 },
+      { date: "11/02/2021", count: 1 },
+      { date: "17/02/2021", count: 2 },
+      { date: "10/03/2021", count: 3 }
+    ]);
+    
+    const [nombre_conversation, setConversation] = useState([
+      { date: "11/02/2021", count: 0 },
+      { date: "17/02/2021", count: 1 },
+      { date: "10/03/2021", count: 2 }
+    ]);
+    
+    const [nombre_date, setnombre_date ] = useState([
+      { date: "10/02/2021", count: 0 },
+      { date: "11/02/2021", count: 1 },
+      { date: "17/02/2021", count: 2 },
+      { date: "10/03/2021", count: 3 }
+    ]);
+    
+    const [e, s ] = useState([
+      { date: "10/02/2021", count: 0 },
+      { date: "11/02/2021", count: 1 },
+      { date: "17/02/2021", count: 2 },
+      { date: "10/03/2021", count: 3 }
+    ]);
+    
+    const data_match = {
+      labels: nombre_match.map((item) => item.date),
       datasets: [
-      {
-      label: "My First Dataset",
-      data: [300, 50, 100],
-      backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-      hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-      },
+        {
+          label: "Nombre de matchs depuis votre inscription",
+          data: nombre_match.map((item) => item.count),
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+        },
       ],
-      };
+    };
+
+    
+    const data_conversation = {
+      labels: nombre_conversation.map((item) => item.date),
+      datasets: [
+        {
+          label: "Nombre de conversations depuis votre inscription",
+          data: nombre_conversation.map((item) => item.count),
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+        },
+      ],
+    };
+    
+    const data_date = {
+      labels: nombre_date.map((item) => item.date),
+      datasets: [
+        {
+          label: "Nombre de dates depuis votre inscription",
+          data: nombre_date.map((item) => item.count),
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+        },
+      ],
+    };
+    
+    const options_stat = {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Chart.js Line Chart',
+        },
+      },
+      scales: {
+        y:
+          {
+            min: 0,
+            max: 10,
+            ticks: {
+              stepSize: 1,
+            },
+          },
+        x:
+          {
+            type: 'time',
+            time: {
+              tooltipFormat: 'DD/MM/YY'
+            },
+            title: {
+              display: true,
+              text: "Date",
+            },        
+          },
+      },
+    };
+
  
       
     return(
@@ -69,21 +176,23 @@ const UserProfile = ({user,locate}) => {
             <span> <h2>Voir plus</h2> </span>          
           </div> 
 <h2>Statistiques :</h2>
+      <h4>Conversations</h4>
           <div className="profile-stats">           
            <div className="stat">
              <h1>10</h1> 
-            <Pie className="graphiques" data={data}/>
-           </div>
-           
-           <div className="stat">
-             <Pie className="graphiques" data={data}/>
-              <h1>20</h1> 
-           
+            <Line className="graphiques"  data={data_conversation} options={options_stat}/>
            </div>
 
+      <h4>Matchs</h4>
+           <div className="stat">
+             <Line className="graphiques"  data={data_match} options={options_stat}/>
+              <h1>20</h1> 
+           </div>
+
+      <h4>Dates</h4>
            <div className="stat">
              <h1>10</h1> 
-            <Pie className="graphiques" data={data}/>
+            <Line className="graphiques"  data={data_date} options={options_stat}/>
            </div>
           
            
