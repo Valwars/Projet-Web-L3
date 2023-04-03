@@ -3,23 +3,20 @@ import { useNavigate } from "react-router-dom";
 import $ from "jquery";
 import { userRoute } from "../utils/APIRoutes";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Profile = ({ user_id, locate }) => {
   const navigate = useNavigate();
-  const [userID, setuserID] = useState("");
   const [profile, setProfile] = useState({ photos: [], interests: [] });
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const params = new URLSearchParams(queryString);
-    const userIDparams = params.get("user_id");
-    setuserID(userIDparams);
+  const { token } = useParams();
 
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(userRoute, {
           params: {
-            myString: userID,
+            myString: token,
           },
         });
         console.log(response.data.uti);
@@ -34,7 +31,7 @@ const Profile = ({ user_id, locate }) => {
       }
     };
     fetchData();
-  }, [navigate, userID, locate]);
+  }, [navigate, token, locate]);
 
   return (
     <div className="app-page">

@@ -111,7 +111,7 @@ function App() {
                 ></Route>
 
                 <Route
-                  path="/user-profile"
+                  path="/user-profile/:token"
                   element={<Profile user={user} locate={locate}></Profile>}
                 ></Route>
 
