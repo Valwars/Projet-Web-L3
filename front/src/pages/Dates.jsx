@@ -65,7 +65,7 @@ const Dates = ({ user, locate }) => {
         <div className="matchs-container">
           {
             tab.map((user) => {
-              if (user) {
+              if (user != undefined) {
                 return (
                   <div
                   className="match"
@@ -75,7 +75,7 @@ const Dates = ({ user, locate }) => {
                   }}
                 >                 
                     {user.personnes.map((u)=>{
-                     if (u){
+                     if (u != undefined){
                        return (
                        <>
                        <img src={u.pdp} alt="" />
