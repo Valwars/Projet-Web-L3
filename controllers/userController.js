@@ -1,11 +1,7 @@
-const MongoClient = require('mongodb').MongoClient;
 const { ObjectId } = require("mongodb");
-const url_db = 'mongodb+srv://valwars:0SBdCbgxuKaSw8Ta@l3-web.c0vkjhr.mongodb.net/?retryWrites=true&w=majority';
-
-
-
+const client = require('../database/mongo_connect');
 module.exports.login = async (req, res, next) => {
-  const client = await MongoClient.connect(url_db);
+  
   const dbo = client.db('Sparkly');
   try {
     const email = req.body.values.email;
@@ -29,7 +25,7 @@ module.exports.register = async (req, res, next) => {
 
 
 module.exports.swipe = async (req, res, next) => {
-  const client = await MongoClient.connect(url_db);
+  
   const dbo = client.db('Sparkly');
   try {
     const resultat = await dbo.collection('users').find({}).toArray();
@@ -43,19 +39,27 @@ module.exports.swipe = async (req, res, next) => {
 
 
 module.exports.dates = async (req, res, next) => {
-  const client = await MongoClient.connect(url_db);
+  
   const dbo = client.db('Sparkly');
  
   var unid = req.query.lid;
   try {
 
-    const admin = await dbo.collection('Dates').findOne({ "": unid });
-
+    const admin = await dbo.collection('Dates').findOne({ "": unid });    
     if (!admin) {
       return res.json({ message: false });
     }
-    console.log(admin)
-    res.json({ message: true, uti: admin });
+    const premier = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin.premier) });
+    const second = await dbo.collection('Admin').findOne({_id: new ObjectId(admin.second) });
+
+    if(!premier || !second){
+      console.log("le date n'existe pas");
+      return res.json({ message: false });
+    }
+    console.log(admin);
+    console.log(premier);
+
+    res.json({ message: true , premier : premier , second : second});
   } catch (error) {
     next(error);;
   }
@@ -64,7 +68,7 @@ module.exports.dates = async (req, res, next) => {
 
 
 module.exports.profil = async (req, res, next) => {
-  const client = await MongoClient.connect(url_db);
+  
   const dbo = client.db('Sparkly');
   console.log(req.query.myString);
   try {
