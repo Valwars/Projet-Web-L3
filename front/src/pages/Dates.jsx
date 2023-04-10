@@ -9,7 +9,7 @@ const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
   const [leuser, setLeuser] = useState({});
   const [date, setDate] = useState([]);
-  const [tab, setTab] = useState([]);
+  const [couple, setTab] = useState([]);
 
   useEffect(() => {
     setLeuser(user);
@@ -24,24 +24,13 @@ const Dates = ({ user, locate }) => {
           },
         });
 
-        console.log(response.data.premier);
-        console.log(response.data.second);
-        var premier = response.data.premier;
-        var second = response.data.second;
-        var ledate = { 
-          personnes : [premier, second],
-          date : "demain",
-          localisation : "Bozouls"
-        }
-        // setTab(tab => {
-        //   tab.push(ledate);
-          
-        //   return tab;
-        // });
-        setTab(prevTab => [...prevTab, ledate]);
-        console.log(tab)
-   
-
+        console.log("response",response.data.date);
+        var tab = response.data.date;
+        var coupletab = response.data.couple;
+        setDate(tab);
+        console.log("tab date",date);
+        setTab(coupletab);
+        console.log("couple",couple);
 
       } catch (error) {
         console.error(error);
@@ -50,9 +39,7 @@ const Dates = ({ user, locate }) => {
     fetchData();
   }, [leuser])
 
-  // useEffect(() => {
-  //   console.log(tab);
-  // }, [tab]);
+
 
   return (
 
@@ -64,41 +51,42 @@ const Dates = ({ user, locate }) => {
         </div>
         <div className="matchs-container">
           {
-            tab.map((user) => {
-              if (user != undefined) {
+            date.map((date) => {
+              // if (user.personnes[0] != undefined) {
                 return (
                   <div
-                  className="match"
-                  onClick={() => {
-                    // setLocate("/match");
-                    navigate("/user-profile/2");
-                  }}
-                >                 
-                    {user.personnes.map((u)=>{
-                     if (u != undefined){
-                       return (
-                       <>
-                       <img src={u.pdp} alt="" />
-                        <h2>{u.name + " " + u.firstname}</h2> 
-                       </>
-                        
+                    className="match"
+                    onClick={() => {
+                      // setLocate("/match");
+                      navigate("/user-profile/2");
+                    }}
+                  >
+                    {couple.map((u) => {
+                      if (u.premier == date.premier && u.second == date.second){
+                         return (
+                        <>
+                          <img src={u.premier.pdp} alt="" />
+                          <h2>{u.premier.name + " " + u.premier.firstname}</h2>
+                          <img src={u.second.pdp} alt="" />
+                          <h2>{u.second.name + " " + u.second.firstname}</h2>
+                        </>
                       )
-                     }else {
-                      return null;
-                     }
-                    
-                    })} 
-                    
-                    <p>{user.localisation}</p>
-                    <p>{user.date}</p>
+                      } else {
+                        return null;
+                      }
+                     
+                    })}
+                    <p>{date.localisation}</p>
+
+                    <p>{date.date}</p>
                   </div>
                 )
-              } else {
-                return null;
-              }
+              // } else {
+              //   return null;
+              // }
             })
           }
-         
+
         </div>
       </div>
     </div>

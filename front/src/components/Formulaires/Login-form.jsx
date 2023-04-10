@@ -36,8 +36,9 @@ const Login_Form = ({ setUser }) => {
 
     console.log(data);
 
-    if (data == false) {
-      toast.error("response.error", toastOptions);
+    if (!data) {
+      console.log("toast")
+      toast.error("Informations incorrectes", toastOptions);
     }
     if (data) {
       // compte crée, on redirige sur la page de connexion.
@@ -108,6 +109,7 @@ const Login_Form = ({ setUser }) => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </div>
   );
 };

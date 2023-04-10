@@ -943,6 +943,10 @@ footer {
     margin-left: 25px;
 }
 
+.match p {
+    margin: auto;
+    width: 100%;
+}
 
 /* CHAT */
 
