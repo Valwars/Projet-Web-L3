@@ -64,7 +64,7 @@ const Swipe = ({ user, setLocate }) => {
               <h1>
                 {swip[currentIndex].fistname + " " + swip[currentIndex].name}{" "}
               </h1>
-              <h2>{swip[currentIndex].age} - 25 km</h2>
+              <h2>{swip[currentIndex].age + " ans"} - 25 km</h2>
               <p>{swip[currentIndex].description}</p>
             </div>
           </div>
