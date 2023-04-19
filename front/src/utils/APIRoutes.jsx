@@ -5,3 +5,4 @@ export const registerRoute = `/api/auth/register`;
 export const userSwipe = `/api/auth/`;
 export const datesRoute = `/api/auth/dates`;
 export const userRoute = `/api/auth/profile`;
+export const userData = `/api/auth/user`;

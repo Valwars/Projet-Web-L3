@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
-import { userRoute } from "./utils/APIRoutes";
+import { userData } from "./utils/APIRoutes";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import Home from "./pages/Home";
@@ -38,26 +38,21 @@ function App() {
   // mis dans le ,[] est modifié ou pas.
 
   useEffect(() => {
-    if (dataFetchedRef.current) return;
-    dataFetchedRef.current = true;
-    //fetchData();
+    fetchData();
   }, []);
 
   //  const fetchData -> fonction qui récupères les données utilisateurs si il est co.
   const fetchData = async () => {
+    console.log("fetch");
+    setDone(false);
     const token = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
+    console.log(token);
     if (token) {
-      const { data } = await axios.get(userRoute, {
-        params: {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-          ),
-        },
-      });
+      const { data } = await axios.get(userData + "?identifiant=" + token);
 
       if (data.status === "ok") {
         // CONNEXION RÉUSSIE, on set l'user.
-        setUser(data.user);
+        setUser(data.uti);
       }
     }
     // On affiche.

@@ -1,39 +1,50 @@
 import { useNavigate } from "react-router-dom";
-import $ from "jquery";
 import { userSwipe } from "../utils/APIRoutes";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import Loader_transition from "../components/Loading";
 const Swipe = ({ user, setLocate }) => {
   const [swip, setSwip] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  var nbs = 0;
+  const [transition, setTransition] = useState("");
+
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
+
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(userSwipe);
-        setSwip(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchData();
+    fetch_data();
   }, []);
 
-  console.log(swip);
-
-  const swp = (e) => {
-    setCurrentIndex(currentIndex + 1);
+  const fetch_data = async () => {
+    // note a moi meme :
+    // premier log, je chope genre 20 user, a chaque fois que j'arrives a 10 user de swipe, je refetch 10 user différents...
+    // dans le fetch (server) il faut vérifier si l'utilisateur n'as pas déja des matchs avec ces personnes la.
+    try {
+      const response = await axios.get(userSwipe);
+      setSwip(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const swp = (side) => {
+    setTransition(side);
+    setTimeout(() => {
+      setCurrentIndex(currentIndex + 1);
+      setTransition("");
+    }, 500);
   };
 
   return (
-    <>
-      {swip.length > 0 && currentIndex < swip.length ? (
-        <div className="app-page">
+    <div className="app-page">
+      {loading ? (
+        <Loader_transition></Loader_transition>
+      ) : (
+        <>
           <div className="swipe-container">
             <div
-              className="card"
+              className={"card " + transition}
               onClick={() => {
                 setLocate("/swipe");
                 navigate("/user-profile/" + swip[currentIndex]._id);
@@ -42,10 +53,10 @@ const Swipe = ({ user, setLocate }) => {
               <img src={swip[currentIndex].pdp} alt="" />
             </div>
             <div class="button-container">
-              <div class="button" id="left" onClick={swp}>
+              <div class="button" id="left" onClick={() => swp("swipe_left")}>
                 <img src="./img/cross.png" alt="" />
               </div>
-              <div class="button" id="right" onClick={swp}>
+              <div class="button" id="right" onClick={() => swp("swipe_right")}>
                 <img src="./img/check.png" alt="" />
               </div>
             </div>
@@ -57,36 +68,9 @@ const Swipe = ({ user, setLocate }) => {
               <p>{swip[currentIndex].description}</p>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="app-page">
-          <div className="swipe-container">
-            <div
-              className="card"
-              onClick={() => {
-                setLocate("/swipe");
-                navigate("/user-profile");
-              }}
-            >
-              {/* <h1>Plus personne pour toi man</h1> */}
-            </div>
-            <div class="button-container">
-              <div class="button" id="left">
-                <img src="./img/cross.png" alt="" onClick={swp} />
-              </div>
-              <div class="button" id="right">
-                <img src="./img/check.png" alt="" onClick={swp} />
-              </div>
-            </div>
-            <div className="user-presentation">
-              <h1>" " </h1>
-              <h2> - 25 km</h2>
-              <p></p>
-            </div>
-          </div>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

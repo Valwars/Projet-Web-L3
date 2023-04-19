@@ -3,7 +3,8 @@ const {
     swipe,
     dates,
     profil,
-    register
+    register,
+    getUser
 } = require("../controllers/userController.js");
 
 
@@ -13,10 +14,13 @@ router.post("/login", login)
 
 router.post("/register", register)
 
-router.get("/",swipe)
+router.get("/", swipe)
 
 router.get("/dates", dates)
 
 router.get("/profile", profil)
+
+router.get("/user", getUser)
+
 
 module.exports = router;

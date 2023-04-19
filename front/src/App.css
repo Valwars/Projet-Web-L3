@@ -743,6 +743,8 @@ footer {
 .swipe-container .user-presentation {
     width: 70%;
     margin: auto;
+    position: relative;
+    z-index: 100;
 }
 
 .swipe-container .card {
@@ -751,6 +753,19 @@ footer {
     margin: auto;
     background: #AD5C6E;
     border: 5px solid #FF7A7A;
+    transition: all 0.5s;
+}
+
+.swipe_left {
+    background: #B8181B !important;
+    border: 5px solid #B8181B !important;
+    transform: rotate(-25deg) translate(-100px) !important;
+}
+
+.swipe_right {
+    background: #65BD64 !important;
+    border: 5px solid #65BD64 !important;
+    transform: rotate(25deg) translate(100px) !important;
 }
 
 .card_container .button-container {
@@ -947,6 +962,7 @@ footer {
     margin: auto;
     width: 100%;
 }
+
 
 /* CHAT */
 

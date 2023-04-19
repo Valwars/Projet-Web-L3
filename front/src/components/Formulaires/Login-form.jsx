@@ -37,27 +37,18 @@ const Login_Form = ({ setUser }) => {
     console.log(data);
 
     if (!data) {
-      console.log("toast")
+      console.log("toast");
       toast.error("Informations incorrectes", toastOptions);
     }
     if (data) {
       // compte crée, on redirige sur la page de connexion.
-
       toast.success("You are connected !", toastOptions);
-      local_user(u);
 
+      localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.identifiant);
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
 
-      setUser(u);
-      navigate("/");
+      window.location.reload();
     }
-  };
-
-  const local_user = (response) => {
-    localStorage.setItem(
-      process.env.REACT_APP_LOCALHOST_KEY,
-      JSON.stringify(response.token)
-    );
   };
 
   return (
@@ -109,7 +100,7 @@ const Login_Form = ({ setUser }) => {
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
