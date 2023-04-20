@@ -6,3 +6,7 @@ export const userSwipe = `/api/auth/`;
 export const datesRoute = `/api/auth/dates`;
 export const userRoute = `/api/auth/profile`;
 export const userData = `/api/auth/user`;
+export const getconv = `/api/auth/getconv`;
+
+export const sendMessageRoute = `${host}/api/auth/addmsg`;
+export const recieveMessageRoute = `${host}/api/auth/getmsg`;

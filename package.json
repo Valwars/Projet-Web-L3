@@ -18,6 +18,7 @@
         "mongodb": "^5.1.0",
         "mongoose": "^6.9.2",
         "nodemon": "^2.0.21",
-        "react-scripts": "^5.0.1"
+        "react-scripts": "^5.0.1",
+        "socket.io": "^4.6.1"
     }
 }

@@ -4,7 +4,11 @@ const {
     dates,
     profil,
     register,
-    getUser
+    getUser,
+    getconv,
+    getMessages,
+    addMessage,
+
 } = require("../controllers/userController.js");
 
 
@@ -19,8 +23,12 @@ router.get("/", swipe)
 router.get("/dates", dates)
 
 router.get("/profile", profil)
+router.get("/getmsg", getMessages)
+router.post("/addmsg", addMessage)
+
 
 router.get("/user", getUser)
+router.get("/getconv", getconv)
 
 
 module.exports = router;
