@@ -74,10 +74,10 @@
     transform: translateX(-50%);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 820px) {
     .nav {
         z-index: 1;
-        position: fixed;
+        position: static;
         bottom: 0;
         left: 0;
         width: 100%;

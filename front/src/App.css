@@ -36,6 +36,10 @@ body {
     overflow-x: hidden;
 }
 
+#root {
+    overflow-x: hidden;
+}
+
 h1 {
     font-size: var(--title);
     font-family: FontBold;
@@ -90,6 +94,9 @@ span:not( .menu-items-container span) {
     left: 50%;
     display: flex;
     margin-bottom: 120px;
+    width: 100%;
+    height: 1px;
+    margin-bottom: 100px;
 }
 
 
@@ -541,7 +548,7 @@ footer {
     margin: 0;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 820px) {
     .card-resp {
         display: none;
     }
@@ -559,6 +566,10 @@ footer {
     }
     .img-info {
         display: none;
+    }
+    .present-text {
+        width: 90%;
+        min-width: auto;
     }
 }
 
@@ -640,6 +651,8 @@ footer {
 
 .login form .labs label {
     margin-bottom: 10px;
+    color: white;
+    font-size: var(--little-font);
 }
 
 .login input {
@@ -649,12 +662,14 @@ footer {
     border-radius: 10px;
     padding-left: 2%;
     border: 0;
+    color: rgba(32, 27, 38, 0.87);
+    font-size: var(--little-font);
 }
 
 .l-but {
     display: block;
     margin-left: auto;
-    color: var(--text-color);
+    color: white;
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     cursor: pointer;
@@ -665,17 +680,44 @@ footer {
     flex-wrap: wrap;
 }
 
+.redirect div {
+    margin-bottom: 25px;
+}
+
+.redirect div p {
+    color: white;
+}
+
 .redirect div button {
     width: fit-content;
-    color: var(--text-color);
     background-color: rgba(0, 0, 0, 0);
     border: 0;
     cursor: pointer;
     padding: 0;
     text-decoration: underline;
+    color: white;
 }
 
-@media (max-width: 767px) {
+.page-container .logo-container img {
+    width: 150px;
+    height: 150px;
+    margin-top: 25px;
+}
+
+.reponsive-back {
+    display: none;
+}
+
+@media (max-width: 909px) {
+    .reponsive-back {
+        display: block;
+        margin-bottom: 25px;
+        color: white;
+        cursor: pointer;
+    }
+    .reponsive-back i {
+        color: white;
+    }
     .page-container .left {
         display: none;
     }
@@ -688,18 +730,18 @@ footer {
         width: 100%;
     }
     .login form {
-        width: 100%;
+        width: 80%;
         margin: auto;
     }
     .login .labs {
-        width: 80%;
+        width: 100%;
         margin: auto;
     }
     .login .labs input {
         width: 100%;
     }
     .redirect {
-        width: 80%;
+        width: 100%;
         margin: auto;
     }
 }
@@ -980,7 +1022,7 @@ footer {
     transform: translate(-50%, -50%);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 820px) {
     .match-content .match {
         width: 100%;
     }
@@ -993,6 +1035,11 @@ footer {
     }
     .app-container {
         height: 100%;
+        flex-direction: column-reverse;
+    }
+    .app-page {
+        height: 90vh !important;
+        min-height: auto;
     }
 }
 

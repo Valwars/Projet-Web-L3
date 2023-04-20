@@ -6,31 +6,31 @@ import { useState } from "react";
 
 const Register_Form = ({ setUser }) => {
   const navigate = useNavigate();
-  const [nouveau , setNouveau ] = useState({      
-      "pdp": "",
-      "photos":[],
-      "name": "",
-      "firstname": "",
-      "age": "",
-      "sexe": "",
-      "orientation": "",
-      "description": "",
-      "interests": [ ],
-      "localisation": "",
-      "identifiant": "",
-      "mdp": ""    
+  const [nouveau, setNouveau] = useState({
+    pdp: "",
+    photos: [],
+    name: "",
+    firstname: "",
+    age: "",
+    sexe: "",
+    orientation: "",
+    description: "",
+    interests: [],
+    localisation: "",
+    identifiant: "",
+    mdp: "",
   });
-const createuser = async () =>{
-  try {
-    
-  } catch (error) {
-    
-  }
-}
+  const createuser = async () => {
+    try {
+    } catch (error) {}
+  };
 
   return (
     <div className="login">
       <form action="" onSubmit={createuser}>
+        <p className="reponsive-back" onClick={() => navigate("/")}>
+          <i className="fa fa-arrow-left"></i> Back
+        </p>
         <div className="labs">
           <label>Identifiant</label>
           <input type="text" name="email" placeholder="E-mail adress"></input>

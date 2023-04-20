@@ -124,6 +124,16 @@ const UserProfile = ({ user, locate }) => {
   return (
     <div className="app-page">
       <div className="profile-content">
+        <button
+          onClick={() => {
+            localStorage.clear();
+            navigate("/");
+
+            window.location.reload();
+          }}
+        >
+          se deco
+        </button>
         <div className="haut-profil">
           <img className="pdp" src={user.pdp} alt="" />
           <h1>{user.name + " " + user.firstname}</h1>

@@ -46,7 +46,7 @@ const Login_Form = ({ setUser }) => {
 
       localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.identifiant);
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
-
+      navigate("/");
       window.location.reload();
     }
   };
@@ -54,6 +54,9 @@ const Login_Form = ({ setUser }) => {
   return (
     <div className="login">
       <form action="" onSubmit={login}>
+        <p className="reponsive-back" onClick={() => navigate("/")}>
+          <i className="fa fa-arrow-left"></i> Back
+        </p>
         <div className="labs">
           <label>Identifiant</label>
           <input
