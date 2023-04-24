@@ -16,35 +16,17 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
+  const [accroche, setAccroche] = useState([
+    "Salut, comment vas-tu ?",
+    "Coucou, tu cherches quoi sur Sparkly ?",
+    "Hey, j'adore ta photo de profil !",
+    "Salut, je suis ravi de matcher avec toi !",
+  ]);
+
   useEffect(() => {
     console.log(currentChat);
   }, []);
 
-  /*const [messages, setMessages] = useState([
-    { fromSelf: false, message: "COUCOU" },
-    { fromSelf: true, message: "Salut ! ça va ?" },
-    { fromSelf: false, message: "Super et toi ?" },
-    { fromSelf: true, message: "et bah super écoute" },
-    { fromSelf: false, message: "COUCOU" },
-    { fromSelf: true, message: "Salut ! ça va ?" },
-    { fromSelf: false, message: "Super et toi ?" },
-    { fromSelf: true, message: "et bah super écoute" },
-    { fromSelf: false, message: "COUCOU" },
-    { fromSelf: true, message: "Salut ! ça va ?" },
-    { fromSelf: false, message: "Super et toi ?" },
-    { fromSelf: true, message: "et bah super écoute" },
-    {
-      fromSelf: true,
-      message:
-        "Cupidatat enim laboris adipisicing laboris irure excepteur duis ea minim commodo pariatur sint. Ex qui ullamco do consequat. Ex ipsum excepteur nostrud adipisicing irure deserunt ea. Sunt aliqua sunt fugiat dolore. Tempor ut incididunt ullamco do pariatur nisi cillum culpa. Lorem aute mollit ex velit deserunt. Minim nisi fugiat velit eu ullamco excepteur ad cillum est consectetur esse eu officia aute.",
-    },
-    {
-      fromSelf: false,
-      message:
-        "Cupidatat enim laboris adipisicing laboris irure excepteur duis ea minim commodo pariatur sint. Ex qui ullamco do consequat. Ex ipsum excepteur nostrud adipisicing irure deserunt ea. Sunt aliqua sunt fugiat dolore. Tempor ut incididunt ullamco do pariatur nisi cillum culpa. Lorem aute mollit ex velit deserunt. Minim nisi fugiat velit eu ullamco excepteur ad cillum est consectetur esse eu officia aute.",
-    },
-  ]);
-*/
   useEffect(() => {
     async function get_messages() {
       const response = await axios.get(recieveMessageRoute, {
@@ -124,21 +106,38 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
         </div>
       </div>
       <div className="chat-messages" id="chat">
-        {messages.map((message) => {
-          return (
-            <div id="scroll_ref" key={uuidv4()}>
-              <div
-                className={`message ${
-                  message.fromSelf ? "sended" : "recieved"
-                }`}
-              >
-                <div className="content ">
-                  <p>{message.message}</p>
+        {messages.length > 0 ? (
+          <>
+            {messages.map((message) => {
+              return (
+                <div id="scroll_ref" key={uuidv4()}>
+                  <div
+                    className={`message ${
+                      message.fromSelf ? "sended" : "recieved"
+                    }`}
+                  >
+                    <div className="content ">
+                      <p>{message.message}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </>
+        ) : (
+          <div className="accroches">
+            {accroche.map((accroche) => {
+              return (
+                <div
+                  className="accroche"
+                  onClick={() => handleSendMsg(accroche)}
+                >
+                  <h2>{accroche}</h2>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       <InputMessage handleSendMsg={handleSendMsg}></InputMessage>
     </div>
