@@ -31,10 +31,12 @@ const Swipe = ({ user, setLocate }) => {
   const swp = (side) => {
     setTransition(side);
     setTimeout(() => {
-      setCurrentIndex(currentIndex + 1);
+      setSwip(swip.slice(0, -1));
       setTransition("");
     }, 500);
   };
+
+  const topCard = swip.length > 0 ? swip[swip.length - 1] : null;
 
   return (
     <div className="app-page">
@@ -43,15 +45,13 @@ const Swipe = ({ user, setLocate }) => {
       ) : (
         <>
           <div className="swipe-container">
-            <div
-              className={"card " + transition}
-              onClick={() => {
-                setLocate("/swipe");
-                navigate("/user-profile/" + swip[currentIndex]._id);
-              }}
-            >
-              <img src={swip[currentIndex].pdp} alt="" />
-            </div>
+            <Card
+              item={topCard}
+              transition={transition}
+              setLocate={setLocate}
+              navigate={navigate}
+            />
+
             <div class="button-container">
               <div class="button" id="left" onClick={() => swp("swipe_left")}>
                 <img src="./img/cross.png" alt="" />
@@ -60,16 +60,32 @@ const Swipe = ({ user, setLocate }) => {
                 <img src="./img/check.png" alt="" />
               </div>
             </div>
-            <div className="user-presentation">
-              <h1>
-                {swip[currentIndex].fistname + " " + swip[currentIndex].name}{" "}
-              </h1>
-              <h2>{swip[currentIndex].age + " ans"} - 25 km</h2>
-              <p>{swip[currentIndex].description}</p>
-            </div>
+            {topCard ? (
+              <div className="user-presentation">
+                <h1>{topCard.fistname + " " + topCard.name} </h1>
+                <h2>{topCard.age + " ans"} - 25 km</h2>
+                <p>{topCard.description}</p>
+              </div>
+            ) : (
+              <h1>Vous n'avez plus de profils à visiter.</h1>
+            )}
           </div>
         </>
       )}
+    </div>
+  );
+};
+
+const Card = ({ item, transition, setLocate, navigate }) => {
+  return (
+    <div
+      className={"card " + transition}
+      onClick={() => {
+        setLocate("/swipe");
+        navigate("/user-profile/" + item._id);
+      }}
+    >
+      <img src={item.pdp} alt="" />
     </div>
   );
 };
