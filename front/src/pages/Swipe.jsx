@@ -3,10 +3,13 @@ import { userSwipe } from "../utils/APIRoutes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader_transition from "../components/Loading";
+import { Client } from "@googlemaps/google-maps-services-js";
+
 const Swipe = ({ user, setLocate }) => {
   const [swip, setSwip] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState("");
+  const [distance, setDistance] = useState(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -38,6 +41,58 @@ const Swipe = ({ user, setLocate }) => {
 
   const topCard = swip.length > 0 ? swip[swip.length - 1] : null;
 
+  const formatDistance = (distanceInKm) => {
+    const distanceInMeters = distanceInKm * 1000;
+    if (distanceInMeters < 1000) {
+      return `${distanceInMeters.toFixed(2)} m`;
+    }
+    return `${distanceInKm.toFixed(2)} km`;
+  };
+
+  const getDistance = async () => {
+    const client = new Client({});
+    try {
+      const response1 = await client.geocode({
+        params: {
+          address: user.localisation,
+          key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
+        },
+      });
+
+      const response2 = await client.geocode({
+        params: {
+          address: topCard.localisation,
+          key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
+        },
+      });
+
+      const lat1 = response1.data.results[0].geometry.location.lat;
+      const lng1 = response1.data.results[0].geometry.location.lng;
+      const lat2 = response2.data.results[0].geometry.location.lat;
+      const lng2 = response2.data.results[0].geometry.location.lng;
+
+      const R = 6371; // Rayon de la Terre en km
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLng = (lng2 - lng1) * (Math.PI / 180);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) *
+          Math.cos(lat2 * (Math.PI / 180)) *
+          Math.sin(dLng / 2) *
+          Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const d = R * c; // Distance en km
+      const formattedDistance = formatDistance(d);
+      setDistance(formattedDistance);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getDistance();
+  }, [swip]);
+
   return (
     <div className="app-page">
       {loading ? (
@@ -63,7 +118,9 @@ const Swipe = ({ user, setLocate }) => {
             {topCard ? (
               <div className="user-presentation">
                 <h1>{topCard.fistname + " " + topCard.name} </h1>
-                <h2>{topCard.age + " ans"} - 25 km</h2>
+                <h2>
+                  {topCard.age + " ans"} - {distance}
+                </h2>
                 <p>{topCard.description}</p>
               </div>
             ) : (

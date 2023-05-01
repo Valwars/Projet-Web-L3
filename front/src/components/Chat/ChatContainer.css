@@ -104,7 +104,15 @@
     margin-right: auto;
 }
 
-.chat-messages:-webkit-scrollbar {
+#chat::-webkit-scrollbar-track {
+    scrollbar-width: none;
+    /* Cacher la barre de défilement pour Firefox */
+}
+
+
+/* Cacher la barre de défilement pour Chrome, Edge et Safari */
+
+#chat::-webkit-scrollbar {
     display: none;
 }
 
