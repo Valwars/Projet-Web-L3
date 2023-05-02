@@ -17,6 +17,8 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
+import Loader_transition from "../components/Loading";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,6 +32,8 @@ ChartJS.register(
 
 const UserProfile = ({ user, locate }) => {
   const navigate = useNavigate();
+  const [photosLimit, setPhotosLimit] = useState(3); // Limite de photos affichées
+  const [loading, setLoading] = useState(false);
 
   const [nombre_match, setnombre_match] = useState([
     { date: "10/02/2021", count: 0 },
@@ -123,88 +127,93 @@ const UserProfile = ({ user, locate }) => {
 
   return (
     <div className="app-page">
-      <div className="profile-content">
-        <button
-          onClick={() => {
-            localStorage.clear();
-            navigate("/");
+      {loading ? (
+        <Loader_transition></Loader_transition>
+      ) : (
+        <div className="profile-content">
+          <button
+            className="disco"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
 
-            window.location.reload();
-          }}
-        >
-          se deco
-        </button>
-        <div className="haut-profil">
-          <img className="pdp" src={user.pdp} alt="" />
-          <h1>{user.name + " " + user.firstname}</h1>
-          <div className="profil-information">
-            <h2>{user.age + " ans"}</h2>{" "}
-            <span>
-              <h2>{user.orientation}</h2>
-            </span>
+              window.location.reload();
+            }}
+          >
+            Déconnexion <i class="fa fa-sign-out" aria-hidden="true"></i>
+          </button>
+          <div className="haut-profil">
+            <img className="pdp" src={user.pdp} alt="" />
+            <h1>{user.name + " " + user.firstname}</h1>
+            <div className="profil-information">
+              <h2>{user.age + " ans"}</h2>{" "}
+              <span>
+                <h2>{user.orientation}</h2>
+              </span>
+            </div>
+            <p>{user.description}</p>
           </div>
-          <p>{user.localisation}</p>
-          <p>{user.description}</p>
-        </div>
-        <div className="profil-interests">
-          <h2>Vos intérêts : </h2>
-          <ul className="interet">
-            {" "}
+          <div className="interests">
             {user.interests.map((inte) => {
-              return <li>{inte}</li>;
-            })}
-          </ul>
-        </div>
-
-        <div className="user-pics">
-          <h2>Vos photos :</h2>
-          <div className="photos-container">
-            {user.photos.map((photo) => {
-              return (
-                <div className="photo">
-                  <img src={photo} alt="" />
-                </div>
-              );
+              return <h2>{inte}</h2>;
             })}
           </div>
-          <span>
-            {" "}
-            <h2>Voir plus</h2>{" "}
-          </span>
-        </div>
-        <h2>Statistiques :</h2>
-        <h4>Conversations</h4>
-        <div className="profile-stats">
-          <div className="stat">
-            <h1>10</h1>
-            <Line
-              className="graphiques"
-              data={data_conversation}
-              options={options_stat}
-            />
+
+          <div className="user-pics">
+            <h2>Vos photos :</h2>
+            <div className="pics-container">
+              {user.photos.slice(0, photosLimit).map((photo) => {
+                return (
+                  <div className="pic">
+                    <img src={photo} alt="" />
+                  </div>
+                );
+              })}
+
+              {photosLimit == 6 ? (
+                <></>
+              ) : (
+                <button onClick={() => setPhotosLimit(photosLimit + 3)}>
+                  Voir plus
+                </button>
+              )}
+            </div>
           </div>
 
-          <h4>Matchs</h4>
-          <div className="stat">
-            <Line
-              className="graphiques"
-              data={data_match}
-              options={options_stat}
-            />
-            <h1>20</h1>
-          </div>
+          <h2>Statistiques :</h2>
+          <h4>Conversations</h4>
+          <div className="profile-stats">
+            <div className="stat">
+              <h1>10</h1>
+              <Line
+                className="graphiques"
+                data={data_conversation}
+                options={options_stat}
+              />
+            </div>
 
-          <h4>Dates</h4>
-          <div className="stat">
-            <h1>10</h1>
-            <Line
-              className="graphiques"
-              data={data_date}
-              options={options_stat}
-            />
+            <h4>Matchs</h4>
+            <div className="stat">
+              <Line
+                className="graphiques"
+                data={data_match}
+                options={options_stat}
+              />
+              <h1>20</h1>
+            </div>
+
+            <h4>Dates</h4>
+            <div className="stat">
+              <h1>10</h1>
+              <Line
+                className="graphiques"
+                data={data_date}
+                options={options_stat}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

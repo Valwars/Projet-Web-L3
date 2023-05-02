@@ -13,6 +13,7 @@ const Profile = ({ user, locate }) => {
   const [distance, setDistance] = useState(null);
   const { token } = useParams();
   const [loading, setLoading] = useState(true);
+  const [photosLimit, setPhotosLimit] = useState(3); // Limite de photos affichées
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,13 +108,24 @@ const Profile = ({ user, locate }) => {
           <div className="user-data">
             <img className="pdp" src={profile.pdp} alt="" />
             <h1>{profile.name + " " + profile.fistname}</h1>
-            <h2>{profile.age + " ans - " + distance}</h2>
+            <div className="profil-information">
+              <h2>{profile.age + " ans - " + distance}</h2>
+              <span>
+                <h2>{user.orientation}</h2>
+              </span>
+            </div>
             <p>{profile.description}</p>
+
+            <div className="interests">
+              {profile.interests.map((inte) => {
+                return <h2>{inte}</h2>;
+              })}
+            </div>
           </div>
           <div className="user-pics">
             <h2>Photos :</h2>
             <div className="pics-container">
-              {profile.photos.map((photo) => {
+              {profile.photos.slice(0, photosLimit).map((photo) => {
                 return (
                   <div className="pic">
                     <img src={photo} alt="" />
@@ -121,11 +133,13 @@ const Profile = ({ user, locate }) => {
                 );
               })}
 
-              <ul>
-                {profile.interests.map((inte) => {
-                  return <li>{inte}</li>;
-                })}
-              </ul>
+              {photosLimit == 6 ? (
+                <></>
+              ) : (
+                <button onClick={() => setPhotosLimit(photosLimit + 3)}>
+                  Voir plus
+                </button>
+              )}
             </div>
           </div>
         </div>
