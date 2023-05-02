@@ -7,7 +7,7 @@ module.exports.login = async(req, res, next) => {
     try {
         const email = req.body.values.email;
         const password = req.body.values.password;
-        const admin = await dbo.collection('Admin').findOne({ identifiant: email, mdp: password });
+        const admin = await dbo.collection('Admin').findOne({ mail: email, mdp: password });
 
         if (!admin) {
             return res.json({ message: false });
@@ -40,7 +40,16 @@ module.exports.getUser = async(req, res) => {
 }
 
 module.exports.register = async(req, res, next) => {
-    console.log("register")
+    
+    try {
+        const nouveau = req.body.nouveau;
+        const ajout = await dbo.collection('Admin').insertOne(nouveau);
+        console.log("ajouté");
+        if(!ajout) return res.json({status : "error"});
+        else return res.json({status : "ok"});
+    } catch (error) {
+        
+    }
 };
 
 
