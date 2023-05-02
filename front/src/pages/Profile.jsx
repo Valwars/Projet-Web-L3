@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Client } from "@googlemaps/google-maps-services-js";
 import Loader_transition from "../components/Loading";
 
-const Profile = ({ user, user_id, locate }) => {
+const Profile = ({ user, locate }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(undefined);
   const [distance, setDistance] = useState(null);
@@ -22,11 +22,12 @@ const Profile = ({ user, user_id, locate }) => {
             myString: token,
           },
         });
-
-        console.log(response.data);
-        setProfile(response.data.uti);
-        getDistance(user, response.data.uti.localisation);
-        setLoading(false);
+        if (response.data.status === "ok") {
+          console.log(response.data);
+          setProfile(response.data.uti);
+          console.log(response.data.uti.interests);
+          setLoading(false);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -42,7 +43,7 @@ const Profile = ({ user, user_id, locate }) => {
     return `${distanceInKm.toFixed(2)} km`;
   };
 
-  const getDistance = async (user, l) => {
+  const getDistance = async () => {
     const client = new Client({});
     try {
       const response1 = await client.geocode({
@@ -54,7 +55,7 @@ const Profile = ({ user, user_id, locate }) => {
 
       const response2 = await client.geocode({
         params: {
-          address: l,
+          address: profile.localisation,
           key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
         },
       });
@@ -82,6 +83,9 @@ const Profile = ({ user, user_id, locate }) => {
     }
   };
 
+  useEffect(() => {
+    getDistance();
+  }, [profile]);
   return (
     <div className="app-page">
       {loading ? (
