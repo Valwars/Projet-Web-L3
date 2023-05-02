@@ -9,6 +9,7 @@ module.exports.login = async(req, res, next) => {
         const password = req.body.values.password;
         const admin = await dbo.collection('Admin').findOne({ mail: email, mdp: password });
 
+        console.log(admin)
         if (!admin) {
             return res.json({ status: "error" });
         }
@@ -26,7 +27,7 @@ module.exports.getUser = async(req, res) => {
 
         const { identifiant } = req.query;
 
-        const admin = await dbo.collection('Admin').findOne({ identifiant: identifiant });
+        const admin = await dbo.collection('Admin').findOne({ mail: identifiant });
 
         if (!admin) {
             return res.json({ status: "error" });

@@ -31,23 +31,22 @@ const Login_Form = ({ setUser }) => {
     const response = await axios.post(loginRoute, {
       values,
     });
-    const data = response.data.message;
+    const data = response.data;
     const u = response.data.uti;
 
     console.log(data);
 
-    if (!data) {
-      console.log("toast");
-      toast.error("Informations incorrectes", toastOptions);
-    }
-    if (data) {
+    if (data.status === "ok") {
       // compte crée, on redirige sur la page de connexion.
       toast.success("You are connected !", toastOptions);
 
-      localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.identifiant);
+      localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.mail);
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
       navigate("/");
       window.location.reload();
+    } else {
+      console.log("toast");
+      toast.error("Informations incorrectes", toastOptions);
     }
   };
 
