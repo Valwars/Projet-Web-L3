@@ -39,7 +39,16 @@ module.exports.getUser = async(req, res) => {
 }
 
 module.exports.register = async(req, res, next) => {
-    console.log("register")
+    
+    try {
+        const nouveau = req.body.nouveau;
+        const ajout = await dbo.collection('Admin').insertOne(nouveau);
+        console.log("ajouté");
+        if(!ajout) return res.json({status : "error"});
+        else return res.json({status : "ok"});
+    } catch (error) {
+        
+    }
 };
 
 
