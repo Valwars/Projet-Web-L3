@@ -138,7 +138,7 @@ const UserProfile = ({ user, locate }) => {
           <img className="pdp" src={user.pdp} alt="" />
           <h1>{user.name + " " + user.firstname}</h1>
           <div className="profil-information">
-            <h2>{user.age + " ans - 25 km "}</h2>{" "}
+            <h2>{user.age + " ans"}</h2>{" "}
             <span>
               <h2>{user.orientation}</h2>
             </span>
