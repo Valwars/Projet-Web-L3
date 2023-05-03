@@ -4,6 +4,8 @@ const { ObjectId } = require('mongodb');
 
 module.exports.login = async(req, res, next) => {
 
+    console.log("LOGIN")
+
     try {
         const email = req.body.values.email;
         const password = req.body.values.password;
@@ -39,15 +41,15 @@ module.exports.getUser = async(req, res) => {
 }
 
 module.exports.register = async(req, res, next) => {
-    
+
     try {
         const nouveau = req.body.nouveau;
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
         console.log("ajouté");
-        if(!ajout) return res.json({status : "error"});
-        else return res.json({status : "ok"});
+        if (!ajout) return res.json({ status: "error" });
+        else return res.json({ status: "ok" });
     } catch (error) {
-        
+
     }
 };
 
