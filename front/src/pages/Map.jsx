@@ -124,8 +124,20 @@ function MapWithLoader({ user, isDark }) {
   ]);
 
   const [dates, setDates] = useState([
-    { adress: "68 rue de Bernis Albi", date: "Resto", personne: "Valérie", heure:"12h30", jour:"12/05"},
-    { adress: "57 St Juéry Albi", date: "Macdo", personne: "Marine", heure:"18h30", jour:"18/05"},
+    {
+      adress: "68 rue de Bernis Albi",
+      date: "Resto",
+      personne: "Valérie",
+      heure: "12h30",
+      jour: "12/05",
+    },
+    {
+      adress: "57 St Juéry Albi",
+      date: "Macdo",
+      personne: "Marine",
+      heure: "18h30",
+      jour: "18/05",
+    },
   ]);
 
   const [startCoordinates, setStartCoordinates] = useState({
@@ -161,7 +173,7 @@ function MapWithLoader({ user, isDark }) {
 
   return (
     <div className="app-page">
-      <div>
+      <div style={{ display: "flex", width: "100%" }}>
         {isLoading ? (
           <Loader_transition></Loader_transition>
         ) : (
@@ -208,7 +220,15 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>'+ date.personne+'</h2><p>'+date.date+'</p><p>'+date.jour+' - '+ date.heure +'</p></div></div>',
+                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>' +
+                            date.personne +
+                            "</h2><p>" +
+                            date.date +
+                            "</p><p>" +
+                            date.jour +
+                            " - " +
+                            date.heure +
+                            "</p></div></div>",
                         };
 
                         const infoWindow = new window.google.maps.InfoWindow(

@@ -4,6 +4,8 @@ const { ObjectId } = require('mongodb');
 
 module.exports.login = async(req, res, next) => {
 
+    console.log("LOGIN")
+
     try {
         const email = req.body.values.email;
         const password = req.body.values.password;
