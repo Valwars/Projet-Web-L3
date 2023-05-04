@@ -9,7 +9,7 @@ module.exports.login = async(req, res, next) => {
         const password = req.body.values.password;
         const admin = await dbo.collection('Admin').findOne({ mail: email, mdp: password });
 
-        console.log(admin)
+        
         if (!admin) {
             return res.json({ status: "error" });
         }
@@ -39,23 +39,24 @@ module.exports.getUser = async(req, res) => {
 }
 
 module.exports.register = async(req, res, next) => {
-    
-    try {
-        const nouveau = req.body.nouveau;
+     const nouveau = req.body.nouveau;       
+    try {       
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
         console.log("ajouté");
+        console.log(ajout.insertedId);
         if(!ajout) return res.json({status : "error"});
-        else return res.json({status : "ok"});
+        else return res.json({status : "ok", id : ajout.insertedId});
     } catch (error) {
-        
+        next(error);
     }
 };
 
 
 module.exports.swipe = async(req, res, next) => {
-
+    const startIndex = 0;
     try {
-        const resultat = await dbo.collection('users').find({}).toArray();
+// Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
+        const resultat = await dbo.collection('users').find({}, {projection: {_id : 0 , pdp : 1 ,photos : 0, name : 1, fistname : 1, age : 1, sexe : 1 , orientation : 0 , description : 1 , interests:0,localisation :1 }}).limit(10).toArray();
         res.send(resultat);
 
     } catch (error) {
@@ -63,6 +64,7 @@ module.exports.swipe = async(req, res, next) => {
     }
 
 };
+
 
 module.exports.getconv = async(req, res) => {
 
