@@ -150,7 +150,10 @@
         height: 72vh;
     }
     .user-details {
-        transform: translateX(-25%);
+        transform: translateX(-50%);
+    }
+    .user-details h3 {
+        display: none;
     }
     .message {
         max-width: 70%;
@@ -166,5 +169,8 @@
     }
     .chat-header .user-details {
         width: fit-content;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 }

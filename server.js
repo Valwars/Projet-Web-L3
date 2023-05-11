@@ -20,7 +20,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
+
+
 app.use("/api/auth", authRoutes);
+
 
 const socket = require("socket.io");
 
@@ -30,8 +33,10 @@ app.get("/*", (_, res) => {
 })
 
 
+
 const server = app.listen(PORT, () => {
     console.log("serveur en écoute...")
+    console.log(PORT)
 })
 
 const io = socket(server, {
@@ -40,6 +45,7 @@ const io = socket(server, {
         credentials: true,
     },
 });
+
 
 global.onlineUsers = new Map();
 
