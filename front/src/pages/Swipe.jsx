@@ -11,17 +11,14 @@ const Swipe = ({ user, setLocate }) => {
   const [transition, setTransition] = useState("");
   const [distance, setDistance] = useState(null);
 
-  
-  
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if ((currentIndex)%5 ==0){
+    if (currentIndex % 5 == 0) {
       fetch_data();
     }
-    
   }, [currentIndex]);
 
   const fetch_data = async () => {
@@ -31,15 +28,13 @@ const Swipe = ({ user, setLocate }) => {
     try {
       const response = await axios.get(userSwipe, {
         params: {
-          currentIndex: currentIndex
-        }
+          currentIndex: currentIndex,
+        },
       });
-      console.log(currentIndex);
       console.log(response.data);
-      console.log(response.headers);
-      var ajout = [...swip];
-      ajout.unshift(response.data);
-      setSwip(tab);
+
+      setSwip((prevSwip) => [...prevSwip, ...response.data]);
+
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -47,7 +42,7 @@ const Swipe = ({ user, setLocate }) => {
   };
   const swp = (side) => {
     setCurrentIndex((prevIndex) => prevIndex + 1);
-    console.log(currentIndex)
+    console.log(currentIndex);
     setTransition(side);
     setTimeout(() => {
       setSwip(swip.slice(0, -1));
