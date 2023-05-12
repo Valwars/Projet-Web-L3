@@ -34,12 +34,12 @@ const Swipe = ({ user, setLocate }) => {
           currentIndex: currentIndex
         }
       });
-      console.log(currentIndex)
-      console.log(response.data)
-      var ajout = swip.concat(response.data);
-      setSwip(prevTab => [...prevTab , ...ajout]);
-      
-      
+      console.log(currentIndex);
+      console.log(response.data);
+      console.log(response.headers);
+      var ajout = [...swip];
+      ajout.unshift(response.data);
+      setSwip(tab);
       setLoading(false);
     } catch (error) {
       console.error(error);

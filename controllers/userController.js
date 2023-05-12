@@ -55,10 +55,13 @@ module.exports.register = async(req, res, next) => {
 
 
 module.exports.swipe = async(req, res, next) => {
-    const startIndex = 0;
+    var startIndex = parseInt(req.query.currentIndex);
+    console.log(req.query.currentIndex)
+    // var startIndex = 0;
     try {
 // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
-        const resultat = await dbo.collection('users').find({}, {projection: {_id : 0 , pdp : 1 ,photos : 0, name : 1, fistname : 1, age : 1, sexe : 1 , orientation : 0 , description : 1 , interests:0,localisation :1 }}).limit(10).toArray();
+        const resultat = await dbo.collection('users').find({}, {projection: {_id : 0 , pdp : 1 , name : 1, fistname : 1, age : 1, sexe : 1 , description : 1 ,localisation :1 }}).skip(startIndex).limit(10).toArray();
+        console.log(resultat)
         res.send(resultat);
 
     } catch (error) {
