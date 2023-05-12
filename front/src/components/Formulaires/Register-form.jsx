@@ -1,6 +1,7 @@
 import "./form.css";
 import { useNavigate } from "react-router-dom";
 import { registerRoute } from "../../utils/APIRoutes";
+import { ToastContainer, toast, Slide } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
 
@@ -17,12 +18,41 @@ const Register_Form = ({ setUser }) => {
     description: "",
     interests: [],
     localisation: "",
-    identifiant: "",
+    mail: "",
     mdp: "",
   });
-  const createuser = async () => {
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 6000,
+    transition: Slide,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "light",
+  };
+
+
+  const createuser = async (event) => {  
+    event.preventDefault();
+    console.log("tentative de création");
     try {
-    } catch (error) {}
+      
+      const create = await axios.post(registerRoute, {
+        nouveau,
+      });
+      
+    const status = create.data.status;
+    const id = create.data.id;
+   
+       if(status === "ok"){
+        navigate("/multistepform");
+        toast.success("Utilisateur créé !", toastOptions)
+      }
+      
+      
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (
@@ -33,13 +63,16 @@ const Register_Form = ({ setUser }) => {
         </p>
         <div className="labs">
           <label>Identifiant</label>
-          <input type="text" name="email" placeholder="E-mail adress"></input>
+          <input type="email" name="email" placeholder="E-mail adress" value={nouveau.mail} onChange={(e) => setNouveau({...nouveau, mail : e.target.value})} required="required"/>
         </div>
         <div className="labs">
           <label>Mot de passe</label>
-
-          <input type="password" name="password" placeholder="Password"></input>
+          <input type="password" name="password" placeholder="Password" value={nouveau.mdp} onChange={(e) => setNouveau({...nouveau, mdp : e.target.value})} required="required" />
         </div>
+
+ <button className="l-but" type="submit">
+            Créer →
+          </button>
 
         <div className="redirect">
           <div>
@@ -47,9 +80,7 @@ const Register_Form = ({ setUser }) => {
             <button onClick={() => navigate("/login")}>Se connecter</button>
           </div>
 
-          <button className="l-but" type="submit">
-            Créer →
-          </button>
+         
         </div>
       </form>
     </div>

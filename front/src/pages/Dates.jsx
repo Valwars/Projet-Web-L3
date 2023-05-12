@@ -62,16 +62,18 @@ const Dates = ({ user, locate }) => {
                     }}
                   >
                     {couple.map((u) => {
-                      if (u.premier == date.premier && u.second == date.second){
+
+                      if ( u.premier._id == date.premier._id && u.second._id == date.second._id){
                          return (
                         <>
-                          <img src={u.premier.pdp} alt="" />
+                        <img src={u.premier.pdp} alt="" />
+                          {/* <img src={u.premier.pdp} alt="" />
                           <h2>{u.premier.name + " " + u.premier.firstname}</h2>
                           <img src={u.second.pdp} alt="" />
-                          <h2>{u.second.name + " " + u.second.firstname}</h2>
+                          <h2>{u.second.name + " " + u.second.firstname}</h2> */}
                         </>
                       )
-                      } else {
+                       } else {
                         return null;
                       }
                      

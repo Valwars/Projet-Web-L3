@@ -15,6 +15,7 @@ import Chat from "./pages/Chat";
 import Map from "./pages/Map";
 import UserProfile from "./pages/userProfile";
 import Dates from "./pages/Dates";
+import MultiStepForm from "./pages/MultiStepForm";
 function App() {
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
@@ -77,7 +78,9 @@ function App() {
                 element={<Login setUser={setUser} />}
               ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
+              <Route path="/multistepform" element={<MultiStepForm/>}></Route>
             </Routes>
+            
           ) : (
             <div className="app-container">
               <NavBar
