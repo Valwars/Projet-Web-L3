@@ -11,27 +11,43 @@ const Swipe = ({ user, setLocate }) => {
   const [transition, setTransition] = useState("");
   const [distance, setDistance] = useState(null);
 
+  
+  
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch_data();
-  }, []);
+    if ((currentIndex)%5 ==0){
+      fetch_data();
+    }
+    
+  }, [currentIndex]);
 
   const fetch_data = async () => {
     // note a moi meme :
     // premier log, je chope genre 20 user, a chaque fois que j'arrives a 10 user de swipe, je refetch 10 user différents...
     // dans le fetch (server) il faut vérifier si l'utilisateur n'as pas déja des matchs avec ces personnes la.
     try {
-      const response = await axios.get(userSwipe);
-      setSwip(response.data);
+      const response = await axios.get(userSwipe, {
+        params: {
+          currentIndex: currentIndex
+        }
+      });
+      console.log(currentIndex)
+      console.log(response.data)
+      var ajout = swip.concat(response.data);
+      setSwip(prevTab => [...prevTab , ...ajout]);
+      
+      
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
   const swp = (side) => {
+    setCurrentIndex((prevIndex) => prevIndex + 1);
+    console.log(currentIndex)
     setTransition(side);
     setTimeout(() => {
       setSwip(swip.slice(0, -1));
