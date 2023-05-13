@@ -1192,3 +1192,56 @@ body {
 #convtp {
     margin-bottom: 15px;
 }
+
+.date_cnt {
+    flex-direction: column;
+}
+
+.date_cnt .user-date {
+    display: flex;
+    width: 85%;
+    border-bottom: 1px solid var(--main-color);
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.date_cnt .user-date div {
+    display: flex;
+}
+
+.dateInfo {
+    width: 70%;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.dateInfo div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dateInfo div p {
+    font-size: var(--medium-font);
+}
+
+.dateInfo div i {
+    font-size: 26px;
+    color: var(--main-color);
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.order-filters {
+    cursor: pointer;
+    font-size: var(--medium-font);
+    display: flex;
+    gap: 25px;
+    margin: auto;
+    margin-right: auto;
+    margin-left: 25px;
+}
