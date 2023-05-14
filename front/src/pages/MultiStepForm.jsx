@@ -38,6 +38,7 @@ const Step2 = ({ values, handleChange }) => {
                     name="address"
                     value={values.localisation}
                     onChange={handleChange}
+                    required ="required"
                 />
             </div>
         </form>
@@ -126,8 +127,8 @@ const MultiStepForm = () => {
     return (
         <>
             {submitted ? (
-                <h1>Form submitted</h1>
-            ) : (
+                {navigate('/login')}
+            )  : (
                 <div className={"container " + transition}>
                     {renderStep()}
                     <div className="btncontainer">

@@ -7,6 +7,7 @@ import { Client } from "@googlemaps/google-maps-services-js";
 
 const Swipe = ({ user, setLocate }) => {
   const [swip, setSwip] = useState([]);
+  // const [ajout, setAjout] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState("");
   const [distance, setDistance] = useState(null);
@@ -16,10 +17,15 @@ const Swipe = ({ user, setLocate }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentIndex % 5 == 0) {
+    if (currentIndex % 10 == 0) {
       fetch_data();
     }
   }, [currentIndex]);
+
+// useEffect(()=> {
+//   console.log(ajout);
+//   setSwip([...swip,...ajout]);
+// },[ajout])
 
   const fetch_data = async () => {
     // note a moi meme :
@@ -31,17 +37,21 @@ const Swipe = ({ user, setLocate }) => {
           currentIndex: currentIndex,
         },
       });
-      console.log(response.data);
-
-      setSwip((prevSwip) => [...prevSwip, ...response.data]);
-
-      setLoading(false);
+   
+      if (!(JSON.stringify(swip) === JSON.stringify(response.data) )){
+        var tab = [...swip] 
+         tab.unshift(...response.data)
+        setSwip(swip => [...swip, ...tab]);
+        console.log(swip);
+        setLoading(false);
+      }
+    
     } catch (error) {
       console.error(error);
     }
   };
   const swp = (side) => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
+    setCurrentIndex((prevIndex) => prevIndex + 2);
     console.log(currentIndex);
     setTransition(side);
     setTimeout(() => {

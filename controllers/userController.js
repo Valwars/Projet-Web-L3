@@ -55,11 +55,11 @@ module.exports.register = async(req, res, next) => {
 
 
 module.exports.swipe = async(req, res, next) => {
-    var startIndex = parseInt(req.query.currentIndex);
+    const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
     // var startIndex = 0;
     try {
-// Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
+    // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
         const resultat = await dbo.collection('users').find({}, {projection: {_id : 0 , pdp : 1 , name : 1, fistname : 1, age : 1, sexe : 1 , description : 1 ,localisation :1 }}).skip(startIndex).limit(10).toArray();
         console.log(resultat)
         res.send(resultat);
@@ -73,39 +73,39 @@ module.exports.swipe = async(req, res, next) => {
 
 module.exports.getconv = async(req, res) => {
 
-    try {
-        const { userid } = req.query
+try {
+    const { userid } = req.query
 
-        const conversations = await dbo.collection('Conversations').find({
-            $or: [
-                { user1Id: new ObjectId(userid) },
-                { user2Id: new ObjectId(userid) }
-            ]
-        }).toArray();
+    const conversations = await dbo.collection('Conversations').find({
+        $or: [
+            { user1Id: new ObjectId(userid) },
+            { user2Id: new ObjectId(userid) }
+        ]
+    }).toArray();
 
 
-        const mappedConversations = conversations.map((conversation) => {
-            if (conversation.user1Id.toString() === userid) {
-                return {
-                    conversationId: conversation._id,
-                    meta: conversation.meta2,
-                    to: conversation.user2Id
-                };
-            } else {
-                return {
-                    conversationId: conversation._id,
-                    meta: conversation.meta1,
-                    to: conversation.user1Id
+const mappedConversations = conversations.map((conversation) => {
+    if (conversation.user1Id.toString() === userid) {
+        return {
+            conversationId: conversation._id,
+            meta: conversation.meta2,
+            to: conversation.user2Id
+        };
+    } else {
+        return {
+            conversationId: conversation._id,
+            meta: conversation.meta1,
+            to: conversation.user1Id
 
-                };
-            }
-        });
+        };
+    }
+});
 
-        res.send({ status: "ok", conversations: mappedConversations });
+res.send({ status: "ok", conversations: mappedConversations });
 
-    } catch (error) {
-        res.send({ status: "error" });
-        console.log(error)
+} catch (error) {
+res.send({ status: "error" });
+console.log(error)
 
     }
 }
