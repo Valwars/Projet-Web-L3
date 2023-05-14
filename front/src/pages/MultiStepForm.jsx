@@ -127,7 +127,8 @@ const MultiStepForm = () => {
     return (
         <>
             {submitted ? (
-                {navigate('/login')}
+                <h1>Form submitted</h1>
+                // {navigate('/login')}
             )  : (
                 <div className={"container " + transition}>
                     {renderStep()}
