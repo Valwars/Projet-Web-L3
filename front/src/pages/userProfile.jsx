@@ -127,7 +127,7 @@ const UserProfile = ({ user, locate }) => {
     ],
   };
 
-  const options_stat = {
+  const options_stat_swipe = {
     responsive: true,
     plugins: {
       title: {
@@ -138,7 +138,79 @@ const UserProfile = ({ user, locate }) => {
     scales: {
       y: {
         min: 0,
-        max: 12,
+        max:nombre_swipe.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+      x: {
+        title: {
+          display: true,
+        },
+      },
+    },
+  };
+
+  const options_stat_match = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max:nombre_match.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+      x: {
+        title: {
+          display: true,
+        },
+      },
+    },
+  };
+
+  const options_stat_conversation = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max:nombre_conversation.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+      x: {
+        title: {
+          display: true,
+        },
+      },
+    },
+  };
+
+  const options_stat_date = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: false,
+        
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max:nombre_date.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
         ticks: {
           stepSize: 1,
         },
@@ -216,7 +288,7 @@ const UserProfile = ({ user, locate }) => {
               <Line
                 className="graphiques"
                 data={data_swipe}
-                options={options_stat}
+                options={options_stat_swipe}
               />
             </div>
 
@@ -225,7 +297,7 @@ const UserProfile = ({ user, locate }) => {
               <Line
                 className="graphiques"
                 data={data_match}
-                options={options_stat}
+                options={options_stat_match}
               />
               <h1>{nombre_match.reduce((acc, curr) => acc + curr.count, 0)}</h1>
             </div>
@@ -236,7 +308,7 @@ const UserProfile = ({ user, locate }) => {
               <Line
                 className="graphiques"
                 data={data_conversation}
-                options={options_stat}
+                options={options_stat_conversation}
               />
             </div>
             <h4>Dates<button>Semaine</button><button>Tout</button></h4>
@@ -244,7 +316,7 @@ const UserProfile = ({ user, locate }) => {
               <Line
                 className="graphiques"
                 data={data_date}
-                options={options_stat}
+                options={options_stat_date}
               />
               <h1>{nombre_date.reduce((acc, curr) => acc + curr.count, 0)}</h1>
             </div>
