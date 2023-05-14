@@ -64,6 +64,11 @@ const Chat = ({ user }) => {
                 <div className="match-content">
                   <div className="top">
                     <h1>Vos conversations</h1>
+                    <div className="order-filters">
+                      <i className="fa fa-chevron-down"></i>
+
+                      <i className="fa fa-chevron-up"></i>
+                    </div>
                     <input
                       id="convtp"
                       type="text"

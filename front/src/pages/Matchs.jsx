@@ -41,7 +41,12 @@ const Matchs = ({ user, setLocate }) => {
         <div className="match-content">
           <div className="top">
             <h1>Vos matchs</h1>
-            <input type="text" placeholder="Rechercher..." />
+            <div className="order-filters">
+              <i className="fa fa-chevron-down"></i>
+
+              <i className="fa fa-chevron-up"></i>
+            </div>
+            <input id="convtp" type="text" placeholder="Rechercher..." />
           </div>
           <div className="matchs-container">
             {matchs.map((match) => {

@@ -169,15 +169,17 @@ const UserProfile = ({ user, locate }) => {
                   </div>
                 );
               })}
-
-              {photosLimit == 6 ? (
-                <></>
-              ) : (
-                <button onClick={() => setPhotosLimit(photosLimit + 3)}>
-                  Voir plus
-                </button>
-              )}
-            </div>
+            </div>{" "}
+            {photosLimit == 6 ? (
+              <></>
+            ) : (
+              <button
+                className="showmorepics"
+                onClick={() => setPhotosLimit(photosLimit + 3)}
+              >
+                Voir plus
+              </button>
+            )}
           </div>
 
           <h2>Statistiques :</h2>
