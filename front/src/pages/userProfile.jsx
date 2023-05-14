@@ -47,7 +47,7 @@ const UserProfile = ({ user, locate }) => {
   ]);
 
   const [nombre_conversation, setConversation] = useState([
-    { date: "10/02", count: 11},
+    { date: "10/02", count: 11 },
     { date: "11/02", count: 4 },
     { date: "12/02", count: 7 },
     { date: "13/02", count: 2 },
@@ -86,7 +86,7 @@ const UserProfile = ({ user, locate }) => {
         label: "Nombre de matchs depuis votre inscription",
         data: nombre_match.map((item) => item.count),
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "#FF7A7A",
       },
     ],
   };
@@ -98,7 +98,7 @@ const UserProfile = ({ user, locate }) => {
         label: "Nombre de conversations depuis votre inscription",
         data: nombre_conversation.map((item) => item.count),
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "#FF7A7A",
       },
     ],
   };
@@ -110,7 +110,7 @@ const UserProfile = ({ user, locate }) => {
         label: "Nombre de dates depuis votre inscription",
         data: nombre_date.map((item) => item.count),
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "#FF7A7A",
       },
     ],
   };
@@ -122,7 +122,7 @@ const UserProfile = ({ user, locate }) => {
         label: "Swipe depuis le 10 Mai 2021",
         data: nombre_swipe.map((item) => item.count),
         fill: false,
-        borderColor: "rgb(75, 192, 192)",
+        borderColor: "#FF7A7A",
       },
     ],
   };
@@ -132,20 +132,26 @@ const UserProfile = ({ user, locate }) => {
     plugins: {
       title: {
         display: true,
-        
       },
+      legend: { display: false },
     },
     scales: {
       y: {
         min: 0,
-        max:nombre_swipe.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        max: nombre_swipe.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,
         ticks: {
           stepSize: 1,
+        },
+        grid: {
+          display: false,
         },
       },
       x: {
         title: {
           display: true,
+        },
+        grid: {
+          display: false,
         },
       },
     },
@@ -156,20 +162,26 @@ const UserProfile = ({ user, locate }) => {
     plugins: {
       title: {
         display: true,
-        
       },
+      legend: { display: false },
     },
     scales: {
       y: {
         min: 0,
-        max:nombre_match.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        max: nombre_match.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,
         ticks: {
           stepSize: 1,
+        },
+        grid: {
+          display: false,
         },
       },
       x: {
         title: {
           display: true,
+        },
+        grid: {
+          display: false,
         },
       },
     },
@@ -180,20 +192,30 @@ const UserProfile = ({ user, locate }) => {
     plugins: {
       title: {
         display: true,
-        
       },
+      legend: { display: false },
     },
     scales: {
       y: {
         min: 0,
-        max:nombre_conversation.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        max:
+          nombre_conversation.reduce(
+            (max, obj) => Math.max(max, obj.count),
+            0
+          ) + 2,
         ticks: {
           stepSize: 1,
+        },
+        grid: {
+          display: false,
         },
       },
       x: {
         title: {
           display: true,
+        },
+        grid: {
+          display: false,
         },
       },
     },
@@ -204,20 +226,26 @@ const UserProfile = ({ user, locate }) => {
     plugins: {
       title: {
         display: false,
-        
       },
+      legend: { display: false },
     },
     scales: {
       y: {
         min: 0,
-        max:nombre_date.reduce((max, obj) => Math.max(max, obj.count), 0)+2,
+        max: nombre_date.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,
         ticks: {
           stepSize: 1,
+        },
+        grid: {
+          display: false,
         },
       },
       x: {
         title: {
           display: true,
+        },
+        grid: {
+          display: false,
         },
       },
     },
@@ -281,43 +309,75 @@ const UserProfile = ({ user, locate }) => {
           </div>
 
           <h2>Statistiques :</h2>
-          <h4>Swipes <button>Semaine</button><button>Tout</button></h4>
+          <h4>Swipes</h4>
           <div className="profile-stats">
             <div className="stat">
               <h1>{nombre_swipe.reduce((acc, curr) => acc + curr.count, 0)}</h1>
-              <Line
-                className="graphiques"
-                data={data_swipe}
-                options={options_stat_swipe}
-              />
+              <div>
+                <Line
+                  className="graphiques"
+                  data={data_swipe}
+                  options={options_stat_swipe}
+                />
+                <div className="btn_stats">
+                  <button>1 sem</button>
+                  <button>1 m</button>
+                  <button>Tout</button>
+                </div>
+              </div>
             </div>
 
-            <h4>Matchs  <button>Semaine</button><button>Tout</button></h4>
-            <div className="stat">
-              <Line
-                className="graphiques"
-                data={data_match}
-                options={options_stat_match}
-              />
+            <h4>Matchs</h4>
+            <div className="stat stat_respo ">
+              <div>
+                <Line
+                  className="graphiques"
+                  data={data_match}
+                  options={options_stat_match}
+                />
+                <div className="btn_stats">
+                  <button>1 sem</button>
+                  <button>1 m</button>
+                  <button>Tout</button>
+                </div>
+              </div>
+
               <h1>{nombre_match.reduce((acc, curr) => acc + curr.count, 0)}</h1>
             </div>
 
-            <h4>Conversations<button>Semaine</button><button>Tout</button></h4>
+            <h4>Conversations</h4>
             <div className="stat">
-              <h1>{nombre_conversation.reduce((acc, curr) => acc + curr.count, 0)}</h1>
-              <Line
-                className="graphiques"
-                data={data_conversation}
-                options={options_stat_conversation}
-              />
+              <h1>
+                {nombre_conversation.reduce((acc, curr) => acc + curr.count, 0)}
+              </h1>
+              <div>
+                <Line
+                  className="graphiques"
+                  data={data_conversation}
+                  options={options_stat_conversation}
+                />
+                <div className="btn_stats">
+                  <button>1 sem</button>
+                  <button>1 m</button>
+                  <button>Tout</button>
+                </div>
+              </div>
             </div>
-            <h4>Dates<button>Semaine</button><button>Tout</button></h4>
-            <div className="stat">
-              <Line
-                className="graphiques"
-                data={data_date}
-                options={options_stat_date}
-              />
+            <h4>Dates</h4>
+            <div className="stat stat_respo ">
+              <div>
+                <Line
+                  className="graphiques"
+                  data={data_date}
+                  options={options_stat_date}
+                />
+                <div className="btn_stats">
+                  <button>1 sem</button>
+                  <button>1 m</button>
+                  <button>Tout</button>
+                </div>
+              </div>
+
               <h1>{nombre_date.reduce((acc, curr) => acc + curr.count, 0)}</h1>
             </div>
           </div>

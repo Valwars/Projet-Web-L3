@@ -87,6 +87,7 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
         });
 
         console.log("message recu");
+        scrollToBottom();
       });
       scrollToBottom();
     }
