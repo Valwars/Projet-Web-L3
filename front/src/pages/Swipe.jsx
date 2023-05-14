@@ -8,24 +8,26 @@ import { Client } from "@googlemaps/google-maps-services-js";
 const Swipe = ({ user, setLocate }) => {
   const [swip, setSwip] = useState([]);
   // const [ajout, setAjout] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState("");
   const [distance, setDistance] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  const [nbSwipes, setNbSwipes] = useState(0);
+  const topCard = swip.length > 0 ? swip[swip.length - 1] : null;
+
   useEffect(() => {
-    if (currentIndex % 10 == 0) {
+    fetch_data();
+  }, []);
+
+  useEffect(() => {
+    if (nbSwipes == 10) {
       fetch_data();
     }
-  }, [currentIndex]);
-
-// useEffect(()=> {
-//   console.log(ajout);
-//   setSwip([...swip,...ajout]);
-// },[ajout])
+  }, [nbSwipes]);
 
   const fetch_data = async () => {
     // note a moi meme :
@@ -34,18 +36,13 @@ const Swipe = ({ user, setLocate }) => {
     try {
       const response = await axios.get(userSwipe, {
         params: {
-          currentIndex: currentIndex,
+          currentIndex: nbSwipes,
         },
       });
-   
-      if (!(JSON.stringify(swip) === JSON.stringify(response.data) )){
-        var tab = [...swip] 
-         tab.unshift(...response.data)
-        setSwip(swip => [...swip, ...tab]);
-        console.log(swip);
-        setLoading(false);
-      }
-    
+      console.log(response.data);
+      setSwip((prevSwip) => response.data.concat(prevSwip));
+
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -57,10 +54,11 @@ const Swipe = ({ user, setLocate }) => {
     setTimeout(() => {
       setSwip(swip.slice(0, -1));
       setTransition("");
+      setNbSwipes(nbSwipes + 1);
     }, 500);
-  };
 
-  const topCard = swip.length > 0 ? swip[swip.length - 1] : null;
+    console.log(topCard);
+  };
 
   const formatDistance = (distanceInKm) => {
     const distanceInMeters = distanceInKm * 1000;
@@ -71,6 +69,10 @@ const Swipe = ({ user, setLocate }) => {
   };
 
   const getDistance = async () => {
+    if (!topCard) {
+      return;
+    }
+
     const client = new Client({});
     try {
       const response1 = await client.geocode({
@@ -121,29 +123,43 @@ const Swipe = ({ user, setLocate }) => {
       ) : (
         <>
           <div className="swipe-container">
-            <Card
-              item={topCard}
-              transition={transition}
-              setLocate={setLocate}
-              navigate={navigate}
-            />
-
-            <div class="button-container">
-              <div class="button" id="left" onClick={() => swp("swipe_left")}>
-                <img src="./img/cross.png" alt="" />
-              </div>
-              <div class="button" id="right" onClick={() => swp("swipe_right")}>
-                <img src="./img/check.png" alt="" />
-              </div>
-            </div>
             {topCard ? (
-              <div className="user-presentation">
-                <h1>{topCard.fistname + " " + topCard.name} </h1>
-                <h2>
-                  {topCard.age + " ans"} - {distance}
-                </h2>
-                <p>{topCard.description}</p>
-              </div>
+              <>
+                {" "}
+                <Card
+                  item={topCard}
+                  transition={transition}
+                  setLocate={setLocate}
+                  navigate={navigate}
+                />
+                <div class="button-container">
+                  <div
+                    class="button"
+                    id="left"
+                    onClick={() => swp("swipe_left")}
+                  >
+                    <img src="./img/cross.png" alt="" />
+                  </div>
+                  <div
+                    class="button"
+                    id="right"
+                    onClick={() => swp("swipe_right")}
+                  >
+                    <img src="./img/check.png" alt="" />
+                  </div>
+                </div>
+                {topCard ? (
+                  <div className="user-presentation">
+                    <h1>{topCard.fistname + " " + topCard.name} </h1>
+                    <h2>
+                      {topCard.age + " ans"} - {distance}
+                    </h2>
+                    <p>{topCard.description}</p>
+                  </div>
+                ) : (
+                  <h1>Vous n'avez plus de profils à visiter.</h1>
+                )}
+              </>
             ) : (
               <h1>Vous n'avez plus de profils à visiter.</h1>
             )}

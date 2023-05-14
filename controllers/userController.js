@@ -11,7 +11,7 @@ module.exports.login = async(req, res, next) => {
         const password = req.body.values.password;
         const admin = await dbo.collection('Admin').findOne({ mail: email, mdp: password });
 
-        
+
         if (!admin) {
             return res.json({ status: "error" });
         }
@@ -41,13 +41,13 @@ module.exports.getUser = async(req, res) => {
 }
 
 module.exports.register = async(req, res, next) => {
-     const nouveau = req.body.nouveau;       
-    try {       
+    const nouveau = req.body.nouveau;
+    try {
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
         console.log("ajouté");
         console.log(ajout.insertedId);
-        if(!ajout) return res.json({status : "error"});
-        else return res.json({status : "ok", id : ajout.insertedId});
+        if (!ajout) return res.json({ status: "error" });
+        else return res.json({ status: "ok", id: ajout.insertedId });
     } catch (error) {
         next(error);
     }
@@ -55,14 +55,23 @@ module.exports.register = async(req, res, next) => {
 
 
 module.exports.swipe = async(req, res, next) => {
+    console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
-    // var startIndex = 0;
+        // var startIndex = 0;
     try {
-    // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
-        const resultat = await dbo.collection('users').find({}, {projection: {_id : 1 , pdp : 1 , name : 1, fistname : 1 , description : 1 ,localisation :1 }}).skip(startIndex).limit(10).toArray();
-        console.log(resultat)
-        res.send(resultat);
+        // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
+
+        if (startIndex == 0) {
+            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
+            console.log(resultat)
+            res.send(resultat);
+        } else {
+            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
+            console.log(resultat)
+            res.send(resultat);
+        }
+
 
     } catch (error) {
         next(error);;
@@ -73,39 +82,39 @@ module.exports.swipe = async(req, res, next) => {
 
 module.exports.getconv = async(req, res) => {
 
-try {
-    const { userid } = req.query
+    try {
+        const { userid } = req.query
 
-    const conversations = await dbo.collection('Conversations').find({
-        $or: [
-            { user1Id: new ObjectId(userid) },
-            { user2Id: new ObjectId(userid) }
-        ]
-    }).toArray();
+        const conversations = await dbo.collection('Conversations').find({
+            $or: [
+                { user1Id: new ObjectId(userid) },
+                { user2Id: new ObjectId(userid) }
+            ]
+        }).toArray();
 
 
-const mappedConversations = conversations.map((conversation) => {
-    if (conversation.user1Id.toString() === userid) {
-        return {
-            conversationId: conversation._id,
-            meta: conversation.meta2,
-            to: conversation.user2Id
-        };
-    } else {
-        return {
-            conversationId: conversation._id,
-            meta: conversation.meta1,
-            to: conversation.user1Id
+        const mappedConversations = conversations.map((conversation) => {
+            if (conversation.user1Id.toString() === userid) {
+                return {
+                    conversationId: conversation._id,
+                    meta: conversation.meta2,
+                    to: conversation.user2Id
+                };
+            } else {
+                return {
+                    conversationId: conversation._id,
+                    meta: conversation.meta1,
+                    to: conversation.user1Id
 
-        };
-    }
-});
+                };
+            }
+        });
 
-res.send({ status: "ok", conversations: mappedConversations });
+        res.send({ status: "ok", conversations: mappedConversations });
 
-} catch (error) {
-res.send({ status: "error" });
-console.log(error)
+    } catch (error) {
+        res.send({ status: "error" });
+        console.log(error)
 
     }
 }
