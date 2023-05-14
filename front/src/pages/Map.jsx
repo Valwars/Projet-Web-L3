@@ -125,7 +125,7 @@ function MapWithLoader({ user, isDark }) {
 
   const [dates, setDates] = useState([
     {
-      adress: "68 rue de Bernis Albi",
+      adress: "49 Lices Georges Pompidou Albi",
       date: "Resto",
       personne: "Valérie",
       heure: "12h30",
