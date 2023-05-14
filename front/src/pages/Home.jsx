@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -25,7 +25,8 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-page">
+   
+      <div className="home-page">
       <header>
         <i class="fas fa-hand-holding-heart"></i>
         <button className="btn" onClick={() => navigate("/login")}>
@@ -247,6 +248,9 @@ const Home = () => {
         </div>
       </footer>
     </div>
+
+   
+   
   );
 };
 

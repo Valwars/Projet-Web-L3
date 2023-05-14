@@ -9,6 +9,7 @@ import { loginRoute } from "../../utils/APIRoutes";
 
 const Login_Form = ({ setUser }) => {
   const navigate = useNavigate();
+  const [complet, setComplet]= useState(false);
 
   const [values, setValues] = useState({
     email: "",
@@ -42,7 +43,11 @@ const Login_Form = ({ setUser }) => {
 
       localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.mail);
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
+     if (complet){
       navigate("/");
+     }else {
+      navigate("/multiform")
+     }
       window.location.reload();
     } else {
       console.log("toast");

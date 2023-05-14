@@ -45,7 +45,7 @@ const Register_Form = ({ setUser }) => {
     const id = create.data.id;
    
        if(status === "ok"){
-        navigate("/multistepform");
+        navigate("/login");
         toast.success("Utilisateur créé !", toastOptions)
       }
       
