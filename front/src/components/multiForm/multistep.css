@@ -1,5 +1,6 @@
 .container {
     transition: all 0.4s ease;
+    margin: 20px auto;
 }
 
 .multisteps {
@@ -286,4 +287,32 @@ input[type="radio"] {
 
 .input-file {
     display: none;
+}
+
+.firstLoad h1 {
+    font-size: var(--title);
+}
+
+@media (max-width: 820px) {
+    .container {
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .multisteps {
+        width: 100%;
+    }
+    .firstLoad {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        padding-bottom: 0;
+        margin: auto;
+        padding: 25px 0;
+    }
+    .formicon {
+        display: none;
+    }
 }
