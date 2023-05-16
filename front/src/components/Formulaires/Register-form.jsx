@@ -31,27 +31,23 @@ const Register_Form = ({ setUser }) => {
     theme: "light",
   };
 
-
-  const createuser = async (event) => {  
+  const createuser = async (event) => {
     event.preventDefault();
     console.log("tentative de création");
     try {
-      
       const create = await axios.post(registerRoute, {
         nouveau,
       });
-      
-    const status = create.data.status;
-    const id = create.data.id;
-   
-       if(status === "ok"){
+
+      const status = create.data.status;
+      const id = create.data.id;
+
+      if (status === "ok") {
         navigate("/login");
-        toast.success("Utilisateur créé !", toastOptions)
+        toast.success("Utilisateur créé !", toastOptions);
       }
-      
-      
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -63,26 +59,39 @@ const Register_Form = ({ setUser }) => {
         </p>
         <div className="labs">
           <label>Identifiant</label>
-          <input type="email" name="email" placeholder="E-mail adress" value={nouveau.mail} onChange={(e) => setNouveau({...nouveau, mail : e.target.value})} required="required"/>
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail adress"
+            value={nouveau.mail}
+            onChange={(e) => setNouveau({ ...nouveau, mail: e.target.value })}
+            required="required"
+          />
         </div>
         <div className="labs">
           <label>Mot de passe</label>
-          <input type="password" name="password" placeholder="Password" value={nouveau.mdp} onChange={(e) => setNouveau({...nouveau, mdp : e.target.value})} required="required" />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={nouveau.mdp}
+            onChange={(e) => setNouveau({ ...nouveau, mdp: e.target.value })}
+            required="required"
+          />
         </div>
 
- <button className="l-but" type="submit">
-            Créer →
-          </button>
+        <button className="l-but" type="submit">
+          Créer →
+        </button>
 
         <div className="redirect">
           <div>
             <p>Vous avez déjà un compte ?</p>
             <button onClick={() => navigate("/login")}>Se connecter</button>
           </div>
-
-         
         </div>
-      </form>
+      </form>{" "}
+      <ToastContainer />
     </div>
   );
 };

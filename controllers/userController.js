@@ -241,3 +241,34 @@ module.exports.filluser = async(req, res, next) => {
     //     next(ex)
     // }
 }
+
+module.exports.modifuser = async(req, res) => {
+    const { values } = req.body;
+    try {
+        const collection = await dbo.collection('Admin');
+
+        const query = { _id: new ObjectId(values.id) };
+        const update = { $set: values };
+
+        const options = { returnOriginal: false };
+        const result = await collection.findOneAndUpdate(query, update, options);
+
+        console.log(result)
+        if (!result.value) {
+            console.log("error")
+
+            return res.json({ status: "error" });
+        }
+
+        console.log(result.value)
+        return res.json({ status: "ok" });
+
+
+    } catch (err) {
+        console.log(err);
+        return res.json({ status: "error" });
+
+    }
+
+
+}

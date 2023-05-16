@@ -128,7 +128,7 @@ function App() {
                 <Route
                   path="/profile"
                   element={
-                    <UserProfile user={user} locate={locate}></UserProfile>
+                    <UserProfile user={user} setUser={setUser}></UserProfile>
                   }
                 ></Route>
                 <Route

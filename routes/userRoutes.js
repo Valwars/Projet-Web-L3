@@ -9,6 +9,7 @@ const {
     getMessages,
     addMessage,
     filluser,
+    modifuser
 
 } = require("../controllers/userController.js");
 
@@ -18,7 +19,7 @@ const router = require("express").Router();
 router.post("/login", login)
 
 router.post("/register", register)
-router.post("/fill",filluser)
+router.post("/fill", filluser)
 router.get("/", swipe)
 
 router.get("/dates", dates)
@@ -31,5 +32,6 @@ router.post("/addmsg", addMessage)
 router.get("/user", getUser)
 router.get("/getconv", getconv)
 
+router.post("/save", modifuser)
 
 module.exports = router;
