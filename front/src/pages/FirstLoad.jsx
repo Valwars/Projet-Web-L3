@@ -1,7 +1,9 @@
 import MultiStepForm from "../components/multiForm/MultiStepForm";
 const FirstLoad = () => {
   return (
-    <div className="app-page chat-page">
+    <div>
+      <i class="fas fa-hand-holding-heart formicon"></i>
+
       <MultiStepForm></MultiStepForm>
     </div>
   );

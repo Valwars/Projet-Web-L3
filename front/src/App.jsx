@@ -87,7 +87,7 @@ function App() {
             </Routes>
           ) : (
             <div className="app-container">
-              {location.pathname.toLowerCase() === "/firstLoad" ? (
+              {location.pathname.toLowerCase() === "/firstload" ? (
                 <></>
               ) : (
                 <NavBar

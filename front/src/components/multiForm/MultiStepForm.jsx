@@ -5,11 +5,11 @@ import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "./multistep.css";
 
-const Step1 = ({ values, handleChange }) => {
+const Step1 = ({ values, handleChange, nextStep }) => {
   return (
-    <form className="multisteps">
+    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
-        <label>Name</label>
+        <label>Nom</label>
         <input
           type="text"
           name="name"
@@ -19,7 +19,7 @@ const Step1 = ({ values, handleChange }) => {
         />
       </div>
       <div className="fields">
-        <label>First name</label>
+        <label>Prénom</label>
         <input
           type="text"
           name="firstname"
@@ -28,67 +28,135 @@ const Step1 = ({ values, handleChange }) => {
           required="required"
         />
       </div>
-    </form>
-  );
-};
 
-const Step2 = ({ values, handleChange }) => {
-  return (
-    <form className="multisteps">
       <div className="fields">
-        <label>Address</label>
-        <input
-          type="text"
-          name="localisation"
-          value={values.localisation}
-          onChange={handleChange}
-          required="required"
-        />
-      </div>
-    </form>
-  );
-};
-
-const Step3 = ({ values, handleChange }) => {
-  return (
-    <form className="multisteps">
-      <div className="fields">
-        <label>Age</label>
+        <label>Âge</label>
         <input
           type="number"
           name="age"
-          min="1"
           value={values.age}
           onChange={handleChange}
           required="required"
         />
       </div>
+
+      <div className="btncontainer alone">
+        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+      </div>
     </form>
   );
 };
 
-const Step4 = ({ values, handleChange }) => {
+const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
   return (
-    <form className="multisteps">
+    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
-        <label>Profile picture</label>
+        <label>Sexe</label>
+        <div className="choice">
+          <div>
+            {" "}
+            <input type="checkbox" name="homme" value="homme"></input>
+            <label for="homme">Homme</label>
+          </div>
+          <div>
+            {" "}
+            <input type="checkbox" name={"femme"} value="femme"></input>
+            <label for="homme">Femme</label>
+          </div>
+        </div>
+      </div>
+      <div className="fields">
+        <label>Sexualité</label>
+        <select
+          name="orientation"
+          value={values.orientation}
+          onChange={handleChange}
+        >
+          <option value="">--Choisi ton orientation--</option>
+          <option value="Hétérosexuel">Hétérosexuel</option>
+          <option value="Homosexuel">Homosexuel</option>
+          <option value="Bisexuel">Bisexuel</option>
+        </select>
+      </div>
+      <div className="fields">
+        <label>Adresse complète</label>
+        <input
+          type="text"
+          name="localisation"
+          value={values.localisation}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="btncontainer">
+        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+
+        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+      </div>
+    </form>
+  );
+};
+
+const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
+  return (
+    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
+      <div className="fields">
+        <label>Photo de profil </label>
         <input
           type="file"
           name="pdp"
           value={values.pdp}
           onChange={handleChange}
-          required="required"
         />
       </div>
       <div className="fields">
-        <label>Some pictures of you</label>
-        <input
+        <label>Décrivez vous !</label>
+        <textarea
           type="file"
-          name="photos"
-          value={values.photos}
+          name="description"
+          value={values.description}
           onChange={handleChange}
-          required="required"
         />
+      </div>
+      <div className="btncontainer">
+        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+
+        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+      </div>
+    </form>
+  );
+};
+
+const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
+  return (
+    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
+      <div className="fields">
+        <label>Ajouter des photos à votre profil</label>
+        <div className="depot">
+          <div
+            class="drag-area"
+            // onDrop={handleDrop}
+            //onDragOver={handleDragOver}
+            //onDragLeave={handleDragLeave}
+          >
+            <div className="header-depot">
+              Glisser déposer vos images ici...
+            </div>
+            <span>Ou</span>
+            <label className="btn-browse">
+              Parcourir les fichiers
+              <input
+                type="file"
+                hidden //onChange={handleFileChange}
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className="btncontainer">
+        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+
+        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
       </div>
     </form>
   );
@@ -96,78 +164,12 @@ const Step4 = ({ values, handleChange }) => {
 
 const Step5 = ({ values, handleChange }) => {
   return (
-    <form className="multisteps">
-      <div className="fields">
-        <label>Your sex</label>
-        <select
-          name="sexe"
-          value={values.sexe}
-          onChange={handleChange}
-          required="required"
-        >
-          <option value="">--Please choose your sex--</option>
-          <option value="Homme">Homme</option>
-          <option value="Femme">Femme</option>
-        </select>
-      </div>
-      <div className="fields">
-        <label>Your orientation</label>
-        <select
-          name="orientation"
-          value={values.orientation}
-          onChange={handleChange}
-          required="required"
-        >
-          <option value="">--Please choose your sex--</option>
-          <option value="Hétérosexuel">Hétérosexuel</option>
-          <option value="Homosexuel">Homosexuel</option>
-          <option value="Bisexuel">Bisexuel</option>
-        </select>
-      </div>
-    </form>
-  );
-};
-
-const Step6 = ({ values, handleChange }) => {
-  return (
-    <form className="multisteps">
-      <div className="fields">
-        <label>Your description</label>
-        <textarea
-          name="description"
-          cols="50"
-          rows="6"
-          value={values.description}
-          onChange={handleChange}
-          required="required"
-        />
-      </div>
-    </form>
-  );
-};
-
-const Step7 = ({ values, inter, handleChangedeux }) => {
-  return (
-    <form className="multisteps">
-      <div className="fields">
-        <label>Your interests</label>
-        {inter.map((interet) => {
-          return (
-            <label key={interet}>
-              {" "}
-              {interet} :{" "}
-              <input
-                type="checkbox"
-                objet="interests"
-                name={values.interests}
-                value={interet}
-                onChange={(e) => handleChangedeux(e)}
-              />
-            </label>
-          );
-        })}
-      </div>
-    </form>
+    <div className="loader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   );
 };
 
@@ -280,25 +282,42 @@ const MultiStepForm = () => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <Step1 values={values} handleChange={handleChange} />;
-      case 2:
-        return <Step2 values={values} handleChange={handleChange} />;
-      case 3:
-        return <Step3 values={values} handleChange={handleChange} />;
-      case 4:
-        return <Step4 values={values} handleChange={handleChange} />;
-      case 5:
-        return <Step5 values={values} handleChange={handleChange} />;
-      case 6:
-        return <Step6 values={values} handleChange={handleChange} />;
-      case 7:
         return (
-          <Step7
+          <Step1
             values={values}
-            inter={inter}
-            handleChangedeux={handleChangedeux}
+            handleChange={handleChange}
+            nextStep={nextStep}
           />
         );
+      case 2:
+        return (
+          <Step2
+            values={values}
+            handleChange={handleChange}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        );
+      case 3:
+        return (
+          <Step3
+            values={values}
+            handleChange={handleChange}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        );
+      case 4:
+        return (
+          <Step4
+            values={values}
+            handleChange={handleChange}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        );
+      case 5:
+        return <Step5 />;
 
       default:
         // je dois ajouter le user dans le localstorage pour qu'il reste co est qu'il continue sa route
@@ -314,24 +333,38 @@ const MultiStepForm = () => {
         <h1>Form submitted</h1>
       ) : (
         // {navigate('/login')}
-        <div className="app-page">
-          <div className={"container " + transition}>
-            {renderStep()}
-            <div className="btncontainer">
-              {step > 1 && (
-                <button onClick={() => prevStep("animate-left")}>
-                  Previous
-                </button>
-              )}
-              {step < 7 && (
-                <button onClick={() => nextStep("animate-right")}>Next</button>
-              )}
-              {step === 7 && <button onClick={handleSubmit}>Submit</button>}
-            </div>
-          </div>
+        <div className="app-page firstLoad">
+          {step == 5 ? (
+            <>
+              <h1>{"Bienvenue, " + values.firstname + " !"}</h1>
+              <p>
+                Vous allez être redirigé vers notre application dans quelques
+                instants...
+              </p>
+            </>
+          ) : (
+            <h1>Dites nous qui vous êtes.</h1>
+          )}
+          <div className={"container " + transition}>{renderStep()}</div>
+          <ProgressBar step={step}></ProgressBar>
         </div>
       )}
     </>
+  );
+};
+const ProgressBar = ({ step }) => {
+  return (
+    <div className="progress-bar">
+      <div className={`progress-point${step >= 1 ? " active" : ""}`}></div>
+      <div className={`progress-line${step >= 2 ? " active" : ""}`}></div>
+      <div className={`progress-point${step >= 2 ? " active" : ""}`}></div>
+      <div className={`progress-line${step >= 3 ? " active" : ""}`}></div>
+      <div className={`progress-point${step >= 3 ? " active" : ""}`}></div>
+      <div className={`progress-line${step >= 4 ? " active" : ""}`}></div>
+      <div className={`progress-point${step >= 4 ? " active" : ""}`}></div>
+      <div className={`progress-line${step >= 5 ? " active" : ""}`}></div>
+      <div className={`progress-point${step >= 5 ? " active" : ""}`}></div>
+    </div>
   );
 };
 
