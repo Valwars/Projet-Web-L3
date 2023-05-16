@@ -203,7 +203,6 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
           type="file"
           className="input-file"
           name="pdp"
-          value={values.pdp}
           onChange={handleChange}
         />
       </div>
@@ -268,7 +267,58 @@ const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
   );
 };
 
-const Step5 = ({ values, handleChange }) => {
+const Step5 = ({ values, handleChangedeux, nextStep, prevStep, inter }) => {
+  const verify = () => {
+    if (values.interests.length < 3) {
+      toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
+
+      return false;
+    }
+
+    return true;
+  };
+  return (
+    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
+      <div className="fields">
+        <label>Selectionner vos centres d'intêrets</label>
+        <div className="interest_form">
+          {inter.map((int, index) => {
+            return (
+              <div className="inter" key={index}>
+                <input
+                  type="checkbox"
+                  id={`checkbox-${index}`}
+                  value={int}
+                  onChange={handleChangedeux}
+                  disabled={
+                    !values.interests.includes(int) &&
+                    values.interests.length >= 6
+                  }
+                />
+                <label htmlFor={`checkbox-${index}`}>{int}</label>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="btncontainer">
+        <button onClick={() => prevStep("animate-left")}>← Précédent</button>
+
+        <button
+          onClick={() => {
+            if (verify()) {
+              nextStep("animate-right");
+            }
+          }}
+        >
+          Suivant →
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const Step6 = ({ values, handleChange }) => {
   return (
     <div className="loader">
       <span></span>
@@ -343,21 +393,23 @@ const MultiStepForm = () => {
   const handleChangedeux = (e) => {
     const { value, checked } = e.target;
 
-    setValues((prevValues) => {
-      if (checked) {
+    if (checked && values.interests.length < 6) {
+      setValues((prevValues) => {
         return {
           ...prevValues,
           interests: [...prevValues.interests, value],
         };
-      } else {
+      });
+    } else if (!checked) {
+      setValues((prevValues) => {
         return {
           ...prevValues,
           interests: prevValues.interests.filter(
             (interest) => interest !== value
           ),
         };
-      }
-    });
+      });
+    }
   };
 
   const handleChange = (e) => {
@@ -423,7 +475,17 @@ const MultiStepForm = () => {
           />
         );
       case 5:
-        return <Step5 />;
+        return (
+          <Step5
+            values={values}
+            handleChangedeux={handleChangedeux}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            inter={inter}
+          />
+        );
+      case 6:
+        return <Step6 />;
 
       default:
         // je dois ajouter le user dans le localstorage pour qu'il reste co est qu'il continue sa route
@@ -470,6 +532,8 @@ const ProgressBar = ({ step }) => {
       <div className={`progress-point${step >= 4 ? " active" : ""}`}></div>
       <div className={`progress-line${step >= 5 ? " active" : ""}`}></div>
       <div className={`progress-point${step >= 5 ? " active" : ""}`}></div>
+      <div className={`progress-line${step >= 6 ? " active" : ""}`}></div>
+      <div className={`progress-point${step >= 6 ? " active" : ""}`}></div>
     </div>
   );
 };
