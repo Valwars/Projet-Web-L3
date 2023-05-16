@@ -315,4 +315,8 @@ input[type="radio"] {
     .formicon {
         display: none;
     }
+    .progress-bar {
+        width: 80%;
+        min-width: auto;
+    }
 }
