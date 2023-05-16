@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { filluser } from "../utils/APIRoutes";
+import { filluser } from "../../utils/APIRoutes";
 import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
-import("../multistep.css");
+import "./multistep.css";
 
 const Step1 = ({ values, handleChange }) => {
   return (
@@ -244,7 +244,9 @@ const MultiStepForm = () => {
       } else {
         return {
           ...prevValues,
-          interests: prevValues.interests.filter((interest) => interest !== value),
+          interests: prevValues.interests.filter(
+            (interest) => interest !== value
+          ),
         };
       }
     });

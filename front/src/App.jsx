@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 import { userData } from "./utils/APIRoutes";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import axios from "axios";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -15,8 +15,10 @@ import Chat from "./pages/Chat";
 import Map from "./pages/Map";
 import UserProfile from "./pages/userProfile";
 import Dates from "./pages/Dates";
-import MultiStepForm from "./pages/MultiStepForm";
+import FirstLoad from "./pages/FirstLoad";
 function App() {
+  const location = useLocation();
+
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -78,18 +80,28 @@ function App() {
                 element={<Login setUser={setUser} />}
               ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
-              <Route path="/multistepform" element={<MultiStepForm/>}></Route>
+              <Route
+                path="/firstLoad"
+                element={<FirstLoad></FirstLoad>}
+              ></Route>
             </Routes>
-            
           ) : (
             <div className="app-container">
-              <NavBar
-                user={user}
-                setIsDark={setIsDark}
-                isDark={isDark}
-              ></NavBar>
+              {location.pathname.toLowerCase() === "/firstLoad" ? (
+                <></>
+              ) : (
+                <NavBar
+                  user={user}
+                  setIsDark={setIsDark}
+                  isDark={isDark}
+                ></NavBar>
+              )}
 
               <Routes>
+                <Route
+                  path="/firstLoad"
+                  element={<FirstLoad></FirstLoad>}
+                ></Route>
                 <Route
                   path="/"
                   element={<Swipe user={user} setLocate={setLocate}></Swipe>}
