@@ -46,6 +46,27 @@ const io = socket(server, {
     },
 });
 
+async function findDocument(collectionName, fieldName, fieldValue) {
+    const uri = "mongodb+srv://<username>:<password>@cluster0.mongodb.net/test"; // remplacez par votre propre uri
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    try {
+        await client.connect();
+
+        const collection = client.db("test").collection(collectionName); // remplacez "test" par le nom de votre base de données
+        const document = await collection.findOne({
+            [fieldName]: fieldValue
+        });
+
+        console.log(document);
+        return
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.close();
+    }
+}
+
 
 global.onlineUsers = new Map();
 

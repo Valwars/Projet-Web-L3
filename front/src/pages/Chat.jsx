@@ -12,10 +12,12 @@ const Chat = ({ user }) => {
   const [selectedConv, setSelected] = useState(undefined);
   const [conversations, setConv] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searsh, setSearsh] = useState("");
+  const [sort, setSort] = useState(-1);
 
   useEffect(() => {
     get_conv();
-  }, []);
+  }, [searsh, sort]);
 
   useEffect(() => {
     if (user) {
@@ -29,6 +31,8 @@ const Chat = ({ user }) => {
       .get(getconv, {
         params: {
           userid: user._id,
+          searchString: searsh,
+          order: sort,
         },
       })
       .then(function (response) {
@@ -39,42 +43,65 @@ const Chat = ({ user }) => {
       });
   };
 
+  const handle_sort = (e) => {
+    document
+      .getElementsByClassName("filter-order-active")[0]
+      .classList.remove("filter-order-active");
+    e.target.classList.add("filter-order-active");
+  };
   return (
     <div className="app-page chat-page">
       {loading ? (
         <Loader_transition></Loader_transition>
       ) : (
         <>
-          {conversations.length == 0 ? (
-            <>
-              <div className="no_conv">
-                <h1>Tu n'as pas encore engagé de conversations !</h1>
-              </div>
-            </>
-          ) : (
-            <>
-              {selectedConv ? (
-                <ChatContainer
-                  user={user}
-                  currentChat={selectedConv}
-                  setConv={setSelected}
-                  socket={socket}
-                ></ChatContainer>
-              ) : (
-                <div className="match-content">
-                  <div className="top">
-                    <h1>Vos conversations</h1>
-                    <div className="order-filters">
-                      <i className="fa fa-chevron-down"></i>
+          <>
+            {selectedConv ? (
+              <ChatContainer
+                user={user}
+                currentChat={selectedConv}
+                setConv={setSelected}
+                socket={socket}
+              ></ChatContainer>
+            ) : (
+              <div className="match-content">
+                <div className="top">
+                  <h1>Vos conversations</h1>
+                  <div className="order-filters">
+                    <i
+                      className="fa fa-chevron-down filter-order-active"
+                      onClick={(e) => {
+                        handle_sort(e);
+                        setSort(1);
+                      }}
+                    ></i>
 
-                      <i className="fa fa-chevron-up"></i>
-                    </div>
-                    <input
-                      id="convtp"
-                      type="text"
-                      placeholder="Rechercher..."
-                    />
+                    <i
+                      className="fa fa-chevron-up"
+                      onClick={(e) => {
+                        handle_sort(e);
+                        setSort(-1);
+                      }}
+                    ></i>
                   </div>
+                  <input
+                    id="convtp"
+                    type="text"
+                    placeholder="Rechercher..."
+                    onChange={(e) => setSearsh(e.target.value)}
+                  />
+                </div>
+                {conversations.length == 0 ? (
+                  <>
+                    <div className="no_conv">
+                      {searsh.length > 0 ? (
+                        <h2>Pas de résulats correspondants !</h2>
+                      ) : (
+                        <h2>Tu n'as pas encore engagé de conversations !</h2>
+                      )}
+                    </div>
+                  </>
+                ) : (
                   <div className="matchs-container">
                     {conversations.map((conv) => {
                       return (
@@ -88,10 +115,10 @@ const Chat = ({ user }) => {
                       );
                     })}
                   </div>
-                </div>
-              )}
-            </>
-          )}{" "}
+                )}
+              </div>
+            )}
+          </>
         </>
       )}
     </div>

@@ -85,17 +85,19 @@ module.exports.swipe = async(req, res, next) => {
 module.exports.getconv = async(req, res) => {
 
     try {
-        const { userid } = req.query
+        const { userid, searchString, order } = req.query
+        const sortOrder = parseInt(order, 10) || 1;
+
 
         const conversations = await dbo.collection('Conversations').find({
             $or: [
                 { user1Id: new ObjectId(userid) },
                 { user2Id: new ObjectId(userid) }
             ]
-        }).toArray();
+        }).sort({ createdAt: sortOrder }).toArray();
 
 
-        const mappedConversations = conversations.map((conversation) => {
+        var mappedConversations = conversations.map((conversation) => {
             if (conversation.user1Id.toString() === userid) {
                 return {
                     conversationId: conversation._id,
@@ -111,6 +113,18 @@ module.exports.getconv = async(req, res) => {
                 };
             }
         });
+
+        if (searchString) {
+            mappedConversations = mappedConversations.filter(conversation => {
+                var fullName = conversation.meta.name + ' ' + conversation.meta.firstName;
+                var fullName2 = conversation.meta.firstName + ' ' + conversation.meta.name;
+
+
+
+                return fullName.toLowerCase().includes(searchString.toLowerCase()) || fullName2.toLowerCase().includes(searchString.toLowerCase());
+            });
+        }
+
 
         res.send({ status: "ok", conversations: mappedConversations });
 
