@@ -1,13 +1,14 @@
 import "./style.css";
 import { Link, useMatch, useResolvedPath, useNavigate } from "react-router-dom";
 import DarkModeButton from "../dark_mode/toogle";
+import { getImage } from "../../utils/APIRoutes";
 
 const NavBar = ({ user, setIsDark, isDark }) => {
   return (
     <div className="nav">
       <div className="content">
         <div className="pdp-container">
-          <img src={user.pdp} alt="" />
+          <img src={getImage + user.pdp} alt="" />
         </div>
         <div className="menu-items-container">
           <ul>

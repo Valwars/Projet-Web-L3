@@ -1,8 +1,10 @@
 const client = require('../database/mongo_connect');
 const dbo = client.db('Sparkly');
 const { ObjectId } = require('mongodb');
+const path = require("path")
+const fs = require('fs');
 
-module.exports.login = async (req, res, next) => {
+module.exports.login = async(req, res, next) => {
 
     console.log("LOGIN")
 
@@ -25,7 +27,7 @@ module.exports.login = async (req, res, next) => {
 };
 
 
-module.exports.getUser = async (req, res) => {
+module.exports.getUser = async(req, res) => {
     try {
         console.log("USER")
 
@@ -42,7 +44,7 @@ module.exports.getUser = async (req, res) => {
     }
 }
 
-module.exports.register = async (req, res, next) => {
+module.exports.register = async(req, res, next) => {
     const nouveau = req.body.nouveau;
     try {
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
@@ -56,11 +58,11 @@ module.exports.register = async (req, res, next) => {
 };
 
 
-module.exports.swipe = async (req, res, next) => {
+module.exports.swipe = async(req, res, next) => {
     console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
-    // var startIndex = 0;
+        // var startIndex = 0;
     try {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
 
@@ -82,7 +84,7 @@ module.exports.swipe = async (req, res, next) => {
 };
 
 
-module.exports.getconv = async (req, res) => {
+module.exports.getconv = async(req, res) => {
 
     try {
         const { userid, searchString, order } = req.query
@@ -136,7 +138,7 @@ module.exports.getconv = async (req, res) => {
 }
 
 
-module.exports.dates = async (req, res, next) => {
+module.exports.dates = async(req, res, next) => {
 
 
     let unid = req.query.lid;
@@ -146,21 +148,21 @@ module.exports.dates = async (req, res, next) => {
         if (!admin) {
             return res.json({ status: "error" });
         } else {
-                let couple = []; 
+            let couple = [];
             for (let i = 0; i < admin.length; i++) {
-           
-            couple.push({ premier: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }), second: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }) });
-        }
+
+                couple.push({ premier: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }), second: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }) });
+            }
             console.log(couple[0])
-            res.json({ status: "ok", dates: admin, couple : couple});
+            res.json({ status: "ok", dates: admin, couple: couple });
             // console.log(admin);
-        
+
         }
 
         // let date = []
-    
 
-        
+
+
     } catch (error) {
         next(error);;
     }
@@ -170,7 +172,7 @@ module.exports.dates = async (req, res, next) => {
 
 
 
-module.exports.profil = async (req, res, next) => {
+module.exports.profil = async(req, res, next) => {
 
     console.log(req.query.myString);
     try {
@@ -188,7 +190,7 @@ module.exports.profil = async (req, res, next) => {
 }
 
 
-module.exports.getMessages = async (req, res, next) => {
+module.exports.getMessages = async(req, res, next) => {
     try {
         const { from, convId } = req.query;
 
@@ -217,7 +219,7 @@ module.exports.getMessages = async (req, res, next) => {
     }
 };
 
-module.exports.addMessage = async (req, res, next) => {
+module.exports.addMessage = async(req, res, next) => {
     try {
 
         const { from, message, convId } = req.body;
@@ -237,7 +239,7 @@ module.exports.addMessage = async (req, res, next) => {
 }
 
 
-module.exports.filluser = async (req, res, next) => {
+module.exports.filluser = async(req, res, next) => {
     console.log("filluser")
     console.log(req.body.values);
     // try {
@@ -247,33 +249,106 @@ module.exports.filluser = async (req, res, next) => {
     // }
 }
 
-module.exports.modifuser = async (req, res) => {
-    const { values } = req.body;
-    try {
-        const collection = await dbo.collection('Admin');
 
-        const query = { _id: new ObjectId(values.id) };
-        const update = { $set: values };
+const multer = require('multer');
 
-        const options = { returnOriginal: false };
-        const result = await collection.findOneAndUpdate(query, update, options);
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './static/images');
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    },
+});
 
-        console.log(result)
-        if (!result.value) {
-            console.log("error")
-
-            return res.json({ status: "error" });
+const upload = multer({
+    storage: storage,
+    fileFilter: function(req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif|webp/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if (mimetype && extname) {
+            return cb(null, true);
         }
+        cb('Error: File upload only supports the following filetypes - ' + filetypes);
+    },
+}).single('pdp');
+module.exports.modifuser = async(req, res) => {
+    try {
+        upload(req, res, async function(err) {
+            console.log(err)
 
-        console.log(result.value)
-        return res.json({ status: "ok" });
+            if (err instanceof multer.MulterError) {
+                console.log(err)
+
+                return res.send({ status: 'error', error: err })
+            } else if (err) {
+                console.log(err)
+
+                return res.send({ status: 'error', error: err })
+            }
+
+            const collection = await dbo.collection('Admin');
+
+            const query = { _id: new ObjectId(req.body.id) };
+
+            // Vérifiez si req.file existe avant d'essayer d'accéder à filename
+            // Récupérer l'administrateur actuel
+            const currentAdmin = await collection.findOne(query);
+
+            // Vérifiez si req.file existe avant d'essayer d'accéder à filename
+            if (req.file) {
+                req.body.pdp = "/" + req.file.filename;
+
+                // Supprimer l'ancien fichier image
+                if (currentAdmin.pdp) {
+                    // Supprime le premier caractère ("/") de currentAdmin.pdp
+                    const filename = currentAdmin.pdp.substring(1);
+                    console.log(filename)
+                    fs.unlink(path.join(__dirname, '../static', 'images', filename), err => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                }
+            } else {
+                // Supprime le champ pdp s'il n'existe pas
+                delete req.body.pdp;
+            }
+
+            let interests = Object.keys(req.body)
+                .filter(key => key.startsWith('interests'))
+                .map(key => req.body[key]);
 
 
+            interests = interests.flat();
+
+            console.log("INTEREST : ")
+
+            console.log(interests)
+            req.body.interests = interests;
+            const update = { $set: req.body };
+
+            const options = { returnOriginal: false };
+            const result = await collection.findOneAndUpdate(query, update, options);
+
+            console.log(result)
+            if (!result.value) {
+                console.log("error")
+
+                return res.json({ status: "error" });
+            }
+
+            console.log(result.value)
+            if (req.file) {
+                return res.json({ status: "ok", filename: "/" + req.file.filename });
+
+            }
+            return res.json({ status: "ok" });
+        })
     } catch (err) {
         console.log(err);
         return res.json({ status: "error" });
-
     }
-
-
 }

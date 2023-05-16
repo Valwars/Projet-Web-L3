@@ -12,7 +12,7 @@ const authRoutes = require("./routes/userRoutes");
 
 const { url } = require('inspector');
 
-app.use('/static/images', express.static('static/images'));
+app.use('/ressources/images', express.static('static/images'));
 app.use(express.static('front/build'));
 
 app.use(cors());

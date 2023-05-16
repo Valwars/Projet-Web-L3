@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
-import { save, userRoute } from "../utils/APIRoutes";
+import { getImage, save, userRoute } from "../utils/APIRoutes";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -55,6 +55,7 @@ const UserProfile = ({ user, setUser }) => {
     localisation: user.localisation,
     orientation: user.orientation,
     photos: user.photos,
+    pdp: user.pdp,
   });
 
   const [nombre_match, setnombre_match] = useState([
@@ -284,11 +285,34 @@ const UserProfile = ({ user, setUser }) => {
       toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
       return;
     }
-    const result = await axios.post(save, { values });
+
+    const formData = new FormData();
+    formData.append("id", values.id);
+    formData.append("name", values.name);
+    formData.append("firstname", values.firstname);
+    formData.append("age", values.age);
+    formData.append("description", values.description);
+    values.interests.forEach((interest, index) => {
+      formData.append(`interests[${index}]`, interest);
+    });
+    formData.append("localisation", values.localisation);
+    formData.append("orientation", values.orientation);
+
+    for (let i = 0; i < values.photos.length; i++) {
+      formData.append("photos", values.photos[i]);
+    }
+    formData.append("pdp", values.pdp);
+
+    const result = await axios.post(save, formData);
 
     console.log(result);
     if (result.data.status === "ok") {
       toast.success("Profil sauvegardé !", toastOptions);
+      console.log(result.data.filename);
+      var pdp = user.pdp;
+      if (result.data.filename) {
+        pdp = result.data.filename;
+      }
       setUser((prevUser) => ({
         ...prevUser,
         _id: values.id,
@@ -300,6 +324,7 @@ const UserProfile = ({ user, setUser }) => {
         localisation: values.localisation,
         orientation: values.orientation,
         photos: values.photos,
+        pdp: pdp,
       }));
 
       setEdit(false);
@@ -356,6 +381,24 @@ const UserProfile = ({ user, setUser }) => {
       });
     }
   };
+
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile && selectedFile.type.includes("image")) {
+      setValues({ ...values, pdp: selectedFile });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setValues({ ...values, pdp: user.pdp });
+      alert("Le fichier doit être une image !");
+    }
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -397,7 +440,17 @@ const UserProfile = ({ user, setUser }) => {
           {edit ? (
             <div>
               <div className="edit">
-                <img className="pdp" src={user.pdp} alt="" />
+                <div className="edit_pdp">
+                  <img
+                    className="pdp"
+                    src={imagePreview ? imagePreview : getImage + user.pdp}
+                    alt=""
+                  />
+                  <label className="btn-browse">
+                    Browse File
+                    <input type="file" hidden onChange={handleFileChange} />
+                  </label>{" "}
+                </div>
 
                 <div className="infos">
                   <div>
@@ -531,7 +584,7 @@ const UserProfile = ({ user, setUser }) => {
           ) : (
             <>
               <div className="haut-profil">
-                <img className="pdp" src={user.pdp} alt="" />
+                <img className="pdp" src={getImage + user.pdp} alt="" />
                 <h1>{user.name + " " + user.firstname}</h1>
                 <div className="profil-information">
                   <h2>{user.age + " ans"}</h2>{" "}

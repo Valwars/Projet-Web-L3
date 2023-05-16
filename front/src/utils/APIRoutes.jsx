@@ -11,3 +11,4 @@ export const filluser = `${host}/api/auth/fill`;
 export const sendMessageRoute = `${host}/api/auth/addmsg`;
 export const recieveMessageRoute = `${host}/api/auth/getmsg`;
 export const save = `${host}/api/auth/save`;
+export const getImage = `${host}/ressources/images`;
