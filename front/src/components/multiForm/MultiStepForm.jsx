@@ -502,7 +502,7 @@ const MultiStepForm = () => {
       ) : (
         // {navigate('/login')}
         <div className="app-page firstLoad">
-          {step == 5 ? (
+          {step == 6 ? (
             <>
               <h1>{"Bienvenue, " + values.firstname + " !"}</h1>
               <p>
