@@ -15,7 +15,6 @@ const Step1 = ({ values, handleChange, nextStep }) => {
           name="name"
           value={values.name}
           onChange={handleChange}
-          required="required"
         />
       </div>
       <div className="fields">
@@ -25,7 +24,6 @@ const Step1 = ({ values, handleChange, nextStep }) => {
           name="firstname"
           value={values.firstname}
           onChange={handleChange}
-          required="required"
         />
       </div>
 
@@ -36,7 +34,6 @@ const Step1 = ({ values, handleChange, nextStep }) => {
           name="age"
           value={values.age}
           onChange={handleChange}
-          required="required"
         />
       </div>
 
@@ -55,13 +52,13 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
         <div className="choice">
           <div>
             {" "}
-            <input type="checkbox" name="homme" value="homme"></input>
+            <input type="radio" id="homme" name="sexe" value="homme"></input>
             <label for="homme">Homme</label>
           </div>
           <div>
             {" "}
-            <input type="checkbox" name={"femme"} value="femme"></input>
-            <label for="homme">Femme</label>
+            <input type="radio" id="femme" name="sexe" value="femme"></input>
+            <label for="femme">Femme</label>
           </div>
         </div>
       </div>
@@ -89,7 +86,7 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
       </div>
 
       <div className="btncontainer">
-        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+        <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
         <button onClick={() => nextStep("animate-right")}>Suivant →</button>
       </div>
@@ -102,8 +99,13 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
     <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
         <label>Photo de profil </label>
+        <label htmlFor="upload-photo" className="custom-file-upload">
+          Télécharger la photo
+        </label>
         <input
+          id="upload-photo"
           type="file"
+          className="input-file"
           name="pdp"
           value={values.pdp}
           onChange={handleChange}
@@ -119,7 +121,7 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
         />
       </div>
       <div className="btncontainer">
-        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+        <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
         <button onClick={() => nextStep("animate-right")}>Suivant →</button>
       </div>
@@ -154,7 +156,7 @@ const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
         </div>
       </div>
       <div className="btncontainer">
-        <button onClick={() => prevStep("animate-left")}>Précédent</button>
+        <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
         <button onClick={() => nextStep("animate-right")}>Suivant →</button>
       </div>

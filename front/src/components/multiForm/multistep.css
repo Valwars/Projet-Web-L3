@@ -98,28 +98,37 @@
     flex-direction: column;
 }
 
-input[type="checkbox"]:checked+label {
+input[type="radio"]:checked+label {
     cursor: pointer;
-    background-color: var(--main-color);
     box-shadow: rgb(0 0 0 / 5%) 0px 4px 10px 0px, rgb(0 0 0 / 5%) 0px 2px 6px 0px;
     transform: translate3d(0px, 0px, 0px) scale3d(1.05, 1.05, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
     transform-style: preserve-3d;
 }
 
-input[name="homme"]+label {
+input[id="homme"]+label {
+    transition: all 0.2s;
     box-shadow: 0px 4px 4px rgba(0, 26, 255, 0.44);
 }
 
-input[name="femme"]+label {
+input[id="homme"]:checked+label {
+    background-color: rgba(0, 26, 255, 0.44);
+}
+
+input[id="femme"]:checked+label {
+    transition: all 0.2s;
+    background-color: rgba(209, 18, 240, 0.25);
+}
+
+input[id="femme"]+label {
     box-shadow: 0px 4px 4px rgba(209, 18, 240, 0.25);
 }
 
-input[type="checkbox"] {
+input[type="radio"] {
     display: absolute;
     cursor: pointer;
 }
 
-input[type="checkbox"] {
+input[type="radio"] {
     position: absolute;
     opacity: 0;
 }
@@ -255,4 +264,26 @@ input[type="checkbox"] {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.custom-file-upload {
+    cursor: pointer;
+    background: #282828;
+    border-radius: 10px;
+    color: white;
+    border: 0;
+    width: 100%;
+    padding: 15px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: clamp(0.8rem, 1vw + .1rem, 1.5rem);
+    margin-top: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    opacity: 0.8;
+}
+
+.input-file {
+    display: none;
 }
