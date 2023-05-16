@@ -280,6 +280,10 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const handleSave = async () => {
+    if (values.interests.length < 3) {
+      toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
+      return;
+    }
     const result = await axios.post(save, { values });
 
     console.log(result);
@@ -303,7 +307,55 @@ const UserProfile = ({ user, setUser }) => {
       toast.error("Erreur !", toastOptions);
     }
   };
+  const inter = [
+    "la lecture",
+    "la musique",
+    "le cinéma",
+    "les voyages",
+    "la randonnée",
+    "le sport",
+    "la cuisine",
+    "la mode",
+    "la danse",
+    "l'art",
+    "la photographie",
+    "le jardinage",
+    "les animaux",
+    "la nature",
+    "la technologie",
+    "les jeux vidéo",
+    "la cuisine asiatique",
+    "les voitures",
+    "le vin",
+    "la bière",
+    "les films d'horreur",
+    "les comédies",
+    "les documentaires",
+    "la culture pop",
+    "le design",
+    "la décoration intérieure",
+  ];
+  const handleChangedeux = (e) => {
+    const { value, checked } = e.target;
 
+    if (checked && values.interests.length < 6) {
+      setValues((prevValues) => {
+        return {
+          ...prevValues,
+          interests: [...prevValues.interests, value],
+        };
+      });
+    } else if (!checked) {
+      setValues((prevValues) => {
+        return {
+          ...prevValues,
+          interests: prevValues.interests.filter(
+            (interest) => interest !== value
+          ),
+        };
+      });
+    }
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -411,6 +463,29 @@ const UserProfile = ({ user, setUser }) => {
                     />
                   </div>
                 </div>
+                <div>
+                  <h2>Gérez vos intêrets :</h2>{" "}
+                  <div className="interest_form">
+                    {inter.map((int, index) => {
+                      return (
+                        <div className="inter" key={index}>
+                          <input
+                            type="checkbox"
+                            id={`checkbox-${index}`}
+                            value={int}
+                            onChange={handleChangedeux}
+                            checked={values.interests.includes(int)}
+                            disabled={
+                              !values.interests.includes(int) &&
+                              values.interests.length >= 6
+                            }
+                          />
+                          <label htmlFor={`checkbox-${index}`}>{int}</label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 <div className="user-pics">
                   <h2>Vos photos :</h2>
@@ -471,6 +546,7 @@ const UserProfile = ({ user, setUser }) => {
                   return <h2>{inte}</h2>;
                 })}
               </div>
+
               <div className="user-pics">
                 <h2>Vos photos :</h2>
                 <div className="pics-container">
