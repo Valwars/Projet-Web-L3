@@ -16,9 +16,11 @@ module.exports.login = async(req, res, next) => {
             return res.json({ status: "error" });
         }
         // console.log(admin)
+
         res.send({ status: "ok", uti: admin });
     } catch (error) {
-        next(error);;
+        console.log(error)
+        return res.json({ status: "error" });
     }
 };
 
@@ -63,12 +65,12 @@ module.exports.swipe = async(req, res, next) => {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
 
         if (startIndex == 0) {
-            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1,age : 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
-           
+            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
+
             res.send(resultat);
         } else {
-            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1,age : 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
-           
+            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
+
             res.send(resultat);
         }
 
@@ -216,11 +218,11 @@ module.exports.addMessage = async(req, res, next) => {
 }
 
 
-module.exports.filluser = async(req,res,next) =>{
+module.exports.filluser = async(req, res, next) => {
     console.log("filluser")
     console.log(req.body.values);
     // try {
-        
+
     // } catch (ex) {
     //     next(ex)
     // }
