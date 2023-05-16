@@ -5,7 +5,37 @@ import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "./multistep.css";
 
+const toastOptions = {
+  position: "bottom-right",
+  autoClose: 6000,
+  transition: Slide,
+  pauseOnHover: true,
+  draggable: true,
+  theme: "light",
+};
+
 const Step1 = ({ values, handleChange, nextStep }) => {
+  const verify = () => {
+    if (values.firstname.length < 3) {
+      toast.error("Prénom trop court.", toastOptions);
+
+      return false;
+    }
+
+    if (values.name.length < 3) {
+      toast.error("Nom trop court.", toastOptions);
+
+      return false;
+    }
+
+    if (parseInt(values.age) < 18 || values.age === "") {
+      toast.error("L'âge n'est pas valide.", toastOptions);
+
+      return false;
+    }
+
+    return true;
+  };
   return (
     <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
@@ -38,13 +68,43 @@ const Step1 = ({ values, handleChange, nextStep }) => {
       </div>
 
       <div className="btncontainer alone">
-        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+        <button
+          onClick={() => {
+            if (verify()) {
+              nextStep("animate-right");
+            }
+          }}
+        >
+          Suivant →
+        </button>
       </div>
     </form>
   );
 };
 
 const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
+  const verify = () => {
+    if (values.sexe === "") {
+      toast.error("Veuillez sélectionner un sexe.", toastOptions);
+
+      return false;
+    }
+
+    if (values.orientation === "") {
+      toast.error("Veuillez sélectionner une sexualité.", toastOptions);
+
+      return false;
+    }
+
+    if (values.localisation.length < 6) {
+      toast.error("Veuillez saisir une adresse correcte.", toastOptions);
+
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
@@ -52,12 +112,24 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
         <div className="choice">
           <div>
             {" "}
-            <input type="radio" id="homme" name="sexe" value="homme"></input>
+            <input
+              type="radio"
+              id="homme"
+              name="sexe"
+              value="homme"
+              onChange={handleChange}
+            ></input>
             <label for="homme">Homme</label>
           </div>
           <div>
             {" "}
-            <input type="radio" id="femme" name="sexe" value="femme"></input>
+            <input
+              type="radio"
+              id="femme"
+              name="sexe"
+              value="femme"
+              onChange={handleChange}
+            ></input>
             <label for="femme">Femme</label>
           </div>
         </div>
@@ -88,13 +160,37 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
       <div className="btncontainer">
         <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
-        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+        <button
+          onClick={() => {
+            if (verify()) {
+              nextStep("animate-right");
+            }
+          }}
+        >
+          Suivant →
+        </button>
       </div>
     </form>
   );
 };
 
 const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
+  const verify = () => {
+    if (values.description.length < 22) {
+      toast.error("Votre description doit être plus longue.", toastOptions);
+
+      return false;
+    }
+
+    if (values.pdp === "") {
+      toast.error("Veuillez ajouter une photo de profil.", toastOptions);
+
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
@@ -123,7 +219,15 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
       <div className="btncontainer">
         <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
-        <button onClick={() => nextStep("animate-right")}>Suivant →</button>
+        <button
+          onClick={() => {
+            if (verify()) {
+              nextStep("animate-right");
+            }
+          }}
+        >
+          Suivant →
+        </button>
       </div>
     </form>
   );
