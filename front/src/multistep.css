@@ -13,10 +13,21 @@
 }
 
 .fields input {
-    background-color: #AAC6C6;
+    /* background-color: #AAC6C6; */
+    background-color: white;
     border: 0;
     border-radius: 10px;
-    color: white;
+    height: 30px;
+    width: 100%;
+    color: #201b26de;
+    font-size: clamp(0.8rem, 1vw + .1rem, 1.5rem);
+}
+.fields textarea {
+    background-color: white;
+    border: 0;
+    border-radius: 10px;
+    color: #201b26de;
+    font-size: clamp(0.8rem, 1vw + .1rem, 1.5rem);
 }
 
 .fields button {

@@ -15,7 +15,7 @@ module.exports.login = async(req, res, next) => {
         if (!admin) {
             return res.json({ status: "error" });
         }
-        console.log(admin)
+        // console.log(admin)
         res.send({ status: "ok", uti: admin });
     } catch (error) {
         next(error);;
@@ -64,11 +64,11 @@ module.exports.swipe = async(req, res, next) => {
 
         if (startIndex == 0) {
             const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1,age : 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
-            console.log(resultat)
+           
             res.send(resultat);
         } else {
             const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1,age : 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
-            console.log(resultat)
+           
             res.send(resultat);
         }
 
@@ -213,4 +213,15 @@ module.exports.addMessage = async(req, res, next) => {
     } catch (ex) {
         next(ex);
     }
+}
+
+
+module.exports.filluser = async(req,res,next) =>{
+    console.log("filluser")
+    console.log(req.body.values);
+    // try {
+        
+    // } catch (ex) {
+    //     next(ex)
+    // }
 }

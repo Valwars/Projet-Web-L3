@@ -7,6 +7,6 @@ export const datesRoute = `${host}/api/auth/dates`;
 export const userRoute = `${host}/api/auth/profile`;
 export const userData = `${host}/api/auth/user`;
 export const getconv = `${host}/api/auth/getconv`;
-
+export const filluser = `${host}/api/auth/fill`;
 export const sendMessageRoute = `${host}/api/auth/addmsg`;
 export const recieveMessageRoute = `${host}/api/auth/getmsg`;

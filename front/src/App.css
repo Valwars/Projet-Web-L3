@@ -575,7 +575,7 @@ footer {
     border-radius: 10px;
     padding-left: 2%;
     border: 0;
-    color: rgba(32, 27, 38, 0.87);
+    color: #201b26de;
     font-size: var(--little-font);
 }
 
