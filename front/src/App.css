@@ -1204,11 +1204,25 @@
         background: var(--div_bg);
         padding: 20px;
         border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .interests h2:hover {
+        transform: translate3d(0px, 0px, 0px) scale3d(1.1, 1.1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+        transform-style: preserve-3d;
     }
     
     .disco {
         display: block;
         margin-left: auto;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .disco:hover {
+        color: var(--main-color);
     }
     
     .disco i {

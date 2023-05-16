@@ -13,7 +13,7 @@ const Chat = ({ user }) => {
   const [conversations, setConv] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searsh, setSearsh] = useState("");
-  const [sort, setSort] = useState(-1);
+  const [sort, setSort] = useState(1);
 
   useEffect(() => {
     get_conv();
