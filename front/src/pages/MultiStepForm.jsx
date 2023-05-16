@@ -233,13 +233,21 @@ const MultiStepForm = () => {
   };
 
   const handleChangedeux = (e) => {
-    console.log(e.target.value);
-    console.log(values.interests);
-    setValues({
-      ...values.interests,
-      interests: [...values.interests, e.target.value],
+    const { value, checked } = e.target;
+
+    setValues((prevValues) => {
+      if (checked) {
+        return {
+          ...prevValues,
+          interests: [...prevValues.interests, value],
+        };
+      } else {
+        return {
+          ...prevValues,
+          interests: prevValues.interests.filter((interest) => interest !== value),
+        };
+      }
     });
-    console.log(values.interests);
   };
 
   const handleChange = (e) => {
