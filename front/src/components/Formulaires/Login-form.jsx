@@ -8,7 +8,6 @@ import { loginRoute } from "../../utils/APIRoutes";
 
 const Login_Form = ({ setUser }) => {
   const navigate = useNavigate();
-  const [complet, setComplet] = useState(null);
 
   const [values, setValues] = useState({
     email: "",
@@ -24,14 +23,14 @@ const Login_Form = ({ setUser }) => {
     theme: "light",
   };
 
-  useEffect(() => {
-    if (complet == true) {
-      navigate("/");
-      window.location.reload();
-    } else if (complet == false) {
-      navigate("/firstLoad");
-    }
-  }, [complet]);
+  // useEffect(() => {
+  //   if (complet == true) {
+  //     navigate("/");
+  //     window.location.reload();
+  //   } else if (complet == false) {
+  //     navigate("/firstLoad");
+  //   }
+  // }, [complet]);
 
   const login = async (event) => {
     // fonction a appeler quand l'user clique sur "connexion"
@@ -46,19 +45,21 @@ const Login_Form = ({ setUser }) => {
     console.log(data);
     console.log(!(u.name === ""));
     if (data.status === "ok") {
-      if (u.name === "") {
-        setComplet(false);
-      } else {
-        setComplet(true);
-      }
-      console.log(complet);
-
+      // if (u.name === "") {
+      //   setComplet(false);
+      // } else {
+      //   setComplet(true);
+      // }
+ 
+      
       // compte crée, on redirige sur la page de connexion.
       toast.success("You are connected !", toastOptions);
 
       localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, u.mail);
       // Redirige vers la page d'accueil -> récupère les informations de l'user et le set au niveau du dessus
-    } else {
+    navigate('/')
+    window.location.reload()
+  } else {
       console.log("toast");
       toast.error("Informations incorrectes", toastOptions);
     }

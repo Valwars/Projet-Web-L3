@@ -8,36 +8,38 @@ const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
   const [leuser, setLeuser] = useState({});
   const [date, setDate] = useState([]);
-  const [couple, setTab] = useState([]);
+  const [couple, setCouple] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLeuser(user);
-    const fetchData = async () => {
-      setLeuser(user);
-      console.log(leuser._id);
-      var unid = leuser._id;
-      try {
-        const response = await axios.get(datesRoute, {
-          params: {
-            lid: unid,
-          },
-        });
 
-        console.log("response", response.data.date);
-        var tab = response.data.date;
-        var coupletab = response.data.couple;
-        setDate(tab);
-        console.log("tab date", date);
-        setTab(coupletab);
-        console.log("couple", couple);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+
+  useEffect(() => {    
     fetchData();
-  }, [leuser]);
+  }, []);
+
+  const fetchData = async () => {
+    setLeuser(user);
+    console.log(leuser._id);
+    var unid = leuser._id;
+    try {
+      const response = await axios.get(datesRoute, {
+        params: {
+          lid: unid,
+        },
+      });
+      console.log(response.data.dates);
+     console.log(response.data.couple)    
+      
+      setDate(response.data.dates);
+      setCouple(response.data.couple)
+     
+      
+       setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
     <div className="app-page">
@@ -55,7 +57,49 @@ const Dates = ({ user, locate }) => {
             <input id="convtp" type="text" placeholder="Rechercher..." />
           </div>
           <div className="matchs-container">
-            {date.map((date) => {
+            {date.map((date, index)=>{
+              
+              return(
+               <>
+              
+               <div className="user-date" >
+                 {couple.map((item)=>{
+                 const keys = Object.keys(item);
+                 keys.map((key)=>{
+                  const element = item[key]
+                  return (
+                    <div>
+                    <img
+                      src={element.pdp}
+                      alt=""
+                    />
+                    <h2>{element.name}</h2>
+                  </div>
+                   ) 
+                 })
+                
+             
+                 })}
+                 </div>
+
+              <div className="dateInfo">
+                <div>
+                  <i class="fas fa-clock"></i>
+
+                  <p>{date.localisation}</p>
+                </div>
+                <div>
+                  <i class="fas fa-map-marker-alt"></i>
+
+                  <p>{date.date}</p>
+                </div>
+              </div>            
+               </>
+               
+            
+              )
+            })}
+            {/* {date.map((date) => {
               // if (user.personnes[0] != undefined) {
               return (
                 <div
@@ -92,7 +136,8 @@ const Dates = ({ user, locate }) => {
               // } else {
               //   return null;
               // }
-            })}
+            })} */}
+            
           </div>
         </div>
       )}

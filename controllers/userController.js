@@ -2,7 +2,7 @@ const client = require('../database/mongo_connect');
 const dbo = client.db('Sparkly');
 const { ObjectId } = require('mongodb');
 
-module.exports.login = async(req, res, next) => {
+module.exports.login = async (req, res, next) => {
 
     console.log("LOGIN")
 
@@ -25,7 +25,7 @@ module.exports.login = async(req, res, next) => {
 };
 
 
-module.exports.getUser = async(req, res) => {
+module.exports.getUser = async (req, res) => {
     try {
         console.log("USER")
 
@@ -42,7 +42,7 @@ module.exports.getUser = async(req, res) => {
     }
 }
 
-module.exports.register = async(req, res, next) => {
+module.exports.register = async (req, res, next) => {
     const nouveau = req.body.nouveau;
     try {
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
@@ -56,11 +56,11 @@ module.exports.register = async(req, res, next) => {
 };
 
 
-module.exports.swipe = async(req, res, next) => {
+module.exports.swipe = async (req, res, next) => {
     console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
-        // var startIndex = 0;
+    // var startIndex = 0;
     try {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
 
@@ -82,7 +82,7 @@ module.exports.swipe = async(req, res, next) => {
 };
 
 
-module.exports.getconv = async(req, res) => {
+module.exports.getconv = async (req, res) => {
 
     try {
         const { userid, searchString, order } = req.query
@@ -136,7 +136,7 @@ module.exports.getconv = async(req, res) => {
 }
 
 
-module.exports.dates = async(req, res, next) => {
+module.exports.dates = async (req, res, next) => {
 
 
     let unid = req.query.lid;
@@ -145,17 +145,22 @@ module.exports.dates = async(req, res, next) => {
         const admin = await dbo.collection('Dates').find({ "": unid }).toArray();
         if (!admin) {
             return res.json({ status: "error" });
-        }
-        let date = []
-        let couple = [];
-
-        for (let i = 0; i < admin.length; i++) {
-            date.push(admin[i]);
+        } else {
+                let couple = []; 
+            for (let i = 0; i < admin.length; i++) {
+           
             couple.push({ premier: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }), second: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }) });
         }
+            console.log(couple[0])
+            res.json({ status: "ok", dates: admin, couple : couple});
+            // console.log(admin);
+        
+        }
 
+        // let date = []
+    
 
-        res.json({ status: "ok", couple: couple, date: date });
+        
     } catch (error) {
         next(error);;
     }
@@ -165,7 +170,7 @@ module.exports.dates = async(req, res, next) => {
 
 
 
-module.exports.profil = async(req, res, next) => {
+module.exports.profil = async (req, res, next) => {
 
     console.log(req.query.myString);
     try {
@@ -183,7 +188,7 @@ module.exports.profil = async(req, res, next) => {
 }
 
 
-module.exports.getMessages = async(req, res, next) => {
+module.exports.getMessages = async (req, res, next) => {
     try {
         const { from, convId } = req.query;
 
@@ -212,7 +217,7 @@ module.exports.getMessages = async(req, res, next) => {
     }
 };
 
-module.exports.addMessage = async(req, res, next) => {
+module.exports.addMessage = async (req, res, next) => {
     try {
 
         const { from, message, convId } = req.body;
@@ -232,7 +237,7 @@ module.exports.addMessage = async(req, res, next) => {
 }
 
 
-module.exports.filluser = async(req, res, next) => {
+module.exports.filluser = async (req, res, next) => {
     console.log("filluser")
     console.log(req.body.values);
     // try {
@@ -242,7 +247,7 @@ module.exports.filluser = async(req, res, next) => {
     // }
 }
 
-module.exports.modifuser = async(req, res) => {
+module.exports.modifuser = async (req, res) => {
     const { values } = req.body;
     try {
         const collection = await dbo.collection('Admin');

@@ -2,7 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 import { userData } from "./utils/APIRoutes";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { useNavigate, Route, Routes, useLocation } from "react-router-dom";
 import axios from "axios";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -16,9 +16,12 @@ import Map from "./pages/Map";
 import UserProfile from "./pages/userProfile";
 import Dates from "./pages/Dates";
 import FirstLoad from "./pages/FirstLoad";
-function App() {
-  const location = useLocation();
 
+function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [complet, setComplet] = useState(undefined);
+ 
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -44,8 +47,31 @@ function App() {
     fetchData();
   }, []);
 
+
+  // useEffect(() => {
+  //   console.log(complet);
+  //   if (complet === false) {
+  //     setTimeout(() => {
+  //       navigate("/firstLoad");
+  //     }, 0);
+  //   } else if (complet === true) {
+  //     setTimeout(() => {
+  //       navigate("/");
+  //     }, 0);
+  //   }
+  // }, [complet]);
+
+  useEffect(()=>{
+    if (complet == false){
+      navigate('/firstLoad');
+    }else {
+      navigate('/');
+    }
+  },[complet])
+
   //  const fetchData -> fonction qui récupères les données utilisateurs si il est co.
   const fetchData = async () => {
+    
     console.log("fetch");
     setDone(false);
     const token = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
@@ -55,7 +81,16 @@ function App() {
 
       if (data.status === "ok") {
         // CONNEXION RÉUSSIE, on set l'user.
+        console.log(data.uti);
+        console.log(data.uti.name)
         setUser(data.uti);
+        if(data.uti.name==="") {
+          setComplet(false);
+          
+        }else {
+          setComplet(true);
+       
+        }
       }
     }
     // On affiche.
@@ -80,28 +115,21 @@ function App() {
                 element={<Login setUser={setUser} />}
               ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
-              <Route
-                path="/firstLoad"
-                element={<FirstLoad></FirstLoad>}
-              ></Route>
+            
             </Routes>
-          ) : (
-            <div className="app-container">
-              {location.pathname.toLowerCase() === "/firstload" ? (
-                <></>
-              ) : (
-                <NavBar
+           
+          ) : ( 
+            <>
+            {complet ?(
+              <div className="app-container">
+              <NavBar
                   user={user}
                   setIsDark={setIsDark}
                   isDark={isDark}
-                ></NavBar>
-              )}
+                ></NavBar>         
 
               <Routes>
-                <Route
-                  path="/firstLoad"
-                  element={<FirstLoad></FirstLoad>}
-                ></Route>
+              
                 <Route
                   path="/"
                   element={<Swipe user={user} setLocate={setLocate}></Swipe>}
@@ -137,9 +165,20 @@ function App() {
                 ></Route>
               </Routes>
             </div>
+            ) :(
+             <div className="app-container"> 
+                <Routes>
+                  <Route
+                    path="/firstLoad"
+                    element={<FirstLoad></FirstLoad>}
+                  ></Route>      
+                </Routes>
+              </div>
+              )}
+              </>
           )}
-        </>
-      )}
+       </>
+      )} 
     </div>
   );
 }
