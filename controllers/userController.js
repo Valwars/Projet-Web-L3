@@ -273,6 +273,69 @@ const upload = multer({
         cb('Error: File upload only supports the following filetypes - ' + filetypes);
     },
 }).single('pdp');
+
+const upload2 = multer({
+    storage: storage,
+    fileFilter: function(req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif|webp/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error('File upload only supports the following filetypes - ' + filetypes));
+    },
+}).array('files', 10); // Specify the maximum number of files allowed (e.g., 5)
+
+module.exports.fillForm = (req, res) => {
+    upload2(req, res, async(error) => {
+        try {
+            if (error instanceof multer.MulterError) {
+                return res.send({ status: 'error', error: error.message });
+            } else if (error) {
+                // Handle other errors
+                return res.send({ status: 'error', error: error.message });
+            }
+
+            const { values } = req.body;
+
+            const collection = await dbo.collection('Admin');
+
+            const query = { _id: new ObjectId(req.body.id) };
+
+            let interests = Object.keys(req.body)
+                .filter((key) => key.startsWith('interests'))
+                .map((key) => req.body[key]);
+
+            let fileNames = [];
+            if (req.files && req.files.length > 0) {
+                fileNames = req.files.map((file) => '/' + file.filename);
+            }
+
+            interests = interests.flat();
+            fileNames = fileNames.flat();
+
+            const pdp = fileNames.shift()
+
+            req.body.interests = interests;
+            req.body.photos = fileNames;
+            req.body.pdp = pdp;
+            const update = { $set: req.body };
+
+            const options = { returnOriginal: false };
+            const result = await collection.findOneAndUpdate(query, update, options);
+
+            console.log(result);
+            return res.send({ status: 'ok' });
+        } catch (error) {
+            // Handle errors
+            console.log(error);
+
+            return res.send({ status: 'error', error: error.message });
+        }
+    });
+};
+
 module.exports.modifuser = async(req, res) => {
     try {
         upload(req, res, async function(err) {

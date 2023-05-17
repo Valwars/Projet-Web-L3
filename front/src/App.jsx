@@ -21,7 +21,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [complet, setComplet] = useState(undefined);
- 
+
   const [locate, setLocate] = useState("/");
   // les const de types[x, setX] = useState() :
   // x représente le nom d'une variable, setX permet de définir la variable et tout cela dans un etat react.
@@ -47,7 +47,6 @@ function App() {
     fetchData();
   }, []);
 
-
   // useEffect(() => {
   //   console.log(complet);
   //   if (complet === false) {
@@ -61,17 +60,16 @@ function App() {
   //   }
   // }, [complet]);
 
-  useEffect(()=>{
-    if (complet == false){
-      navigate('/firstLoad');
-    }else {
-      navigate('/');
+  useEffect(() => {
+    if (complet == false) {
+      navigate("/firstLoad");
+    } else {
+      navigate("/");
     }
-  },[complet])
+  }, [complet]);
 
   //  const fetchData -> fonction qui récupères les données utilisateurs si il est co.
   const fetchData = async () => {
-    
     console.log("fetch");
     setDone(false);
     const token = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
@@ -82,14 +80,12 @@ function App() {
       if (data.status === "ok") {
         // CONNEXION RÉUSSIE, on set l'user.
         console.log(data.uti);
-        console.log(data.uti.name)
+        console.log(data.uti.name);
         setUser(data.uti);
-        if(data.uti.name==="") {
+        if (data.uti.name === "") {
           setComplet(false);
-          
-        }else {
+        } else {
           setComplet(true);
-       
         }
       }
     }
@@ -115,70 +111,77 @@ function App() {
                 element={<Login setUser={setUser} />}
               ></Route>
               <Route path="/register" element={<Register></Register>}></Route>
-            
             </Routes>
-           
-          ) : ( 
+          ) : (
             <>
-            {complet ?(
-              <div className="app-container">
-              <NavBar
-                  user={user}
-                  setIsDark={setIsDark}
-                  isDark={isDark}
-                ></NavBar>         
+              {complet ? (
+                <div className="app-container">
+                  <NavBar
+                    user={user}
+                    setIsDark={setIsDark}
+                    isDark={isDark}
+                  ></NavBar>
 
-              <Routes>
-              
-                <Route
-                  path="/"
-                  element={<Swipe user={user} setLocate={setLocate}></Swipe>}
-                ></Route>
-                <Route
-                  path="/matchs"
-                  element={<Matchs user={user} setLocate={setLocate}></Matchs>}
-                ></Route>
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={
+                        <Swipe user={user} setLocate={setLocate}></Swipe>
+                      }
+                    ></Route>
+                    <Route
+                      path="/matchs"
+                      element={
+                        <Matchs user={user} setLocate={setLocate}></Matchs>
+                      }
+                    ></Route>
 
-                <Route path="/chat" element={<Chat user={user}></Chat>}></Route>
+                    <Route
+                      path="/chat"
+                      element={<Chat user={user}></Chat>}
+                    ></Route>
 
-                <Route
-                  path="/Map"
-                  element={
-                    <Map user={user} locate={locate} isDark={isDark}></Map>
-                  }
-                ></Route>
+                    <Route
+                      path="/Map"
+                      element={
+                        <Map user={user} locate={locate} isDark={isDark}></Map>
+                      }
+                    ></Route>
 
-                <Route
-                  path="/user-profile/:token"
-                  element={<Profile user={user} locate={locate}></Profile>}
-                ></Route>
+                    <Route
+                      path="/user-profile/:token"
+                      element={<Profile user={user} locate={locate}></Profile>}
+                    ></Route>
 
-                <Route
-                  path="/profile"
-                  element={
-                    <UserProfile user={user} setUser={setUser}></UserProfile>
-                  }
-                ></Route>
-                <Route
-                  path="/dates"
-                  element={<Dates user={user} locate={locate}></Dates>}
-                ></Route>
-              </Routes>
-            </div>
-            ) :(
-             <div className="app-container"> 
-                <Routes>
-                  <Route
-                    path="/firstLoad"
-                    element={<FirstLoad></FirstLoad>}
-                  ></Route>      
-                </Routes>
-              </div>
+                    <Route
+                      path="/profile"
+                      element={
+                        <UserProfile
+                          user={user}
+                          setUser={setUser}
+                        ></UserProfile>
+                      }
+                    ></Route>
+                    <Route
+                      path="/dates"
+                      element={<Dates user={user} locate={locate}></Dates>}
+                    ></Route>
+                  </Routes>
+                </div>
+              ) : (
+                <div className="app-container">
+                  <Routes>
+                    <Route
+                      path="/firstLoad"
+                      element={<FirstLoad user={user}></FirstLoad>}
+                    ></Route>
+                  </Routes>
+                </div>
               )}
-              </>
+            </>
           )}
-       </>
-      )} 
+        </>
+      )}
     </div>
   );
 }

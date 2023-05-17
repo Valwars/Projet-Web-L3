@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { filluser } from "../../utils/APIRoutes";
+import { fillForm, filluser } from "../../utils/APIRoutes";
 import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import "./multistep.css";
@@ -174,7 +174,13 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
   );
 };
 
-const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
+const Step3 = ({
+  values,
+  handleChange,
+  handleProfilPic,
+  nextStep,
+  prevStep,
+}) => {
   const verify = () => {
     if (values.description.length < 22) {
       toast.error("Votre description doit être plus longue.", toastOptions);
@@ -196,14 +202,14 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
       <div className="fields">
         <label>Photo de profil </label>
         <label htmlFor="upload-photo" className="custom-file-upload">
-          Télécharger la photo
+          {values.pdp || "Télécharger la photo"}
         </label>
         <input
           id="upload-photo"
           type="file"
           className="input-file"
           name="pdp"
-          onChange={handleChange}
+          onChange={(e) => handleProfilPic(e)}
         />
       </div>
       <div className="fields">
@@ -232,7 +238,13 @@ const Step3 = ({ values, handleChange, nextStep, prevStep }) => {
   );
 };
 
-const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
+const Step4 = ({
+  values,
+  handleFileChange,
+  removeFile,
+  nextStep,
+  prevStep,
+}) => {
   return (
     <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
       <div className="fields">
@@ -250,11 +262,15 @@ const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
             <span>Ou</span>
             <label className="btn-browse">
               Parcourir les fichiers
-              <input
-                type="file"
-                hidden //onChange={handleFileChange}
-              />
+              <input multiple type="file" hidden onChange={handleFileChange} />
             </label>
+            <div className="picsuploaded">
+              {values.photos.map((file, index) => (
+                <div key={index} onClick={() => removeFile(file)}>
+                  {file}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -267,7 +283,14 @@ const Step4 = ({ values, handleChange, nextStep, prevStep }) => {
   );
 };
 
-const Step5 = ({ values, handleChangedeux, nextStep, prevStep, inter }) => {
+const Step5 = ({
+  values,
+  handleChangedeux,
+  nextStep,
+  prevStep,
+  inter,
+  handleSubmit,
+}) => {
   const verify = () => {
     if (values.interests.length < 3) {
       toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
@@ -278,7 +301,14 @@ const Step5 = ({ values, handleChangedeux, nextStep, prevStep, inter }) => {
     return true;
   };
   return (
-    <form className="multisteps" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className="multisteps"
+      onSubmit={(e) => {
+        if (verify()) {
+          handleSubmit(e);
+        }
+      }}
+    >
       <div className="fields">
         <label>Selectionner vos centres d'intêrets</label>
         <div className="interest_form">
@@ -304,15 +334,7 @@ const Step5 = ({ values, handleChangedeux, nextStep, prevStep, inter }) => {
       <div className="btncontainer">
         <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
-        <button
-          onClick={() => {
-            if (verify()) {
-              nextStep("animate-right");
-            }
-          }}
-        >
-          Suivant →
-        </button>
+        <button>Valider →</button>
       </div>
     </form>
   );
@@ -329,7 +351,7 @@ const Step6 = ({ values, handleChange }) => {
   );
 };
 
-const MultiStepForm = () => {
+const MultiStepForm = ({ user }) => {
   const inter = [
     "la lecture",
     "la musique",
@@ -375,20 +397,55 @@ const MultiStepForm = () => {
     localisation: "",
   });
 
+  const [selectedProfilPic, setSelectedProfilePic] = useState(null);
+
+  const handleProfilPic = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile && selectedFile.type.includes("image")) {
+      setValues({ ...values, pdp: selectedFile.name });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedProfilePic(reader.result);
+      };
+
+      reader.readAsDataURL(selectedFile);
+
+      console.log(values);
+    } else {
+      setValues({ ...values, pdp: "" });
+      alert("Le fichier doit être une image !");
+    }
+  };
+
+  const [selectedPics, setSelectedPics] = useState([]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedPics((prevSelectedFiles) => [...prevSelectedFiles, ...files]);
+
+    const fileNames = files.map((file) => file.name);
+    setValues((prevValues) => ({
+      ...prevValues,
+      photos: [...prevValues.photos, ...fileNames],
+    }));
+
+    console.log(selectedPics);
+  };
+
+  const removeFile = (fileName) => {
+    const updatedSelectedFiles = selectedPics.filter(
+      (file) => file.name !== fileName
+    );
+    setSelectedPics(updatedSelectedFiles);
+
+    setValues((prevValues) => ({
+      ...prevValues,
+      photos: prevValues.photos.filter((name) => name !== fileName),
+    }));
+  };
+
   const [transition, setTransition] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    fetch_data();
-  }, [submitted]);
-
-  const fetch_data = async () => {
-    try {
-      const response = await axios.post(filluser, {
-        values,
-      });
-    } catch (error) {}
-  };
 
   const handleChangedeux = (e) => {
     const { value, checked } = e.target;
@@ -431,10 +488,47 @@ const MultiStepForm = () => {
     }, 500);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
-    setSubmitted(true);
+
+    console.log(user);
+    const formData = new FormData();
+    formData.append("id", user._id);
+
+    formData.append("name", values.name);
+    formData.append("firstname", values.firstname);
+    formData.append("age", values.age);
+    formData.append("description", values.description);
+    values.interests.forEach((interest, index) => {
+      formData.append(`interests[${index}]`, interest);
+    });
+    formData.append("localisation", values.localisation);
+    formData.append("orientation", values.orientation);
+    formData.append("sexe", values.sexe);
+
+    for (let i = 0; i < values.photos.length; i++) {
+      formData.append("photos", values.photos[i]);
+    }
+
+    formData.append("files", selectedProfilPic);
+
+    for (let i = 0; i < selectedPics.length; i++) {
+      formData.append("files", selectedPics[i]);
+    }
+
+    const result = await axios.post(fillForm, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log(result);
+    if (result.data.status === "ok") {
+      toast.success("Profil sauvegardé !", toastOptions);
+      nextStep("animate-right");
+    } else {
+      toast.error("Erreur !", toastOptions);
+    }
   };
 
   const renderStep = () => {
@@ -461,6 +555,7 @@ const MultiStepForm = () => {
           <Step3
             values={values}
             handleChange={handleChange}
+            handleProfilPic={handleProfilPic}
             nextStep={nextStep}
             prevStep={prevStep}
           />
@@ -469,7 +564,8 @@ const MultiStepForm = () => {
         return (
           <Step4
             values={values}
-            handleChange={handleChange}
+            handleFileChange={handleFileChange}
+            removeFile={removeFile}
             nextStep={nextStep}
             prevStep={prevStep}
           />
@@ -482,6 +578,7 @@ const MultiStepForm = () => {
             nextStep={nextStep}
             prevStep={prevStep}
             inter={inter}
+            handleSubmit={handleSubmit}
           />
         );
       case 6:

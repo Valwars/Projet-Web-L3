@@ -56,6 +56,8 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-size: clamp(0.8rem, 1vw + .1rem, 1.5rem);
     margin-top: 10px;
+    font-family: FontMedium;
+    font-weight: 500;
 }
 
 .fields textarea:focus {
@@ -158,6 +160,7 @@ input[type="radio"] {
     gap: 10px;
     height: 250px;
     margin-top: 20px;
+    overflow: auto;
 }
 
 .header-depot {
@@ -335,17 +338,20 @@ input[type="radio"] {
     gap: 30px 25px;
 }
 
-.interest_form::-webkit-scrollbar {
+.interest_form::-webkit-scrollbar,
+.drag-area::-webkit-scrollbar {
     display: block;
     width: 10px;
 }
 
-.interest_form::-webkit-scrollbar-track {
+.interest_form::-webkit-scrollbar-track,
+.drag-area::-webkit-scrollbar {
     border-radius: 10px;
     background-color: transparent;
 }
 
-.interest_form::-webkit-scrollbar-thumb {
+.interest_form::-webkit-scrollbar-thumb,
+.drag-area::-webkit-scrollbar {
     background: rgba(255, 122, 122, 0.5);
     opacity: 0.4;
     border-radius: 10px;

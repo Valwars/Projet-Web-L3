@@ -549,7 +549,7 @@ const UserProfile = ({ user, setUser }) => {
                           <div className="pic" onClick={() => deletepic(index)}>
                             {" "}
                             <div className="deletebg"></div>
-                            <img src={photo} alt="" />
+                            <img src={getImage + photo} alt="" />
                           </div>
                         );
                       })}
@@ -606,7 +606,7 @@ const UserProfile = ({ user, setUser }) => {
                   {user.photos.slice(0, photosLimit).map((photo) => {
                     return (
                       <div className="pic">
-                        <img src={photo} alt="" />
+                        <img src={getImage + photo} alt="" />
                       </div>
                     );
                   })}

@@ -12,3 +12,4 @@ export const sendMessageRoute = `${host}/api/auth/addmsg`;
 export const recieveMessageRoute = `${host}/api/auth/getmsg`;
 export const save = `${host}/api/auth/save`;
 export const getImage = `${host}/ressources/images`;
+export const fillForm = `${host}/api/auth/fillForm`;

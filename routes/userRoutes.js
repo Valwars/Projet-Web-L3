@@ -9,7 +9,8 @@ const {
     getMessages,
     addMessage,
     filluser,
-    modifuser
+    modifuser,
+    fillForm
 
 } = require("../controllers/userController.js");
 
@@ -33,5 +34,6 @@ router.get("/user", getUser)
 router.get("/getconv", getconv)
 
 router.post("/save", modifuser)
+router.post("/fillForm", fillForm)
 
 module.exports = router;

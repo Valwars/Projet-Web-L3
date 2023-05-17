@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
+import { getImage } from "../utils/APIRoutes";
 function MapWithLoader({ user, isDark }) {
   useEffect(() => {
     if (isDark) {
@@ -200,7 +201,7 @@ function MapWithLoader({ user, isDark }) {
                   map: map,
                   title: "Mon adresse",
                   icon: {
-                    url: user.pdp,
+                    url: getImage + user.pdp,
                     scaledSize: {
                       width: 80,
                       height: 80,
