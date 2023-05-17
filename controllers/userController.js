@@ -277,7 +277,7 @@ const upload = multer({
 const upload2 = multer({
     storage: storage,
     fileFilter: function(req, file, cb) {
-        const filetypes = /jpeg|jpg|png|gif|webp/;
+        const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
         if (mimetype && extname) {
@@ -285,15 +285,21 @@ const upload2 = multer({
         }
         cb(new Error('File upload only supports the following filetypes - ' + filetypes));
     },
+    limits: {
+        fieldSize: 10 * 1024 * 1024, // 10 Mo (en octets)
+    },
 }).array('files', 10); // Specify the maximum number of files allowed (e.g., 5)
 
 module.exports.fillForm = (req, res) => {
     upload2(req, res, async(error) => {
         try {
             if (error instanceof multer.MulterError) {
+                console.log(error)
                 return res.send({ status: 'error', error: error.message });
             } else if (error) {
-                // Handle other errors
+                // Handle other errors                
+                console.log(error)
+
                 return res.send({ status: 'error', error: error.message });
             }
 

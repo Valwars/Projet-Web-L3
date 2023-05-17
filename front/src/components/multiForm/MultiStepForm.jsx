@@ -118,6 +118,7 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
               name="sexe"
               value="homme"
               onChange={handleChange}
+              checked={values.sexe === "homme"}
             ></input>
             <label for="homme">Homme</label>
           </div>
@@ -129,6 +130,7 @@ const Step2 = ({ values, handleChange, nextStep, prevStep }) => {
               name="sexe"
               value="femme"
               onChange={handleChange}
+              checked={values.sexe === "femme"}
             ></input>
             <label for="femme">Femme</label>
           </div>
@@ -304,9 +306,7 @@ const Step5 = ({
     <form
       className="multisteps"
       onSubmit={(e) => {
-        if (verify()) {
-          handleSubmit(e);
-        }
+        e.preventDefault();
       }}
     >
       <div className="fields">
@@ -320,6 +320,7 @@ const Step5 = ({
                   id={`checkbox-${index}`}
                   value={int}
                   onChange={handleChangedeux}
+                  checked={values.interests.includes(int)}
                   disabled={
                     !values.interests.includes(int) &&
                     values.interests.length >= 6
@@ -334,7 +335,15 @@ const Step5 = ({
       <div className="btncontainer">
         <button onClick={() => prevStep("animate-left")}>← Précédent</button>
 
-        <button>Valider →</button>
+        <button
+          onClick={(e) => {
+            if (verify()) {
+              handleSubmit(e);
+            }
+          }}
+        >
+          Valider →
+        </button>
       </div>
     </form>
   );
@@ -526,6 +535,10 @@ const MultiStepForm = ({ user }) => {
     if (result.data.status === "ok") {
       toast.success("Profil sauvegardé !", toastOptions);
       nextStep("animate-right");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 6000);
     } else {
       toast.error("Erreur !", toastOptions);
     }
