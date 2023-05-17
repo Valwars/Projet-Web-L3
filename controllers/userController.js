@@ -67,11 +67,11 @@ module.exports.swipe = async(req, res, next) => {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
 
         if (startIndex == 0) {
-            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
+            const resultat = await dbo.collection('Admin').find({}, { projection: { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
 
             res.send(resultat);
         } else {
-            const resultat = await dbo.collection('users').find({}, { projection: { _id: 1, pdp: 1, name: 1, fistname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
+            const resultat = await dbo.collection('Admin').find({}, { projection: { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
 
             res.send(resultat);
         }
@@ -177,7 +177,7 @@ module.exports.profil = async(req, res, next) => {
     console.log(req.query.myString);
     try {
         const theid = req.query.myString;
-        const admin = await dbo.collection('users').findOne({ _id: new ObjectId(theid) });
+        const admin = await dbo.collection('Admin').findOne({ _id: new ObjectId(theid) });
 
         if (!admin) {
             return res.json({ status: "error" });

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { userSwipe } from "../utils/APIRoutes";
+import { getImage, userSwipe } from "../utils/APIRoutes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader_transition from "../components/Loading";
@@ -150,7 +150,7 @@ const Swipe = ({ user, setLocate }) => {
                 </div>
                 {topCard ? (
                   <div className="user-presentation">
-                    <h1>{topCard.fistname + " " + topCard.name} </h1>
+                    <h1>{topCard.firstname + " " + topCard.name} </h1>
                     <h2>
                       {topCard.age + " ans"} - {distance}
                     </h2>
@@ -179,7 +179,7 @@ const Card = ({ item, transition, setLocate, navigate }) => {
         navigate("/user-profile/" + item._id);
       }}
     >
-      <img src={item.pdp} alt="" />
+      <img src={getImage + item.pdp} alt="" />
     </div>
   );
 };

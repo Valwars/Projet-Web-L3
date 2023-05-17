@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import $ from "jquery";
-import { userRoute } from "../utils/APIRoutes";
+import { getImage, userRoute } from "../utils/APIRoutes";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Client } from "@googlemaps/google-maps-services-js";
@@ -106,8 +106,8 @@ const Profile = ({ user, locate }) => {
           </div>
 
           <div className="user-data">
-            <img className="pdp" src={profile.pdp} alt="" />
-            <h1>{profile.name + " " + profile.fistname}</h1>
+            <img className="pdp" src={getImage + profile.pdp} alt="" />
+            <h1>{profile.name + " " + profile.firstname}</h1>
             <div className="profil-information">
               <h2>{profile.age + " ans - " + distance}</h2>
               <span>
@@ -128,7 +128,7 @@ const Profile = ({ user, locate }) => {
               {profile.photos.slice(0, photosLimit).map((photo) => {
                 return (
                   <div className="pic">
-                    <img src={photo} alt="" />
+                    <img src={getImage + photo} alt="" />
                   </div>
                 );
               })}
