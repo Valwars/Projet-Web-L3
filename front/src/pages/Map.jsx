@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
-import { getImage } from "../utils/APIRoutes";
+import { getImage, datesRoute } from "../utils/APIRoutes";
+
+
 function MapWithLoader({ user, isDark }) {
   useEffect(() => {
     if (isDark) {
@@ -13,6 +15,41 @@ function MapWithLoader({ user, isDark }) {
   }, [isDark]);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const [dates, setDates] = useState([]);
+
+  const [leuser, setLeuser] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLeuser(user);
+    console.log(leuser._id);
+    var unid = leuser._id;
+    try {
+      const response = await axios.get(datesRoute, {
+        params: {
+          lid: user._id,
+        },
+      });
+      console.log(response.data.dates);
+
+
+      setDates(response.data.date);
+
+
+
+       setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const [default_style, setDefault] = useState([
     {
@@ -124,23 +161,6 @@ function MapWithLoader({ user, isDark }) {
     },
   ]);
 
-  const [dates, setDates] = useState([
-    {
-      adress: "49 Lices Georges Pompidou Albi",
-      date: "Resto",
-      personne: "Valérie",
-      heure: "12h30",
-      jour: "12/05",
-    },
-    {
-      adress: "57 St Juéry Albi",
-      date: "Macdo",
-      personne: "Marine",
-      heure: "18h30",
-      jour: "18/05",
-    },
-  ]);
-
   const [startCoordinates, setStartCoordinates] = useState({
     lat: null,
     lng: null,
@@ -212,23 +232,22 @@ function MapWithLoader({ user, isDark }) {
                 let previousDirectionsRenderer;
                 const directionsService =
                   new window.google.maps.DirectionsService();
-
+                
                 dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
-                    { address: date.adress },
+                    { address: date.localisation },
                     (results, status) => {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
                             '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>' +
-                            date.personne +
+                            date.firstname +
                             "</h2><p>" +
-                            date.date +
+                            date.localisation +
                             "</p><p>" +
-                            date.jour +
+                            date.date +
                             " - " +
-                            date.heure +
                             "</p></div></div>",
                         };
 
@@ -238,14 +257,12 @@ function MapWithLoader({ user, isDark }) {
                         const marker = new window.google.maps.Marker({
                           position: results[0].geometry.location,
                           map: map,
-                          title: date.date,
                           clickable: false, // Désactiver l'effet de zoom au clic
                           label: "", // Supprimer les marqueurs A et B
                           optimized: false,
                           icon: {
                             url:
-                              process.env.PUBLIC_URL +
-                              "https://xsgames.co/randomusers/avatar.php?g=female",
+                              process.env.PUBLIC_URL + date.pdp,
                             scaledSize: {
                               width: 80,
                               height: 80,
