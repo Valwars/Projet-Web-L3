@@ -59,7 +59,7 @@ const Dates = ({ user, locate }) => {
                   className="match date_cnt"
                   onClick={() => {
                     // setLocate("/match");
-                    navigate("/user-profile/2");
+                    navigate("/map/" + date._id);
                   }}
                 >
                   <div className="user-date">
