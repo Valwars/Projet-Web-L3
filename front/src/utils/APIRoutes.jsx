@@ -14,3 +14,4 @@ export const save = `${host}/api/auth/save`;
 export const getImage = `${host}/ressources/images`;
 export const fillForm = `${host}/api/auth/fillForm`;
 export const swipe = `${host}/api/auth/swipe`;
+export const match = `${host}/api/auth/match`;

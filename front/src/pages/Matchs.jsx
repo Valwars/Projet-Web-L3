@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader_transition from "../components/Loading";
+import { match } from "../utils/APIRoutes";
+import axios from "axios";
 
 const Matchs = ({ user, setLocate }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  // const [matchs, setMatch] = useState([]);
 
+  
+  // useEffect(()=>{
+  //   fetch_data();
+  // })
+
+  // const fetch_data = async ()=> {
+  //   const response = await axios.get(match,{
+  //     params: {
+  //       currentuser: user._id,
+  //     },
+  //   })
+  //   console.log(response.data.match)
+  //   setMatch(response.data.match)
+  // }
   const matchs = [
     {
       id: "23",

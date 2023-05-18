@@ -11,7 +11,8 @@ const {
     filluser,
     modifuser,
     fillForm,
-    addswipe
+    addswipe,
+    matchs
 
 } = require("../controllers/userController.js");
 
@@ -30,6 +31,7 @@ router.get("/profile", profil)
 router.get("/getmsg", getMessages)
 router.post("/addmsg", addMessage)
 router.post("/swipe", addswipe)
+router.get("/match", matchs)
 
 router.get("/user", getUser)
 router.get("/getconv", getconv)

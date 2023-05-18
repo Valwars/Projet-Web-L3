@@ -509,3 +509,18 @@ module.exports.addswipe = async(req, res) => {
     }
 
 }
+
+
+module.exports.matchs = async(req, res) => {
+   console.log(req.query.currentuser)
+    try {
+     const admin = await dbo.collection('Matchs').find({"":req.querry.currentuser})
+       if(!admin) return res.json({status : "error"})
+       console.log(admin)
+       res.json({status :"ok", match : admin})
+
+    } catch (err) {
+        return res.json({status : "error"})
+    }
+
+}
