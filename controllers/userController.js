@@ -478,25 +478,26 @@ module.exports.modifuser = async(req, res) => {
 module.exports.addswipe = async(req, res) => {
     try {
         const data = req.body.value;
-
+        console.log(data.val === "positif")
         if(data.val === "positif"){
-            const test = await dbo.collection('Swipe').findOne({"": data.user1, "": data.user2});
-
-            if(!test){
+            const test = await dbo.collection('Swipe').findOne({to: data.from});
+            
+            if(!test){                
             const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
             if(!ajoutswipe) return res.json({status : "error"})
             return res.json({status : "ok"})
             } else{
                 console.log(test)
-                const ajoutmatch = await dbo.collection('Matchs').insertOne({
-                    user1 : date.user1,
-                    user2 : date.user2,
+                const doc = {
+                    user1 : data.user1,
+                    user2 : data.user2,
                     createdAt : new Date()
-                })
+                }
+                const ajoutmatch = await dbo.collection('Matchs').insertOne()
                 if(!ajoutmatch) return res.json({status : "error"})
-                return res.json({status : "ok"})
+               return res.json({status : "ok"})
             }
-        } else {
+        } else if (data.val === "negatif"){
             const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
             if (!ajoutswipe) return res.json({status : "error"})
             return res.json({status :"ok"})

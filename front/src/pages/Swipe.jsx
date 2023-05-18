@@ -59,8 +59,8 @@ const Swipe = ({ user, setLocate }) => {
     if(side === "swipe_right"){
       const value = {
         val : "positif",
-        user1 : user._id,
-        user2 : topCard._id,
+        from : user._id,
+        to : topCard._id,
         createdAt : new Date()
       }
       const response = await axios.post(swipe,{
@@ -71,8 +71,8 @@ const Swipe = ({ user, setLocate }) => {
     }else if (side === "swipe_left"){
       const value = {
         val : "negatif",
-        user1 : user._id,
-        user2 : topCard._id,
+        from : user._id,
+        to : topCard._id,
         createdAt : new Date()
       }
       const response = await axios.post(swipe,{
