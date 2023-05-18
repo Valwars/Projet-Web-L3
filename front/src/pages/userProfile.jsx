@@ -276,8 +276,12 @@ const UserProfile = ({ user, setUser }) => {
 
   const deletepic = (index) => {
     const updatedContent = [...values.photos];
+
+    const deletedItem = updatedContent[index];
+
     updatedContent.splice(index, 1);
     setValues({ ...values, photos: updatedContent });
+    setDeleted([...deletedFiles, deletedItem]);
   };
 
   const [selectedPics, setSelectedPics] = useState([]);
@@ -295,6 +299,7 @@ const UserProfile = ({ user, setUser }) => {
     console.log(selectedPics);
   };
 
+  const [deletedFiles, setDeleted] = useState([]);
   const handleSave = async () => {
     if (values.interests.length < 3) {
       toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
@@ -317,6 +322,13 @@ const UserProfile = ({ user, setUser }) => {
       formData.append("photos", selectedPics[i]);
     }
 
+    for (let i = 0; i < user.photos.length; i++) {
+      formData.append("oldpic", user.photos[i]);
+    }
+
+    for (let i = 0; i < deletedFiles.length; i++) {
+      formData.append("deletedPics", deletedFiles[i]);
+    }
     formData.append("pdp", values.pdp);
 
     const result = await axios.post(save, formData, {
@@ -333,6 +345,13 @@ const UserProfile = ({ user, setUser }) => {
       if (result.data.filename) {
         pdp = result.data.filename;
       }
+      var pics = user.photos;
+
+      if (result.data.pics) {
+        pics = result.data.pics;
+      }
+
+      console.log(result.data.pics);
 
       setUser((prevUser) => ({
         ...prevUser,
@@ -344,7 +363,7 @@ const UserProfile = ({ user, setUser }) => {
         interests: values.interests,
         localisation: values.localisation,
         orientation: values.orientation,
-        photos: values.photos,
+        photos: pics,
         pdp: pdp,
       }));
 

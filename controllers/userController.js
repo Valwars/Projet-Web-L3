@@ -26,6 +26,39 @@ module.exports.login = async(req, res, next) => {
     }
 };
 
+module.exports.addswipe = async(req, res) => {
+    try {
+        const data = req.body.value;
+        console.log(data.val === "positif")
+        if (data.val === "positif") {
+            const test = await dbo.collection('Swipe').findOne({ "": data.user1, "": data.user2 });
+
+            if (!test) {
+                const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+                if (!ajoutswipe) return res.json({ status: "error" })
+                return res.json({ status: "ok" })
+            } else {
+                console.log(test)
+                const ajoutmatch = await dbo.collection('Matchs').insertOne({
+                    user1: date.user1,
+                    user2: date.user2,
+                    createdAt: new Date()
+                })
+                if (!ajoutmatch) return res.json({ status: "error" })
+
+            }
+        } else {
+            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+            if (!ajoutswipe) return res.json({ status: "error" })
+            return res.json({ status: "ok" })
+        }
+
+
+    } catch (err) {
+        return res.json({ status: "error" })
+    }
+
+}
 
 module.exports.getUser = async(req, res) => {
     try {
@@ -84,6 +117,7 @@ module.exports.swipe = async(req, res, next) => {
 };
 
 
+
 module.exports.getconv = async(req, res) => {
 
     try {
@@ -140,7 +174,13 @@ module.exports.getconv = async(req, res) => {
 
 module.exports.dates = async(req, res, next) => {
 
-    let unid = req.query.lid;
+    const { unid, searchString, order } = req.query
+
+    const sortOrder = parseInt(order, 10) || 1;
+
+    console.log(sortOrder)
+    console.log(searchString)
+
     try {
         const key1 = "premier";
         const key2 = "second";
@@ -153,7 +193,7 @@ module.exports.dates = async(req, res, next) => {
             }, {
                 [key2]: unid
             }]
-        }).toArray();
+        }).sort({ createdAt: sortOrder }).toArray();
         if (!admin) {
             return res.json({ status: "error" });
         } else
@@ -192,7 +232,13 @@ module.exports.dates = async(req, res, next) => {
             }
             // console.log("tab :")
             //  console.log(tab)
+        if (searchString) {
+            tab = tab.filter(conversation => {
+                var fullName = conversation.name + ' ' + conversation.firstname;
 
+                return fullName.toLowerCase().includes(searchString.toLowerCase());
+            });
+        }
         res.json({ status: "ok", dates: tab });
 
     } catch (error) {
@@ -310,7 +356,7 @@ const upload = multer({
 const upload = multer({
     storage: storage,
     fileFilter: function(req, file, cb) {
-        const filetypes = /jpeg|jpg|png|gif|webp/;
+        const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
         if (mimetype && extname) {
@@ -409,12 +455,100 @@ module.exports.modifuser = async(req, res) => {
             const query = { _id: new ObjectId(req.body.id) };
 
             if (req.files && req.files.photos) {
-                req.body.photos = req.files.photos.map(file => "/" + file.filename);
-            }
 
-            console.log(req.body.photos)
-                // Vérifiez si req.file existe avant d'essayer d'accéder à filename
-                // Récupérer l'administrateur actuel
+                console.log("gere les files ")
+                req.body.photos = req.files.photos.map(file => "/" + file.filename);
+
+                let oldpic = Object.keys(req.body)
+                    .filter((key) => key.startsWith('oldpic'))
+                    .map((key) => req.body[key]);
+
+                if (!Array.isArray(oldpic)) {
+                    oldpic = [oldpic];
+                }
+                oldpic = oldpic.flat();
+
+                console.log("OLD PICS : ")
+                console.log(oldpic)
+                let deleted = Object.keys(req.body)
+                    .filter((key) => key.startsWith('deletedPics'))
+                    .map((key) => req.body[key]);
+
+                if (!Array.isArray(deleted)) {
+                    deleted = [deleted];
+                }
+
+                deleted = deleted.flat();
+                console.log("DELETED PICS : ")
+                console.log(deleted)
+
+                deleted.forEach(element => {
+                    const filename = element.substring(1);
+                    console.log("DELETE : ")
+                    console.log(filename)
+                    fs.unlink(path.join(__dirname, '../static', 'images', filename), err => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                });
+
+                oldpic = oldpic.filter(item => !deleted.includes(item));
+
+                console.log("OLD PICS : ")
+
+                req.body.photos.push(...oldpic)
+                console.log("FINALS PICS : ")
+                console.log(req.body.photos)
+
+
+            } else {
+
+                let oldpic = Object.keys(req.body)
+                    .filter((key) => key.startsWith('oldpic'))
+                    .map((key) => req.body[key]);
+
+                if (!Array.isArray(oldpic)) {
+                    oldpic = [oldpic];
+                }
+                oldpic = oldpic.flat();
+
+                console.log("OLD PICS : ")
+                console.log(oldpic)
+
+                let deleted = Object.keys(req.body)
+                    .filter((key) => key.startsWith('deletedPics'))
+                    .map((key) => req.body[key]);
+
+                if (!Array.isArray(deleted)) {
+                    deleted = [deleted];
+                }
+
+                deleted = deleted.flat();
+                console.log("DELETED PICS : ")
+                console.log(deleted)
+
+                deleted.forEach(element => {
+                    const filename = element.substring(1);
+                    console.log("DELETE : ")
+                    console.log(filename)
+                    fs.unlink(path.join(__dirname, '../static', 'images', filename), err => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                });
+
+                oldpic = oldpic.filter(item => !deleted.includes(item));
+                req.body.photos = oldpic
+                console.log("FINALS PICS : ")
+                console.log(req.body.photos)
+
+            }
+            // Vérifiez si req.file existe avant d'essayer d'accéder à filename
+            // Récupérer l'administrateur actuel
             const currentAdmin = await collection.findOne(query);
 
             // Vérifiez si req.file existe avant d'essayer d'accéder à filename
@@ -445,12 +579,13 @@ module.exports.modifuser = async(req, res) => {
 
             interests = interests.flat();
 
-            console.log("INTEREST : ")
-
-            console.log(interests)
             req.body.interests = interests;
-            const update = { $set: req.body };
 
+
+            const update = {
+                $set: {...req.body },
+
+            };
             const options = { returnOriginal: false };
             const result = await collection.findOneAndUpdate(query, update, options);
 
@@ -463,10 +598,10 @@ module.exports.modifuser = async(req, res) => {
 
             console.log(result.value)
             if (req.files.pdp) {
-                return res.json({ status: "ok", filename: "/" + req.body.pdp });
+                return res.json({ status: "ok", filename: "/" + req.body.pdp, pics: req.body.photos });
 
             }
-            return res.json({ status: "ok" });
+            return res.json({ status: "ok", pics: req.body.photos });
         })
     } catch (err) {
         console.log(err);

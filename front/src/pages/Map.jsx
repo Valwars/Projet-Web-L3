@@ -4,9 +4,7 @@ import axios from "axios";
 import Loader_transition from "../components/Loading";
 import { getImage, datesRoute } from "../utils/APIRoutes";
 
-
 function MapWithLoader({ user, isDark }) {
-
   const [startCoordinates, setStartCoordinates] = useState({
     lat: null,
     lng: null,
@@ -149,25 +147,20 @@ function MapWithLoader({ user, isDark }) {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          lid: user._id,
+          unid: user._id,
+          searchString: "",
+          order: 1,
         },
       });
       console.log(response.data.dates);
 
-
       setDates(response.data.dates);
-
-
 
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
-
-  
-
-
 
   useEffect(() => {
     const loader = new Loader({
@@ -215,7 +208,6 @@ function MapWithLoader({ user, isDark }) {
 
                   zoom: 14,
                 });
-
                 const marqer = new window.google.maps.Marker({
                   position: {
                     lat: startCoordinates.lat,
@@ -235,7 +227,10 @@ function MapWithLoader({ user, isDark }) {
                 let previousDirectionsRenderer;
                 const directionsService =
                   new window.google.maps.DirectionsService();
-                
+
+                let params = new URLSearchParams(window.location.search);
+                let id = params.get("id");
+
                 dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
@@ -244,8 +239,12 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<div class="bubble_content"><div class="pdp"><img src={getImage + date.pdp} /></div><div class="bubble_data"><h2>' +
-                            date.firstname + date.name +
+                            '<div class="bubble_content"><div class="pdp"><img src="' +
+                            getImage +
+                            date.pdp +
+                            '" /></div><div class="bubble_data"><h2>' +
+                            date.firstname +
+                            date.name +
                             "</h2><p>" +
                             date.localisation +
                             "</p><p>" +
@@ -259,12 +258,11 @@ function MapWithLoader({ user, isDark }) {
                         const marker = new window.google.maps.Marker({
                           position: results[0].geometry.location,
                           map: map,
-                          clickable: false, // Désactiver l'effet de zoom au clic
+                          clickable: true,
                           label: "", // Supprimer les marqueurs A et B
                           optimized: false,
                           icon: {
-                            url:
-                              getImage + date.pdp,
+                            url: getImage + date.pdp,
                             scaledSize: {
                               width: 80,
                               height: 80,
@@ -272,12 +270,11 @@ function MapWithLoader({ user, isDark }) {
                           },
                         });
 
-
                         window.google.maps.event.addListener(
                           marker,
                           "click",
                           function () {
-                            console.log('1');
+                            console.log("1");
                             // Supprimez l'événement de clic précédent
                             if (previousClickEvent) {
                               window.google.maps.event.removeListener(
@@ -334,7 +331,6 @@ function MapWithLoader({ user, isDark }) {
                           marker,
                           "mouseover",
                           function () {
-                      
                             infoWindow.open(map, marker);
                           }
                         );
@@ -350,6 +346,49 @@ function MapWithLoader({ user, isDark }) {
                           this.getPanes().markerLayer.id = "myMarker";
                         };
                         myoverlay.setMap(map);
+                        if (date._id === id) {
+                          const marker1 = new window.google.maps.Marker({
+                            position: results[0].geometry.location,
+                            map: map,
+                            clickable: true,
+                            label: "", // Supprimer les marqueurs A et B
+                            optimized: false,
+                            icon: {
+                              url: getImage + date.pdp,
+                              scaledSize: {
+                                width: 80,
+                                height: 80,
+                              },
+                            },
+                          });
+
+                          infoWindow.open(map, marker1);
+                          const directionsRenderer =
+                            new window.google.maps.DirectionsRenderer({
+                              suppressMarkers: true,
+                              polylineOptions: {
+                                strokeColor: "#FF7A7A",
+                                strokeWeight: 6,
+                              },
+                            });
+
+                          const request = {
+                            origin: {
+                              lat: startCoordinates.lat,
+                              lng: startCoordinates.lng,
+                            },
+                            destination: results[0].geometry.location,
+                            travelMode: "DRIVING",
+                          };
+
+                          directionsService.route(request, (result, status) => {
+                            if (status === "OK") {
+                              directionsRenderer.setDirections(result);
+                            }
+                          });
+
+                          directionsRenderer.setMap(map);
+                        }
                       }
                     }
                   );

@@ -142,7 +142,7 @@ function App() {
                     ></Route>
 
                     <Route
-                      path="/Map"
+                      path="/map"
                       element={
                         <Map user={user} locate={locate} isDark={isDark}></Map>
                       }
