@@ -206,7 +206,6 @@ function MapWithLoader({ user, isDark }) {
 
                   zoom: 14,
                 });
-
                 const marqer = new window.google.maps.Marker({
                   position: {
                     lat: startCoordinates.lat,
@@ -227,6 +226,9 @@ function MapWithLoader({ user, isDark }) {
                 const directionsService =
                   new window.google.maps.DirectionsService();
 
+                let params = new URLSearchParams(window.location.search);
+                let id = params.get('id');
+                
                 dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
@@ -245,13 +247,44 @@ function MapWithLoader({ user, isDark }) {
                             "</p></div></div>",
                         };
 
+                        if (date._id === id) {
+                          //infoWindow.open(map, marker);
+                          const directionsRenderer = new window.google.maps.DirectionsRenderer({
+                              suppressMarkers: true,
+                              polylineOptions: {
+                                  strokeColor: "#FF7A7A",
+                                  strokeWeight: 6,
+                              },
+                          });
+          
+                          const request = {
+                              origin: {
+                                  lat: startCoordinates.lat,
+                                  lng: startCoordinates.lng,
+                              },
+                              destination: results[0].geometry.location,
+                              travelMode: "DRIVING",
+                          };
+          
+                          directionsService.route(
+                              request,
+                              (result, status) => {
+                                  if (status === "OK") {
+                                      directionsRenderer.setDirections(result);
+                                  }
+                              }
+                          );
+          
+                          directionsRenderer.setMap(map);
+                      }
+
                         const infoWindow = new window.google.maps.InfoWindow(
                           infoWindowOptions
                         );
                         const marker = new window.google.maps.Marker({
                           position: results[0].geometry.location,
                           map: map,
-                          clickable: false, // Désactiver l'effet de zoom au clic
+                          clickable: true,
                           label: "", // Supprimer les marqueurs A et B
                           optimized: false,
                           icon: {
