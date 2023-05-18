@@ -10,7 +10,8 @@ const {
     addMessage,
     filluser,
     modifuser,
-    fillForm
+    fillForm,
+    addswipe
 
 } = require("../controllers/userController.js");
 
@@ -28,7 +29,7 @@ router.get("/dates", dates)
 router.get("/profile", profil)
 router.get("/getmsg", getMessages)
 router.post("/addmsg", addMessage)
-
+router.post("/swipe", addswipe)
 
 router.get("/user", getUser)
 router.get("/getconv", getconv)

@@ -473,3 +473,38 @@ module.exports.modifuser = async(req, res) => {
         return res.json({ status: "error" });
     }
 }
+
+
+module.exports.addswipe = async(req, res) => {
+    try {
+        const data = req.body.value;
+
+        if(data.val === "positif"){
+            const test = await dbo.collection('Swipe').findOne({"": data.user1, "": data.user2});
+
+            if(!test){
+            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+            if(!ajoutswipe) return res.json({status : "error"})
+            return res.json({status : "ok"})
+            } else{
+                console.log(test)
+                const ajoutmatch = await dbo.collection('Matchs').insertOne({
+                    user1 : date.user1,
+                    user2 : date.user2,
+                    createdAt : new Date()
+                })
+                if(!ajoutmatch) return res.json({status : "error"})
+                return res.json({status : "ok"})
+            }
+        } else {
+            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+            if (!ajoutswipe) return res.json({status : "error"})
+            return res.json({status :"ok"})
+        }
+       
+
+    } catch (err) {
+        return res.json({status : "error"})
+    }
+
+}

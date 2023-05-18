@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getImage, userSwipe } from "../utils/APIRoutes";
+import { getImage, userSwipe,swipe } from "../utils/APIRoutes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader_transition from "../components/Loading";
@@ -47,17 +47,42 @@ const Swipe = ({ user, setLocate }) => {
       console.error(error);
     }
   };
-  const swp = (side) => {
+  const swp = async(side) => {
     setCurrentIndex((prevIndex) => prevIndex + 2);
-    console.log(currentIndex);
-    setTransition(side);
-    setTimeout(() => {
-      setSwip(swip.slice(0, -1));
-      setTransition("");
-      setNbSwipes(nbSwipes + 1);
-    }, 500);
+      console.log(currentIndex);
+      setTransition(side);
+      setTimeout(() => {
+        setSwip(swip.slice(0, -1));
+        setTransition("");
+        setNbSwipes(nbSwipes + 1);
+      }, 500);
+    if(side === "swipe_right"){
+      const value = {
+        val : "positif",
+        user1 : user._id,
+        user2 : topCard._id,
+        createdAt : new Date()
+      }
+      const response = await axios.post(swipe,{
+        value,
+      })
+     
+  
+    }else if (side === "swipe_left"){
+      const value = {
+        val : "negatif",
+        user1 : user._id,
+        user2 : topCard._id,
+        createdAt : new Date()
+      }
+      const response = await axios.post(swipe,{
+        value,
+      })
+    
+    }
 
-    console.log(topCard);
+    
+ 
   };
 
   const formatDistance = (distanceInKm) => {
@@ -154,7 +179,7 @@ const Swipe = ({ user, setLocate }) => {
                     <h2>
                       {topCard.age + " ans"} - {distance}
                     </h2>
-                    <p>{topCard.description}</p>
+                    <p>{topCard.description} </p>
                   </div>
                 ) : (
                   <h1>Vous n'avez plus de profils à visiter.</h1>
