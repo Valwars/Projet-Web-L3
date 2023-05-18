@@ -8,12 +8,14 @@ const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
   const [leuser, setLeuser] = useState({});
   const [date, setDate] = useState([]);
+  const [searsh, setSearsh] = useState("");
+  const [sort, setSort] = useState(1);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searsh, sort]);
 
   const fetchData = async () => {
     setLeuser(user);
@@ -22,7 +24,9 @@ const Dates = ({ user, locate }) => {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          lid: user._id,
+          unid: user._id,
+          searchString: searsh,
+          order: sort,
         },
       });
       console.log(response.data.dates);
@@ -35,6 +39,12 @@ const Dates = ({ user, locate }) => {
     }
   };
 
+  const handle_sort = (e) => {
+    document
+      .getElementsByClassName("filter-order-active")[0]
+      .classList.remove("filter-order-active");
+    e.target.classList.add("filter-order-active");
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -44,11 +54,28 @@ const Dates = ({ user, locate }) => {
           <div className="top">
             <h1>Vos dates</h1>
             <div className="order-filters">
-              <i className="fa fa-chevron-down"></i>
+              <i
+                className="fa fa-chevron-down filter-order-active"
+                onClick={(e) => {
+                  handle_sort(e);
+                  setSort(1);
+                }}
+              ></i>
 
-              <i className="fa fa-chevron-up"></i>
+              <i
+                className="fa fa-chevron-up"
+                onClick={(e) => {
+                  handle_sort(e);
+                  setSort(-1);
+                }}
+              ></i>
             </div>
-            <input id="convtp" type="text" placeholder="Rechercher..." />
+            <input
+              id="convtp"
+              type="text"
+              placeholder="Rechercher..."
+              onChange={(e) => setSearsh(e.target.value)}
+            />{" "}
           </div>
 
           <div className="matchs-container">
@@ -59,7 +86,7 @@ const Dates = ({ user, locate }) => {
                   className="match date_cnt"
                   onClick={() => {
                     // setLocate("/match");
-                    navigate("/map?id="+date._id);
+                    navigate("/map?id=" + date._id);
                   }}
                 >
                   <div className="user-date">

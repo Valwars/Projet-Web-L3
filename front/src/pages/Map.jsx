@@ -227,8 +227,8 @@ function MapWithLoader({ user, isDark }) {
                   new window.google.maps.DirectionsService();
 
                 let params = new URLSearchParams(window.location.search);
-                let id = params.get('id');
-                
+                let id = params.get("id");
+
                 dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
                   geocoder.geocode(
@@ -237,17 +237,17 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                          '<div class="bubble_content"><div class="pdp"><img src="' +
-                          getImage +
-                          date.pdp +
-                          '" /></div><div class="bubble_data"><h2>' +
-                          date.firstname +
-                          date.name +
-                          "</h2><p>" +
-                          date.localisation +
-                          "</p><p>" +
-                          date.date +
-                          "</p></div></div>",
+                            '<div class="bubble_content"><div class="pdp"><img src="' +
+                            getImage +
+                            date.pdp +
+                            '" /></div><div class="bubble_data"><h2>' +
+                            date.firstname +
+                            date.name +
+                            "</h2><p>" +
+                            date.localisation +
+                            "</p><p>" +
+                            date.date +
+                            "</p></div></div>",
                         };
 
                         const infoWindow = new window.google.maps.InfoWindow(
@@ -359,36 +359,34 @@ function MapWithLoader({ user, isDark }) {
                               },
                             },
                           });
-                          
+
                           infoWindow.open(map, marker1);
-                          const directionsRenderer = new window.google.maps.DirectionsRenderer({
+                          const directionsRenderer =
+                            new window.google.maps.DirectionsRenderer({
                               suppressMarkers: true,
                               polylineOptions: {
-                                  strokeColor: "#FF7A7A",
-                                  strokeWeight: 6,
+                                strokeColor: "#FF7A7A",
+                                strokeWeight: 6,
                               },
-                          });
-          
+                            });
+
                           const request = {
-                              origin: {
-                                  lat: startCoordinates.lat,
-                                  lng: startCoordinates.lng,
-                              },
-                              destination: results[0].geometry.location,
-                              travelMode: "DRIVING",
+                            origin: {
+                              lat: startCoordinates.lat,
+                              lng: startCoordinates.lng,
+                            },
+                            destination: results[0].geometry.location,
+                            travelMode: "DRIVING",
                           };
-          
-                          directionsService.route(
-                              request,
-                              (result, status) => {
-                                  if (status === "OK") {
-                                      directionsRenderer.setDirections(result);
-                                  }
-                              }
-                          );
-          
+
+                          directionsService.route(request, (result, status) => {
+                            if (status === "OK") {
+                              directionsRenderer.setDirections(result);
+                            }
+                          });
+
                           directionsRenderer.setMap(map);
-                      }
+                        }
                       }
                     }
                   );

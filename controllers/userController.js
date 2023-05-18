@@ -174,7 +174,13 @@ module.exports.getconv = async(req, res) => {
 
 module.exports.dates = async(req, res, next) => {
 
-    let unid = req.query.lid;
+    const { unid, searchString, order } = req.query
+
+    const sortOrder = parseInt(order, 10) || 1;
+
+    console.log(sortOrder)
+    console.log(searchString)
+
     try {
         const key1 = "premier";
         const key2 = "second";
@@ -187,7 +193,7 @@ module.exports.dates = async(req, res, next) => {
             }, {
                 [key2]: unid
             }]
-        }).toArray();
+        }).sort({ createdAt: sortOrder }).toArray();
         if (!admin) {
             return res.json({ status: "error" });
         } else
@@ -226,7 +232,13 @@ module.exports.dates = async(req, res, next) => {
             }
             // console.log("tab :")
             //  console.log(tab)
+        if (searchString) {
+            tab = tab.filter(conversation => {
+                var fullName = conversation.name + ' ' + conversation.firstname;
 
+                return fullName.toLowerCase().includes(searchString.toLowerCase());
+            });
+        }
         res.json({ status: "ok", dates: tab });
 
     } catch (error) {
