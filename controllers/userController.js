@@ -140,28 +140,52 @@ module.exports.getconv = async(req, res) => {
 
 module.exports.dates = async(req, res, next) => {
 
-
     let unid = req.query.lid;
     try {
-
-        const admin = await dbo.collection('Dates').find({ "": unid }).toArray();
+        const key1 = "premier";
+        const key2 = "second";
+        
+        let tab = [];
+        console.log(unid)
+        const admin = await dbo.collection('Dates').find({ $or: [{ [key1]: unid }, { [key2] : unid }] }).toArray();
         if (!admin) {
             return res.json({ status: "error" });
-        } else {
-            let couple = [];
-            for (let i = 0; i < admin.length; i++) {
-
-                couple.push({ premier: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }), second: await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }) });
-            }
-            console.log(couple[0])
-            res.json({ status: "ok", dates: admin, couple: couple });
-            // console.log(admin);
-
+        }else
+        // console.log("admin : ")
+        // console.log(admin)
+        for (var i = 0; i < admin.length;i++){
+             if (admin[i].premier === unid) {
+            // Exécuter la requête correspondante à la clé 1
+          const info = await dbo.collection('Admin').findOne({_id :new ObjectId( admin[i].second)}, { projection: { pdp: 1, name: 1, firstname: 1 } })
+        //   console.log("key1")
+        //   console.log(admin[i].premier)
+        //   console.log(key1)
+        //   console.log(info)
+          tab.push({_id : info._id,
+            pdp : info.pdp,
+            name: info.name,
+            firstname: info.firstname,
+            localisation : admin[i].localisation,
+            date: admin[i].date
+        })
+          } else if (admin[i].second === unid) {
+            // Exécuter la requête correspondante à la clé 2
+            const info = await dbo.collection('Admin').findOne({_id : new ObjectId(admin[i].premier)}, { projection: { pdp: 1, name: 1, firstname: 1 } })
+            // console.log("key2")
+            // console.log(info)
+          tab.push({_id : info._id,
+            pdp : info.pdp,
+            name: info.name,
+            firstname: info.firstname,
+            localisation : admin[i].localisation,
+            date: admin[i].date
+        })
+          }
         }
-
-        // let date = []
-
-
+        // console.log("tab :")
+        //  console.log(tab)
+       
+            res.json({ status: "ok", dates : tab });
 
     } catch (error) {
         next(error);;

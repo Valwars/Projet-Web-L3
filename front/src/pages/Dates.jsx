@@ -8,7 +8,7 @@ const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
   const [leuser, setLeuser] = useState({});
   const [date, setDate] = useState([]);
-  const [couple, setCouple] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
 
@@ -24,14 +24,14 @@ const Dates = ({ user, locate }) => {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          lid: unid,
+          lid: user._id,
         },
       });
       console.log(response.data.dates);
-     console.log(response.data.couple)    
+     
       
       setDate(response.data.dates);
-      setCouple(response.data.couple)
+  
      
       
        setLoading(false);
@@ -57,58 +57,47 @@ const Dates = ({ user, locate }) => {
             <input id="convtp" type="text" placeholder="Rechercher..." />
           </div>
           
-            {date.map((date, index)=>{
-              
-              return(                          
-               <div className="date_cnt">
-                 {couple.map((item)=>{
-                 const keys = Object.keys(item);
-                 console.log("keys")
-                 console.log(keys)
-                return(
-           keys.map((key)=>{
-                    const element = item[key]
-                    console.log("element")
-                    console.log(element.pdp)
-                    console.log(element.name)
-                    return (
-                    <div className="user-date" >
-                      <div>
-                      
+          <div className="matchs-container">
+            {date.map((date) => {
+              // if (user.personnes[0] != undefined) {
+              return (
+                <div
+                  className="match date_cnt"
+                  onClick={() => {
+                    // setLocate("/match");
+                    navigate("/user-profile/2");
+                  }}
+                >
+                  <div className="user-date">
+                    <div>
                       <img
-                        src={getImage + element.pdp}
+                        src={getImage + date.pdp}
                         alt=""
                       />
-                      <h2>{element.name}</h2>
+                      <h2>{date.name} {date.firstname}</h2>
                     </div>
+                  </div>
+
+                  <div className="dateInfo">
+                    <div>
+                      <i class="fas fa-clock"></i>
+
+                      <p>{date.localisation}</p>
                     </div>
-                    
-                    
-                     ) 
-                  
-                   }) 
-                  
-                )               
-             
-                 })}                
-     <div className="dateInfo">
-                     <div>
-                       <i class="fas fa-clock"></i>
-     
-                       <p>{date.localisation}</p>
-                     </div>
-                     <div>
-                       <i class="fas fa-map-marker-alt"></i>
-     
-                       <p>{date.date}</p>
-                     </div>
-                   </div> 
-                  
-              
-               </div>
-            
-              )
+                    <div>
+                      <i class="fas fa-map-marker-alt"></i>
+
+                      <p>{date.date}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+              // } else {
+              //   return null;
+              // }
             })}
+          </div>
+
            
             
           
