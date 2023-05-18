@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
-import { datesRoute } from "../utils/APIRoutes";
+import { getImage, datesRoute } from "../utils/APIRoutes";
 import UserProfile from "./userProfile";
 const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
@@ -56,89 +56,62 @@ const Dates = ({ user, locate }) => {
             </div>
             <input id="convtp" type="text" placeholder="Rechercher..." />
           </div>
-          <div className="matchs-container">
+          
             {date.map((date, index)=>{
               
-              return(
-               <>
-              
-               <div className="user-date" >
+              return(                          
+               <div className="date_cnt">
                  {couple.map((item)=>{
                  const keys = Object.keys(item);
-                 keys.map((key)=>{
-                  const element = item[key]
-                  return (
-                    <div>
-                    <img
-                      src={element.pdp}
-                      alt=""
-                    />
-                    <h2>{element.name}</h2>
-                  </div>
-                   ) 
-                 })
-                
+                 console.log("keys")
+                 console.log(keys)
+                return(
+           keys.map((key)=>{
+                    const element = item[key]
+                    console.log("element")
+                    console.log(element.pdp)
+                    console.log(element.name)
+                    return (
+                    <div className="user-date" >
+                      <div>
+                      
+                      <img
+                        src={getImage + element.pdp}
+                        alt=""
+                      />
+                      <h2>{element.name}</h2>
+                    </div>
+                    </div>
+                    
+                    
+                     ) 
+                  
+                   }) 
+                  
+                )               
              
-                 })}
-                 </div>
-
-              <div className="dateInfo">
-                <div>
-                  <i class="fas fa-clock"></i>
-
-                  <p>{date.localisation}</p>
-                </div>
-                <div>
-                  <i class="fas fa-map-marker-alt"></i>
-
-                  <p>{date.date}</p>
-                </div>
-              </div>            
-               </>
-               
+                 })}                
+     <div className="dateInfo">
+                     <div>
+                       <i class="fas fa-clock"></i>
+     
+                       <p>{date.localisation}</p>
+                     </div>
+                     <div>
+                       <i class="fas fa-map-marker-alt"></i>
+     
+                       <p>{date.date}</p>
+                     </div>
+                   </div> 
+                  
+              
+               </div>
             
               )
             })}
-            {/* {date.map((date) => {
-              // if (user.personnes[0] != undefined) {
-              return (
-                <div
-                  className="match date_cnt"
-                  onClick={() => {
-                    // setLocate("/match");
-                    navigate("/user-profile/2");
-                  }}
-                >
-                  <div className="user-date">
-                    <div>
-                      <img
-                        src="https://randomuser.me/api/portraits/women/22.jpg"
-                        alt=""
-                      />
-                      <h2>Jane MaBite</h2>
-                    </div>
-                  </div>
-
-                  <div className="dateInfo">
-                    <div>
-                      <i class="fas fa-clock"></i>
-
-                      <p>{date.localisation}</p>
-                    </div>
-                    <div>
-                      <i class="fas fa-map-marker-alt"></i>
-
-                      <p>{date.date}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-              // } else {
-              //   return null;
-              // }
-            })} */}
+           
             
-          </div>
+          
         </div>
       )}
     </div>
