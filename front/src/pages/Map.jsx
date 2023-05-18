@@ -245,7 +245,7 @@ function MapWithLoader({ user, isDark }) {
                         const infoWindowOptions = {
                           content:
                             '<div class="bubble_content"><div class="pdp"><img src={getImage + date.pdp} /></div><div class="bubble_data"><h2>' +
-                            date.firstname +
+                            date.firstname + date.name +
                             "</h2><p>" +
                             date.localisation +
                             "</p><p>" +
