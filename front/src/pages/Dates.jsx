@@ -11,9 +11,7 @@ const Dates = ({ user, locate }) => {
 
   const [loading, setLoading] = useState(true);
 
-
-
-  useEffect(() => {    
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -28,18 +26,14 @@ const Dates = ({ user, locate }) => {
         },
       });
       console.log(response.data.dates);
-     
-      
+
       setDate(response.data.dates);
-  
-     
-      
-       setLoading(false);
+
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <div className="app-page">
@@ -56,7 +50,7 @@ const Dates = ({ user, locate }) => {
             </div>
             <input id="convtp" type="text" placeholder="Rechercher..." />
           </div>
-          
+
           <div className="matchs-container">
             {date.map((date) => {
               // if (user.personnes[0] != undefined) {
@@ -70,11 +64,10 @@ const Dates = ({ user, locate }) => {
                 >
                   <div className="user-date">
                     <div>
-                      <img
-                        src={getImage + date.pdp}
-                        alt=""
-                      />
-                      <h2>{date.name} {date.firstname}</h2>
+                      <img src={getImage + date.pdp} alt="" />
+                      <h2>
+                        {date.name} {date.firstname}
+                      </h2>
                     </div>
                   </div>
 
@@ -82,12 +75,12 @@ const Dates = ({ user, locate }) => {
                     <div>
                       <i class="fas fa-clock"></i>
 
-                      <p>{date.localisation}</p>
+                      <p>{date.date}</p>
                     </div>
                     <div>
                       <i class="fas fa-map-marker-alt"></i>
 
-                      <p>{date.date}</p>
+                      <p>{date.localisation}</p>
                     </div>
                   </div>
                 </div>
@@ -97,10 +90,6 @@ const Dates = ({ user, locate }) => {
               // }
             })}
           </div>
-
-           
-            
-          
         </div>
       )}
     </div>

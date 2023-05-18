@@ -144,48 +144,56 @@ module.exports.dates = async(req, res, next) => {
     try {
         const key1 = "premier";
         const key2 = "second";
-        
+
         let tab = [];
         console.log(unid)
-        const admin = await dbo.collection('Dates').find({ $or: [{ [key1]: unid }, { [key2] : unid }] }).toArray();
+        const admin = await dbo.collection('Dates').find({
+            $or: [{
+                [key1]: unid
+            }, {
+                [key2]: unid
+            }]
+        }).toArray();
         if (!admin) {
             return res.json({ status: "error" });
-        }else
+        } else
         // console.log("admin : ")
         // console.log(admin)
-        for (var i = 0; i < admin.length;i++){
-             if (admin[i].premier === unid) {
-            // Exécuter la requête correspondante à la clé 1
-          const info = await dbo.collection('Admin').findOne({_id :new ObjectId( admin[i].second)}, { projection: { pdp: 1, name: 1, firstname: 1 } })
-        //   console.log("key1")
-        //   console.log(admin[i].premier)
-        //   console.log(key1)
-        //   console.log(info)
-          tab.push({_id : info._id,
-            pdp : info.pdp,
-            name: info.name,
-            firstname: info.firstname,
-            localisation : admin[i].localisation,
-            date: admin[i].date
-        })
-          } else if (admin[i].second === unid) {
-            // Exécuter la requête correspondante à la clé 2
-            const info = await dbo.collection('Admin').findOne({_id : new ObjectId(admin[i].premier)}, { projection: { pdp: 1, name: 1, firstname: 1 } })
-            // console.log("key2")
-            // console.log(info)
-          tab.push({_id : info._id,
-            pdp : info.pdp,
-            name: info.name,
-            firstname: info.firstname,
-            localisation : admin[i].localisation,
-            date: admin[i].date
-        })
-          }
-        }
-        // console.log("tab :")
-        //  console.log(tab)
-       
-            res.json({ status: "ok", dates : tab });
+            for (var i = 0; i < admin.length; i++) {
+                if (admin[i].premier === unid) {
+                    // Exécuter la requête correspondante à la clé 1
+                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                        //   console.log("key1")
+                        //   console.log(admin[i].premier)
+                        //   console.log(key1)
+                        //   console.log(info)
+                    tab.push({
+                        _id: info._id,
+                        pdp: info.pdp,
+                        name: info.name,
+                        firstname: info.firstname,
+                        localisation: admin[i].localisation,
+                        date: admin[i].date
+                    })
+                } else if (admin[i].second === unid) {
+                    // Exécuter la requête correspondante à la clé 2
+                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                        // console.log("key2")
+                        // console.log(info)
+                    tab.push({
+                        _id: info._id,
+                        pdp: info.pdp,
+                        name: info.name,
+                        firstname: info.firstname,
+                        localisation: admin[i].localisation,
+                        date: admin[i].date
+                    })
+                }
+            }
+            // console.log("tab :")
+            //  console.log(tab)
+
+        res.json({ status: "ok", dates: tab });
 
     } catch (error) {
         next(error);;
@@ -284,7 +292,7 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     },
 });
-
+/*
 const upload = multer({
     storage: storage,
     fileFilter: function(req, file, cb) {
@@ -296,7 +304,22 @@ const upload = multer({
         }
         cb('Error: File upload only supports the following filetypes - ' + filetypes);
     },
-}).single('pdp');
+}).single('pdp');*/
+
+const upload = multer({
+    storage: storage,
+    fileFilter: function(req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb('Error: File upload only supports the following filetypes - ' + filetypes);
+    },
+}).fields([{ name: 'photos', maxCount: 10 }, { name: 'pdp', maxCount: 1 }]); // Use fields() instead of array()
+
+
 
 const upload2 = multer({
     storage: storage,
@@ -385,13 +408,18 @@ module.exports.modifuser = async(req, res) => {
 
             const query = { _id: new ObjectId(req.body.id) };
 
-            // Vérifiez si req.file existe avant d'essayer d'accéder à filename
-            // Récupérer l'administrateur actuel
+            if (req.files && req.files.photos) {
+                req.body.photos = req.files.photos.map(file => "/" + file.filename);
+            }
+
+            console.log(req.body.photos)
+                // Vérifiez si req.file existe avant d'essayer d'accéder à filename
+                // Récupérer l'administrateur actuel
             const currentAdmin = await collection.findOne(query);
 
             // Vérifiez si req.file existe avant d'essayer d'accéder à filename
-            if (req.file) {
-                req.body.pdp = "/" + req.file.filename;
+            if (req.files.pdp) {
+                req.body.pdp = "/" + req.files.pdp[0].filename;
 
                 // Supprimer l'ancien fichier image
                 if (currentAdmin.pdp) {
@@ -434,8 +462,8 @@ module.exports.modifuser = async(req, res) => {
             }
 
             console.log(result.value)
-            if (req.file) {
-                return res.json({ status: "ok", filename: "/" + req.file.filename });
+            if (req.files.pdp) {
+                return res.json({ status: "ok", filename: "/" + req.body.pdp });
 
             }
             return res.json({ status: "ok" });
