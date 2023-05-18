@@ -6,13 +6,11 @@ import { getImage, datesRoute } from "../utils/APIRoutes";
 
 
 function MapWithLoader({ user, isDark }) {
-  useEffect(() => {
-    if (isDark) {
-      setCurrent(dark);
-    } else {
-      setCurrent(default_style);
-    }
-  }, [isDark]);
+
+  const [startCoordinates, setStartCoordinates] = useState({
+    lat: null,
+    lng: null,
+  });
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,35 +19,6 @@ function MapWithLoader({ user, isDark }) {
   const [leuser, setLeuser] = useState({});
 
   const [loading, setLoading] = useState(true);
-
-
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLeuser(user);
-    console.log(leuser._id);
-    var unid = leuser._id;
-    try {
-      const response = await axios.get(datesRoute, {
-        params: {
-          lid: user._id,
-        },
-      });
-      console.log(response.data.dates);
-
-
-      setDates(response.data.dates);
-
-
-
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const [default_style, setDefault] = useState([
     {
@@ -161,10 +130,44 @@ function MapWithLoader({ user, isDark }) {
     },
   ]);
 
-  const [startCoordinates, setStartCoordinates] = useState({
-    lat: null,
-    lng: null,
-  });
+  useEffect(() => {
+    if (isDark) {
+      setCurrent(dark);
+    } else {
+      setCurrent(default_style);
+    }
+  }, [isDark]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLeuser(user);
+    console.log(leuser._id);
+    var unid = leuser._id;
+    try {
+      const response = await axios.get(datesRoute, {
+        params: {
+          lid: user._id,
+        },
+      });
+      console.log(response.data.dates);
+
+
+      setDates(response.data.dates);
+
+
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+
+
 
   useEffect(() => {
     const loader = new Loader({
@@ -241,7 +244,7 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<div class="bubble_content"><div class="pdp"><img src="https://xsgames.co/randomusers/avatar.php?g=female" /></div><div class="bubble_data"><h2>' +
+                            '<div class="bubble_content"><div class="pdp"><img src={getImage + date.pdp} /></div><div class="bubble_data"><h2>' +
                             date.firstname +
                             "</h2><p>" +
                             date.localisation +
@@ -257,7 +260,6 @@ function MapWithLoader({ user, isDark }) {
                           position: results[0].geometry.location,
                           map: map,
                           clickable: false, // Désactiver l'effet de zoom au clic
-                          title:"",
                           label: "", // Supprimer les marqueurs A et B
                           optimized: false,
                           icon: {
@@ -269,6 +271,7 @@ function MapWithLoader({ user, isDark }) {
                             },
                           },
                         });
+
 
                         window.google.maps.event.addListener(
                           marker,
