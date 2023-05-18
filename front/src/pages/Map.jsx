@@ -237,46 +237,18 @@ function MapWithLoader({ user, isDark }) {
                       if (status === "OK") {
                         const infoWindowOptions = {
                           content:
-                            '<div class="bubble_content"><div class="pdp"><img src={getImage + date.pdp} /></div><div class="bubble_data"><h2>' +
-                            date.firstname +
-                            date.name +
-                            "</h2><p>" +
-                            date.localisation +
-                            "</p><p>" +
-                            date.date +
-                            "</p></div></div>",
+                          '<div class="bubble_content"><div class="pdp"><img src="' +
+                          getImage +
+                          date.pdp +
+                          '" /></div><div class="bubble_data"><h2>' +
+                          date.firstname +
+                          date.name +
+                          "</h2><p>" +
+                          date.localisation +
+                          "</p><p>" +
+                          date.date +
+                          "</p></div></div>",
                         };
-
-                        if (date._id === id) {
-                          //infoWindow.open(map, marker);
-                          const directionsRenderer = new window.google.maps.DirectionsRenderer({
-                              suppressMarkers: true,
-                              polylineOptions: {
-                                  strokeColor: "#FF7A7A",
-                                  strokeWeight: 6,
-                              },
-                          });
-          
-                          const request = {
-                              origin: {
-                                  lat: startCoordinates.lat,
-                                  lng: startCoordinates.lng,
-                              },
-                              destination: results[0].geometry.location,
-                              travelMode: "DRIVING",
-                          };
-          
-                          directionsService.route(
-                              request,
-                              (result, status) => {
-                                  if (status === "OK") {
-                                      directionsRenderer.setDirections(result);
-                                  }
-                              }
-                          );
-          
-                          directionsRenderer.setMap(map);
-                      }
 
                         const infoWindow = new window.google.maps.InfoWindow(
                           infoWindowOptions
@@ -372,6 +344,51 @@ function MapWithLoader({ user, isDark }) {
                           this.getPanes().markerLayer.id = "myMarker";
                         };
                         myoverlay.setMap(map);
+                        if (date._id === id) {
+                          const marker1 = new window.google.maps.Marker({
+                            position: results[0].geometry.location,
+                            map: map,
+                            clickable: true,
+                            label: "", // Supprimer les marqueurs A et B
+                            optimized: false,
+                            icon: {
+                              url: getImage + date.pdp,
+                              scaledSize: {
+                                width: 80,
+                                height: 80,
+                              },
+                            },
+                          });
+                          
+                          infoWindow.open(map, marker1);
+                          const directionsRenderer = new window.google.maps.DirectionsRenderer({
+                              suppressMarkers: true,
+                              polylineOptions: {
+                                  strokeColor: "#FF7A7A",
+                                  strokeWeight: 6,
+                              },
+                          });
+          
+                          const request = {
+                              origin: {
+                                  lat: startCoordinates.lat,
+                                  lng: startCoordinates.lng,
+                              },
+                              destination: results[0].geometry.location,
+                              travelMode: "DRIVING",
+                          };
+          
+                          directionsService.route(
+                              request,
+                              (result, status) => {
+                                  if (status === "OK") {
+                                      directionsRenderer.setDirections(result);
+                                  }
+                              }
+                          );
+          
+                          directionsRenderer.setMap(map);
+                      }
                       }
                     }
                   );
