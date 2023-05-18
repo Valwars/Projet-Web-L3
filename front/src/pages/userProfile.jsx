@@ -280,6 +280,21 @@ const UserProfile = ({ user, setUser }) => {
     setValues({ ...values, photos: updatedContent });
   };
 
+  const [selectedPics, setSelectedPics] = useState([]);
+
+  const handleNewPic = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedPics((prevSelectedFiles) => [...prevSelectedFiles, ...files]);
+
+    const fileNames = files.map((file) => file.name);
+    setValues((prevValues) => ({
+      ...prevValues,
+      photos: [...prevValues.photos, ...fileNames],
+    }));
+
+    console.log(selectedPics);
+  };
+
   const handleSave = async () => {
     if (values.interests.length < 3) {
       toast.error("Veuillez choisir au moins 3 intêrets.", toastOptions);
@@ -298,12 +313,17 @@ const UserProfile = ({ user, setUser }) => {
     formData.append("localisation", values.localisation);
     formData.append("orientation", values.orientation);
 
-    for (let i = 0; i < values.photos.length; i++) {
-      formData.append("photos", values.photos[i]);
+    for (let i = 0; i < selectedPics.length; i++) {
+      formData.append("photos", selectedPics[i]);
     }
+
     formData.append("pdp", values.pdp);
 
-    const result = await axios.post(save, formData);
+    const result = await axios.post(save, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     console.log(result);
     if (result.data.status === "ok") {
@@ -313,6 +333,7 @@ const UserProfile = ({ user, setUser }) => {
       if (result.data.filename) {
         pdp = result.data.filename;
       }
+
       setUser((prevUser) => ({
         ...prevUser,
         _id: values.id,
@@ -570,8 +591,10 @@ const UserProfile = ({ user, setUser }) => {
                           <label className="btn-browse">
                             Parcourir les fichiers
                             <input
+                              multiple
                               type="file"
-                              hidden //onChange={handleFileChange}
+                              hidden
+                              onChange={handleNewPic}
                             />
                           </label>
                         </div>

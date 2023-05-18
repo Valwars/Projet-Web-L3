@@ -292,6 +292,7 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     },
 });
+
 /*
 const upload = multer({
     storage: storage,
@@ -304,12 +305,12 @@ const upload = multer({
         }
         cb('Error: File upload only supports the following filetypes - ' + filetypes);
     },
-}).single('pdp');*/
+}).single('pdp'); */
 
 const upload = multer({
     storage: storage,
     fileFilter: function(req, file, cb) {
-        const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
+        const filetypes = /jpeg|jpg|png|gif|webp/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
         if (mimetype && extname) {
@@ -318,7 +319,6 @@ const upload = multer({
         cb('Error: File upload only supports the following filetypes - ' + filetypes);
     },
 }).fields([{ name: 'photos', maxCount: 10 }, { name: 'pdp', maxCount: 1 }]); // Use fields() instead of array()
-
 
 
 const upload2 = multer({
