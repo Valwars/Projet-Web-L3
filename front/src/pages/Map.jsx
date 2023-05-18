@@ -41,11 +41,11 @@ function MapWithLoader({ user, isDark }) {
       console.log(response.data.dates);
 
 
-      setDates(response.data.date);
+      setDates(response.data.dates);
 
 
 
-       setLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -210,7 +210,7 @@ function MapWithLoader({ user, isDark }) {
                   },
                   styles: current_style,
 
-                  zoom: 13,
+                  zoom: 14,
                 });
 
                 const marqer = new window.google.maps.Marker({
@@ -247,7 +247,6 @@ function MapWithLoader({ user, isDark }) {
                             date.localisation +
                             "</p><p>" +
                             date.date +
-                            " - " +
                             "</p></div></div>",
                         };
 
@@ -258,11 +257,12 @@ function MapWithLoader({ user, isDark }) {
                           position: results[0].geometry.location,
                           map: map,
                           clickable: false, // Désactiver l'effet de zoom au clic
+                          title:"",
                           label: "", // Supprimer les marqueurs A et B
                           optimized: false,
                           icon: {
                             url:
-                              process.env.PUBLIC_URL + date.pdp,
+                              getImage + date.pdp,
                             scaledSize: {
                               width: 80,
                               height: 80,
@@ -274,6 +274,7 @@ function MapWithLoader({ user, isDark }) {
                           marker,
                           "click",
                           function () {
+                            console.log('1');
                             // Supprimez l'événement de clic précédent
                             if (previousClickEvent) {
                               window.google.maps.event.removeListener(
@@ -330,6 +331,7 @@ function MapWithLoader({ user, isDark }) {
                           marker,
                           "mouseover",
                           function () {
+                      
                             infoWindow.open(map, marker);
                           }
                         );
