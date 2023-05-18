@@ -147,7 +147,9 @@ function MapWithLoader({ user, isDark }) {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          lid: user._id,
+          unid: user._id,
+          searchString: "",
+          order: 1,
         },
       });
       console.log(response.data.dates);
