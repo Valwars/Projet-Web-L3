@@ -1133,6 +1133,15 @@
         transform-style: preserve-3d;
     }
     
+    .btn-cont button {
+        transition: all 0.4s;
+    }
+    
+    .btn-cont button:hover {
+        transform: translate3d(0px, 0px, 0px) scale3d(1.1, 1.1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+        transform-style: preserve-3d;
+    }
+    
     .graphiques {
         width: 100% !important;
         height: 100% !important;

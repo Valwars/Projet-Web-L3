@@ -1,32 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader_transition from "../components/Loading";
-import { getImage ,match } from "../utils/APIRoutes";
+import { getImage, match } from "../utils/APIRoutes";
 import axios from "axios";
 
 const Matchs = ({ user, setLocate }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [matchs, setMatch] = useState([]);
+  const [searsh, setSearsh] = useState("");
+  const [sort, setSort] = useState(1);
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     fetch_data();
-  })
-
-  const fetch_data = async ()=> {
+  }, [searsh, sort]);
+  const fetch_data = async () => {
     try {
-      const response = await axios.get(match,{
+      const response = await axios.get(match, {
         params: {
           currentuser: user._id,
+          searchString: searsh,
+          order: sort,
         },
-      })
-      console.log(response.data.status)
-      setMatch(response.data.match)
-    }catch (error) {
-      console.log(error)
+      });
+      console.log(response.data.status);
+      setMatch(response.data.match);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-}
+  };
   // const matchs = [
   //   {
   //     id: "23",
@@ -53,7 +56,12 @@ const Matchs = ({ user, setLocate }) => {
   //     pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
   //   },
   // ];
-
+  const handle_sort = (e) => {
+    document
+      .getElementsByClassName("filter-order-active")[0]
+      .classList.remove("filter-order-active");
+    e.target.classList.add("filter-order-active");
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -63,11 +71,28 @@ const Matchs = ({ user, setLocate }) => {
           <div className="top">
             <h1>Vos matchs</h1>
             <div className="order-filters">
-              <i className="fa fa-chevron-down"></i>
+              <i
+                className="fa fa-chevron-down filter-order-active"
+                onClick={(e) => {
+                  handle_sort(e);
+                  setSort(1);
+                }}
+              ></i>
 
-              <i className="fa fa-chevron-up"></i>
+              <i
+                className="fa fa-chevron-up"
+                onClick={(e) => {
+                  handle_sort(e);
+                  setSort(-1);
+                }}
+              ></i>
             </div>
-            <input id="convtp" type="text" placeholder="Rechercher..." />
+            <input
+              id="convtp"
+              type="text"
+              placeholder="Rechercher..."
+              onChange={(e) => setSearsh(e.target.value)}
+            />{" "}
           </div>
           <div className="matchs-container">
             {matchs.map((match) => {
@@ -76,7 +101,7 @@ const Matchs = ({ user, setLocate }) => {
                   className="match"
                   onClick={() => {
                     setLocate("/match");
-                    navigate("/user-profile/"+ match._id);
+                    navigate("/user-profile/" + match._id);
                   }}
                 >
                   <img src={getImage + match.pdp} alt="" />
