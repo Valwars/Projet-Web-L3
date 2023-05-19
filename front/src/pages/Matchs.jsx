@@ -76,7 +76,7 @@ const Matchs = ({ user, setLocate }) => {
                   className="match"
                   onClick={() => {
                     setLocate("/match");
-                    navigate("/user-profile/2");
+                    navigate("/user-profile/"+ match._id);
                   }}
                 >
                   <img src={getImage + match.pdp} alt="" />
