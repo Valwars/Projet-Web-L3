@@ -681,3 +681,13 @@ try {
     }
 
 }
+
+
+module.exports.createDate = async(req, res) => {
+    console.log(req.body.date);
+    // try {
+        
+    // } catch (error) {
+    //     console.log(error)
+    // }
+}
