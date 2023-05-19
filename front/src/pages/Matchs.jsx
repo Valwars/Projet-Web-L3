@@ -1,54 +1,58 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader_transition from "../components/Loading";
-import { match } from "../utils/APIRoutes";
+import { getImage ,match } from "../utils/APIRoutes";
 import axios from "axios";
 
 const Matchs = ({ user, setLocate }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  // const [matchs, setMatch] = useState([]);
+  const [matchs, setMatch] = useState([]);
 
   
-  // useEffect(()=>{
-  //   fetch_data();
-  // })
+  useEffect(()=>{
+    fetch_data();
+  })
 
-  // const fetch_data = async ()=> {
-  //   const response = await axios.get(match,{
-  //     params: {
-  //       currentuser: user._id,
-  //     },
-  //   })
-  //   console.log(response.data.match)
-  //   setMatch(response.data.match)
-  // }
-  const matchs = [
-    {
-      id: "23",
-      nom: "Jane",
-      prenom: "Cooper",
-      pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-    },
-    {
-      id: "23",
-      nom: "Jane",
-      prenom: "Cooper",
-      pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-    },
-    {
-      id: "23",
-      nom: "Jane",
-      prenom: "Cooper",
-      pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-    },
-    {
-      id: "23",
-      nom: "Jane",
-      prenom: "Cooper",
-      pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
-    },
-  ];
+  const fetch_data = async ()=> {
+    try {
+      const response = await axios.get(match,{
+        params: {
+          currentuser: user._id,
+        },
+      })
+      console.log(response.data.status)
+      setMatch(response.data.match)
+    }catch (error) {
+      console.log(error)
+    }
+}
+  // const matchs = [
+  //   {
+  //     id: "23",
+  //     nom: "Jane",
+  //     prenom: "Cooper",
+  //     pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+  //   },
+  //   {
+  //     id: "23",
+  //     nom: "Jane",
+  //     prenom: "Cooper",
+  //     pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+  //   },
+  //   {
+  //     id: "23",
+  //     nom: "Jane",
+  //     prenom: "Cooper",
+  //     pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+  //   },
+  //   {
+  //     id: "23",
+  //     nom: "Jane",
+  //     prenom: "Cooper",
+  //     pdp: "https://xsgames.co/randomusers/avatar.php?g=female",
+  //   },
+  // ];
 
   return (
     <div className="app-page">
@@ -75,8 +79,8 @@ const Matchs = ({ user, setLocate }) => {
                     navigate("/user-profile/2");
                   }}
                 >
-                  <img src={match.pdp} alt="" />
-                  <h2>{match.nom + " " + match.prenom}</h2>
+                  <img src={getImage + match.pdp} alt="" />
+                  <h2>{match.name + " " + match.firstname}</h2>
                 </div>
               );
             })}

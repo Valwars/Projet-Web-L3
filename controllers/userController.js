@@ -613,22 +613,23 @@ module.exports.modifuser = async(req, res) => {
 module.exports.addswipe = async(req, res) => {
     try {
         const data = req.body.value;
-        console.log(data.val === "positif")
+       
+   
         if(data.val === "positif"){
             const test = await dbo.collection('Swipe').findOne({to: data.from});
-            
+           
             if(!test){                
             const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
             if(!ajoutswipe) return res.json({status : "error"})
             return res.json({status : "ok"})
-            } else{
-                console.log(test)
+            } else if (test){
+                
                 const doc = {
-                    user1 : data.user1,
-                    user2 : data.user2,
+                    user1 : data.from,
+                    user2 : data.to,
                     createdAt : new Date()
                 }
-                const ajoutmatch = await dbo.collection('Matchs').insertOne()
+                const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
                 if(!ajoutmatch) return res.json({status : "error"})
                return res.json({status : "ok"})
             }
@@ -647,13 +648,34 @@ module.exports.addswipe = async(req, res) => {
 
 
 module.exports.matchs = async(req, res) => {
-   console.log(req.query.currentuser)
-    try {
-     const admin = await dbo.collection('Matchs').find({"":req.querry.currentuser})
-       if(!admin) return res.json({status : "error"})
-       console.log(admin)
-       res.json({status :"ok", match : admin})
-
+//    console.log(req.query.currentuser)
+   const val = req.query.currentuser;
+   const key1 = "user1";
+   const key2 = "user2";
+   let tab = []
+try {      
+        const admin = await dbo.collection('Matchs').find({
+            $or: [{
+                [key1]: val
+            }, {
+                [key2]: val
+            }] 
+        }).toArray();
+       if(!admin){
+        return res.json({status : "error"})
+       } else{
+        for (var i = 0; i < admin.length; i++) {
+            if (admin[i].user1 === val) {
+                const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user2) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+        tab.push(info)
+            } else if (admin[i].user2 === val){
+                const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user1) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                tab.push(info)
+            }
+       }
+     
+       res.json({status :"ok", match : tab})
+    }
     } catch (err) {
         return res.json({status : "error"})
     }
