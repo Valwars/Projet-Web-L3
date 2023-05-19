@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import $ from "jquery";
-import { getImage, userRoute } from "../utils/APIRoutes";
+import { getImage, userRoute, createConv } from "../utils/APIRoutes";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Client } from "@googlemaps/google-maps-services-js";
@@ -89,6 +89,20 @@ const Profile = ({ user, locate }) => {
   useEffect(() => {
     getDistance();
   }, [profile]);
+
+  const create_conv = async () => {
+    const val = { user1: user._id, user2: token };
+    console.log(val);
+    try {
+      const response = await axios.post(createConv, val);
+
+      if (response.data.status === "ok") {
+        navigate("/chat");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -107,7 +121,13 @@ const Profile = ({ user, locate }) => {
             <button onClick={() => navigate("/")}>Retour</button>
             {locate === "/match" ? (
               <div className="btn-cont">
-                <button>Discuter</button>
+                <button
+                  onClick={() => {
+                    create_conv();
+                  }}
+                >
+                  Discuter
+                </button>
                 <button onClick={() => setShowPop(!showpop)}>
                   {" "}
                   {!showpop ? "Date !" : "Annuler"}

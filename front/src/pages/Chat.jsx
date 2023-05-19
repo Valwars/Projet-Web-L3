@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContainer from "../components/Chat/ChatContainer";
 import { io } from "socket.io-client";
-import { getconv, host } from "../utils/APIRoutes";
+import { getImage, getconv, host } from "../utils/APIRoutes";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
 
@@ -109,7 +109,7 @@ const Chat = ({ user }) => {
                           className="match"
                           onClick={() => setSelected(conv)}
                         >
-                          <img src={conv.meta.pdp} alt="" />
+                          <img src={getImage + conv.meta.pdp} alt="" />
                           <h2>{conv.meta.name + " " + conv.meta.firstName}</h2>
                         </div>
                       );

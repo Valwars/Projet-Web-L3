@@ -16,3 +16,4 @@ export const fillForm = `${host}/api/auth/fillForm`;
 export const swipe = `${host}/api/auth/swipe`;
 export const match = `${host}/api/auth/match`;
 export const createDate = `${host}/api/auth/createDate`;
+export const createConv = `${host}/api/auth/createConv`;

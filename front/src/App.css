@@ -58,6 +58,10 @@
         font-weight: 700;
     }
     
+    input:focus {
+        outline: none;
+    }
+    
     h2,
     label,
     .l-but,

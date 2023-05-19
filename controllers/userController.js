@@ -701,7 +701,57 @@ module.exports.matchs = async(req, res) => {
 module.exports.createDate = async(req, res) => {
     console.log(req.body.date);
     // try {
-        
+
+    // } catch (error) {
+    //     console.log(error)
+    // }
+}
+
+module.exports.createConv = async(req, res) => {
+    console.log("NEW CONV OMG")
+
+
+
+    try {
+        const { user1, user2 } = req.body
+
+        const adminCollection = await dbo.collection('Admin');
+        const user1Data = await adminCollection.findOne({ _id: new ObjectId(user1) }, { projection: { pdp: 1, name: 1, firstname: 1 } });
+        const user2Data = await adminCollection.findOne({ _id: new ObjectId(user2) }, { projection: { pdp: 1, name: 1, firstname: 1 } });
+
+        if (!user1Data || !user2Data) return res.json({ status: "error", message: "User not found in Admin collection." });
+
+
+        const collection = await dbo.collection('Conversations');
+
+        const existingConv = await collection.findOne({
+            $or: [
+                { user1Id: new ObjectId(user1), user2Id: new ObjectId(user2) },
+                { user1Id: new ObjectId(user2), user2Id: new ObjectId(user1) }
+            ]
+        });
+
+        if (existingConv) return res.json({ status: "ok", message: "Conversation already exists." });
+
+        const data = await collection.insertOne({
+            user1Id: new ObjectId(user1),
+            user2Id: new ObjectId(user2),
+            meta1: { name: user1Data.name, firstName: user1Data.firstname, pdp: user1Data.pdp },
+            meta2: { name: user2Data.name, firstName: user2Data.firstname, pdp: user2Data.pdp },
+            createdAt: new Date()
+
+
+
+        });
+
+        if (!data) return res.json({ status: "error" });
+        else return res.json({ status: "ok" });
+    } catch (ex) {
+        return res.json({ status: "error" });
+    }
+
+    // try {
+
     // } catch (error) {
     //     console.log(error)
     // }

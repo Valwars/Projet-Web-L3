@@ -3,7 +3,11 @@ import axios from "axios";
 import "./ChatContainer.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { sendMessageRoute, recieveMessageRoute } from "../../utils/APIRoutes";
+import {
+  sendMessageRoute,
+  recieveMessageRoute,
+  getImage,
+} from "../../utils/APIRoutes";
 
 // import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 import { v4 as uuidv4 } from "uuid";
@@ -102,7 +106,7 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
       <div className="chat-header">
         <h2 onClick={() => setConv(undefined)}>Retour</h2>
         <div className="user-details">
-          <img src={currentChat.meta.pdp} alt="" />
+          <img src={getImage + currentChat.meta.pdp} alt="" />
           <h3>{currentChat.meta.name + " " + currentChat.meta.firstName}</h3>
         </div>
       </div>
