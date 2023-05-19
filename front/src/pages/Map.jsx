@@ -230,6 +230,7 @@ function MapWithLoader({ user, isDark }) {
 
                 let params = new URLSearchParams(window.location.search);
                 let id = params.get("id");
+                let previousInfoWindow;
 
                 dates.forEach((date, index) => {
                   const geocoder = new window.google.maps.Geocoder();
@@ -243,7 +244,7 @@ function MapWithLoader({ user, isDark }) {
                             getImage +
                             date.pdp +
                             '" /></div><div class="bubble_data"><h2>' +
-                            date.firstname +
+                            date.firstname + " " +
                             date.name +
                             "</h2><p>" +
                             date.localisation +
@@ -274,16 +275,21 @@ function MapWithLoader({ user, isDark }) {
                           marker,
                           "click",
                           function () {
-                            console.log("1");
+                            if (previousInfoWindow) {
+                              previousInfoWindow.close();
+                            }
+                            
                             // Supprimez l'événement de clic précédent
                             if (previousClickEvent) {
                               window.google.maps.event.removeListener(
                                 previousClickEvent
+                                
                               );
                             }
                             // Supprimez le tracé de la destination cliquée précédemment
                             if (previousDirectionsRenderer) {
                               previousDirectionsRenderer.setMap(null);
+                              
                             }
 
                             // Ajoutez le nouvel événement de clic
@@ -309,6 +315,9 @@ function MapWithLoader({ user, isDark }) {
                               (result, status) => {
                                 if (status === "OK") {
                                   directionsRenderer.setDirections(result);
+                                  infoWindow.open(map, marker);
+
+                                  
                                 }
                               }
                             );
@@ -320,25 +329,14 @@ function MapWithLoader({ user, isDark }) {
                               window.google.maps.event.addListener(
                                 marker,
                                 "click",
-                                function () {}
+                                function () {
+                                  
+                                }
                               );
 
                             // Stockez la référence du tracé de la destination cliquée actuellement
                             previousDirectionsRenderer = directionsRenderer;
-                          }
-                        );
-                        window.google.maps.event.addListener(
-                          marker,
-                          "mouseover",
-                          function () {
-                            infoWindow.open(map, marker);
-                          }
-                        );
-                        window.google.maps.event.addListener(
-                          marker,
-                          "mouseout",
-                          function () {
-                            infoWindow.close();
+                            previousInfoWindow = infoWindow;
                           }
                         );
                         var myoverlay = new window.google.maps.OverlayView();
@@ -346,23 +344,16 @@ function MapWithLoader({ user, isDark }) {
                           this.getPanes().markerLayer.id = "myMarker";
                         };
                         myoverlay.setMap(map);
-                        if (date._id === id) {
-                          const marker1 = new window.google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: map,
-                            clickable: true,
-                            label: "", // Supprimer les marqueurs A et B
-                            optimized: false,
-                            icon: {
-                              url: getImage + date.pdp,
-                              scaledSize: {
-                                width: 80,
-                                height: 80,
-                              },
-                            },
-                          });
 
-                          infoWindow.open(map, marker1);
+                        if (date._id === id) {
+
+                          if (previousInfoWindow) {
+                            previousInfoWindow.close();
+                          }
+
+                          infoWindow.open(map, marker);
+
+                          previousInfoWindow=infoWindow;
                           const directionsRenderer =
                             new window.google.maps.DirectionsRenderer({
                               suppressMarkers: true,
@@ -388,6 +379,17 @@ function MapWithLoader({ user, isDark }) {
                           });
 
                           directionsRenderer.setMap(map);
+                          previousClickEvent =
+                              window.google.maps.event.addListener(
+                                marker,
+                                "click",
+                                function () {
+                                  infoWindow.close();
+                                }
+                              );
+
+                            // Stockez la référence du tracé de la destination cliquée actuellement
+                            previousDirectionsRenderer = directionsRenderer;
                         }
                       }
                     }
