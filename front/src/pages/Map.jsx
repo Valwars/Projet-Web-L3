@@ -244,7 +244,8 @@ function MapWithLoader({ user, isDark }) {
                             getImage +
                             date.pdp +
                             '" /></div><div class="bubble_data"><h2>' +
-                            date.firstname + " " +
+                            date.firstname +
+                            " " +
                             date.name +
                             "</h2><p>" +
                             date.localisation +
@@ -285,18 +286,16 @@ function MapWithLoader({ user, isDark }) {
                             if (previousInfoWindow) {
                               previousInfoWindow.close();
                             }
-                            
+
                             // Supprimez l'événement de clic précédent
                             if (previousClickEvent) {
                               window.google.maps.event.removeListener(
                                 previousClickEvent
-                                
                               );
                             }
                             // Supprimez le tracé de la destination cliquée précédemment
                             if (previousDirectionsRenderer) {
                               previousDirectionsRenderer.setMap(null);
-                              
                             }
 
                             // Ajoutez le nouvel événement de clic
@@ -323,8 +322,6 @@ function MapWithLoader({ user, isDark }) {
                                 if (status === "OK") {
                                   directionsRenderer.setDirections(result);
                                   infoWindow.open(map, marker);
-
-                                  
                                 }
                               }
                             );
@@ -336,9 +333,7 @@ function MapWithLoader({ user, isDark }) {
                               window.google.maps.event.addListener(
                                 marker,
                                 "click",
-                                function () {
-                                  
-                                }
+                                function () {}
                               );
 
                             // Stockez la référence du tracé de la destination cliquée actuellement
@@ -353,14 +348,13 @@ function MapWithLoader({ user, isDark }) {
                         myoverlay.setMap(map);
 
                         if (date._id === id) {
-
                           if (previousInfoWindow) {
                             previousInfoWindow.close();
                           }
 
                           infoWindow.open(map, marker);
 
-                          previousInfoWindow=infoWindow;
+                          previousInfoWindow = infoWindow;
                           const directionsRenderer =
                             new window.google.maps.DirectionsRenderer({
                               suppressMarkers: true,
@@ -387,16 +381,16 @@ function MapWithLoader({ user, isDark }) {
 
                           directionsRenderer.setMap(map);
                           previousClickEvent =
-                              window.google.maps.event.addListener(
-                                marker,
-                                "click",
-                                function () {
-                                  infoWindow.close();
-                                }
-                              );
+                            window.google.maps.event.addListener(
+                              marker,
+                              "click",
+                              function () {
+                                infoWindow.close();
+                              }
+                            );
 
-                            // Stockez la référence du tracé de la destination cliquée actuellement
-                            previousDirectionsRenderer = directionsRenderer;
+                          // Stockez la référence du tracé de la destination cliquée actuellement
+                          previousDirectionsRenderer = directionsRenderer;
                         }
                       }
                     }
