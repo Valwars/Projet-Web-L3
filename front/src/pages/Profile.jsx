@@ -6,6 +6,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Client } from "@googlemaps/google-maps-services-js";
 import Loader_transition from "../components/Loading";
+import PopupDate from "../components/popupDate/PopupDate";
 
 const Profile = ({ user, locate }) => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Profile = ({ user, locate }) => {
   const [loading, setLoading] = useState(true);
   const [photosLimit, setPhotosLimit] = useState(3); // Limite de photos affichées
 
+  const [showpop, setShowPop] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,12 +95,20 @@ const Profile = ({ user, locate }) => {
         <Loader_transition></Loader_transition>
       ) : (
         <div className="profile-content">
+          {showpop ? (
+            <>
+              {" "}
+              <PopupDate user={user}></PopupDate>{" "}
+            </>
+          ) : (
+            <></>
+          )}
           <div className="inputs-container">
             <button onClick={() => navigate("/")}>Retour</button>
             {locate === "/match" ? (
               <div className="btn-cont">
                 <button>Discuter</button>
-                <button>Date !</button>
+                <button onClick={() => setShowPop(!showpop)}>Date !</button>
               </div>
             ) : (
               <></>
