@@ -613,71 +613,86 @@ module.exports.modifuser = async(req, res) => {
 module.exports.addswipe = async(req, res) => {
     try {
         const data = req.body.value;
-       
-   
-        if(data.val === "positif"){
-            const test = await dbo.collection('Swipe').findOne({to: data.from});
-           
-            if(!test){                
-            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
-            if(!ajoutswipe) return res.json({status : "error"})
-            return res.json({status : "ok"})
-            } else if (test){
-                
+
+
+        if (data.val === "positif") {
+            const test = await dbo.collection('Swipe').findOne({ to: data.from });
+
+            if (!test) {
+                const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+                if (!ajoutswipe) return res.json({ status: "error" })
+                return res.json({ status: "ok" })
+            } else if (test) {
+
                 const doc = {
-                    user1 : data.from,
-                    user2 : data.to,
-                    createdAt : new Date()
+                    user1: data.from,
+                    user2: data.to,
+                    createdAt: new Date()
                 }
                 const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
-                if(!ajoutmatch) return res.json({status : "error"})
-               return res.json({status : "ok"})
+                if (!ajoutmatch) return res.json({ status: "error" })
+                return res.json({ status: "ok" })
             }
-        } else if (data.val === "negatif"){
+        } else if (data.val === "negatif") {
             const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
-            if (!ajoutswipe) return res.json({status : "error"})
-            return res.json({status :"ok"})
+            if (!ajoutswipe) return res.json({ status: "error" })
+            return res.json({ status: "ok" })
         }
-       
+
 
     } catch (err) {
-        return res.json({status : "error"})
+        return res.json({ status: "error" })
     }
 
 }
 
 
 module.exports.matchs = async(req, res) => {
-//    console.log(req.query.currentuser)
-   const val = req.query.currentuser;
-   const key1 = "user1";
-   const key2 = "user2";
-   let tab = []
-try {      
+    //    console.log(req.query.currentuser)
+    const val = req.query.currentuser;
+    const { searchString, order } = req.query
+
+    const sortOrder = parseInt(order, 10) || 1;
+
+    const key1 = "user1";
+    const key2 = "user2";
+    let tab = []
+    try {
         const admin = await dbo.collection('Matchs').find({
             $or: [{
                 [key1]: val
             }, {
                 [key2]: val
-            }] 
-        }).toArray();
-       if(!admin){
-        return res.json({status : "error"})
-       } else{
-        for (var i = 0; i < admin.length; i++) {
-            if (admin[i].user1 === val) {
-                const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user2) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-        tab.push(info)
-            } else if (admin[i].user2 === val){
-                const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user1) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                tab.push(info)
+            }]
+        }).sort({ createdAt: sortOrder }).toArray();
+
+        if (!admin) {
+            return res.json({ status: "error" })
+        } else {
+            for (var i = 0; i < admin.length; i++) {
+                if (admin[i].user1 === val) {
+                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user2) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                    tab.push(info)
+                } else if (admin[i].user2 === val) {
+                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user1) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                    tab.push(info)
+                }
             }
-       }
-     
-       res.json({status :"ok", match : tab})
-    }
+
+            //  console.log(tab)
+            if (searchString) {
+                tab = tab.filter(conversation => {
+                    var fullName = conversation.name + ' ' + conversation.firstname;
+
+                    return fullName.toLowerCase().includes(searchString.toLowerCase());
+                });
+            }
+
+
+            res.json({ status: "ok", match: tab })
+        }
     } catch (err) {
-        return res.json({status : "error"})
+        return res.json({ status: "error" })
     }
 
 }
