@@ -25,8 +25,7 @@ const Home = () => {
   }, []);
 
   return (
-   
-      <div className="home-page">
+    <div className="home-page">
       <header>
         <i class="fas fa-hand-holding-heart"></i>
         <button className="btn" onClick={() => navigate("/login")}>
@@ -94,9 +93,10 @@ const Home = () => {
               <i className="fas fa-user-alt"></i>
               <h2>Créer un profil</h2>
               <p>
-                Bienvenue sur notre application de rencontre, un endroit où vous
-                pouvez rencontrer de nouvelles personnes intéressantes,
-                discuter.
+                Plongez dans la création de votre profil sur notre plateforme,
+                un espace où vous pouvez exprimer votre personnalité unique,
+                partager vos intérêts et attirer des personnes qui vous
+                ressemblent
               </p>
             </div>
           </div>
@@ -105,9 +105,11 @@ const Home = () => {
               <i className="fas fa-heart"></i>
               <h2>Trouve un match</h2>
               <p>
-                Bienvenue sur notre application de rencontre, un endroit où vous
-                pouvez rencontrer de nouvelles personnes intéressantes,
-                discuter.
+                Découvrez votre partenaire idéal ici, un lieu où vous pouvez
+                connecter avec des individus captivants et peut-être rencontrer
+                quelqu'un qui vous correspond parfaitement.
+                <br></br>
+                <br></br>
               </p>
             </div>
           </div>
@@ -116,9 +118,10 @@ const Home = () => {
               <i className="fab fa-facebook-messenger"></i>
               <h2>Échange</h2>
               <p>
-                Bienvenue sur notre application de rencontre, un endroit où vous
-                pouvez rencontrer de nouvelles personnes intéressantes,
-                discuter.
+                Interagissez avec ceux qui piquent votre curiosité, explorez
+                leur univers et apprenez-en davantage sur eux grâce à notre
+                interface conviviale! <br></br>
+                <br></br> <br></br>
               </p>
             </div>
           </div>
@@ -248,9 +251,6 @@ const Home = () => {
         </div>
       </footer>
     </div>
-
-   
-   
   );
 };
 
