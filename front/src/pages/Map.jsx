@@ -272,6 +272,13 @@ function MapWithLoader({ user, isDark }) {
                         });
 
                         window.google.maps.event.addListener(
+                          map,
+                          "click",
+                          function () {
+                            infoWindow.close();
+                          });
+
+                        window.google.maps.event.addListener(
                           marker,
                           "click",
                           function () {
