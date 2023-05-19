@@ -108,7 +108,10 @@ const Profile = ({ user, locate }) => {
             {locate === "/match" ? (
               <div className="btn-cont">
                 <button>Discuter</button>
-                <button onClick={() => setShowPop(!showpop)}>Date !</button>
+                <button onClick={() => setShowPop(!showpop)}>
+                  {" "}
+                  {!showpop ? "Date !" : "Annuler"}
+                </button>
               </div>
             ) : (
               <></>

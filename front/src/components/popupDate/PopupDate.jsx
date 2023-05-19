@@ -2,68 +2,70 @@ import axios from "axios";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {createDate} from "../../utils/APIRoutes";
+import { createDate } from "../../utils/APIRoutes";
 import "./popup.css";
 
+const PopupDate = ({ user, setLocate }) => {
+  const [date, setDate] = useState({
+    premier: user._id,
+    second: "",
+    date: "",
+    localisation: "",
+    activite: "",
+    createdAt: undefined,
+  });
 
-const PopupDate = ({user,setLocate})=>{
-const [date, setDate] = useState({
-    premier:user._id,
-    second :"",
-    date : "",
-    localisation:"",
-    activite:"",
-    createdAt:undefined
-})
-
-    
-const ajoutDate = async (event)=>{
+  const ajoutDate = async (event) => {
     event.preventDefault();
-    setDate({...date, createdAt:new Date()})
-    console.log(date)
+    setDate({ ...date, createdAt: new Date() });
+    console.log(date);
     try {
-        const response = await axios.post(createDate,{
-            date,
-        })
-        
+      const response = await axios.post(createDate, {
+        date,
+      });
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  };
 
-    return(
-       <form action="" onSubmit={ajoutDate}>
+  return (
+    <form action="" onSubmit={ajoutDate} id="popupform">
+      <div className="fields">
+        {" "}
         <label>date et heure</label>
-        <input type="datetime-local"
-        name="date"
-        value={date.date}
-        onChange={(e) => setDate({...date, date:e.target.value})}
-        required="required"
+        <input
+          type="datetime-local"
+          name="date"
+          value={date.date}
+          onChange={(e) => setDate({ ...date, date: e.target.value })}
+          required="required"
         />
-
+      </div>
+      <div className="fields">
         <label>Lieux</label>
-        <input type="text" 
-        name="localisation"
-        value={date.localisation}
-        onChange={(e)=> setDate({...date, localisation: e.target.value})}
-        required="required"
+        <input
+          type="text"
+          name="localisation"
+          value={date.localisation}
+          onChange={(e) => setDate({ ...date, localisation: e.target.value })}
+          required="required"
         />
-
+      </div>
+      <div className="fields">
         <label>Activité du date</label>
-        <input type="text"
-         name="activite"
-         value={date.activite}
-         onChange={(e)=> setDate({...date, activite: e.target.value})}
-         required="required"
+        <input
+          type="text"
+          name="activite"
+          value={date.activite}
+          onChange={(e) => setDate({ ...date, activite: e.target.value })}
+          required="required"
         />
-       
-
-       <button className="" type="submit">
-          Créer le rendez-vous →
-        </button>
-       </form>
-    )
-}
-
+      </div>
+      <button className="" type="submit">
+        Créer le rendez-vous →
+      </button>
+    </form>
+  );
+};
 
 export default PopupDate;
