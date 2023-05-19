@@ -103,6 +103,14 @@ const Profile = ({ user, locate }) => {
       console.log(error);
     }
   };
+
+  const handleBack = () => {
+    if (locate === "/match") {
+      navigate("/matchs");
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -118,7 +126,7 @@ const Profile = ({ user, locate }) => {
             <></>
           )}
           <div className="inputs-container">
-            <button onClick={() => navigate("/")}>Retour</button>
+            <button onClick={() => handleBack()}>Retour</button>
             {locate === "/match" ? (
               <div className="btn-cont">
                 <button
