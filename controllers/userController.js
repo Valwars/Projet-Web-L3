@@ -700,11 +700,14 @@ module.exports.matchs = async(req, res) => {
 
 module.exports.createDate = async(req, res) => {
     console.log(req.body.date);
-    // try {
+    try {
+        const admin = await dbo.collection("Dates").insertOne(req.body.date)
 
-    // } catch (error) {
-    //     console.log(error)
-    // }
+        if(!admin) return res.json({status : "error"})
+        res.json({status :"ok"})
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 module.exports.createConv = async(req, res) => {

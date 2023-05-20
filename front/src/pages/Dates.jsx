@@ -20,7 +20,7 @@ const Dates = ({ user, locate }) => {
   const fetchData = async () => {
     setLeuser(user);
     console.log(leuser._id);
-    var unid = leuser._id;
+    
     try {
       const response = await axios.get(datesRoute, {
         params: {
