@@ -264,7 +264,8 @@ module.exports.dates = async(req, res, next) => {
                         name: info.name,
                         firstname: info.firstname,
                         localisation: admin[i].localisation,
-                        date: admin[i].date
+                        date: admin[i].date,
+                        activite: admin[i].activite
                     })
                 } else if (admin[i].second === unid) {
                     // Exécuter la requête correspondante à la clé 2
@@ -277,7 +278,8 @@ module.exports.dates = async(req, res, next) => {
                         name: info.name,
                         firstname: info.firstname,
                         localisation: admin[i].localisation,
-                        date: admin[i].date
+                        date: admin[i].date,
+                        activite: admin[i].activite
                     })
                 }
             }
