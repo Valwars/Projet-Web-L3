@@ -225,7 +225,7 @@ module.exports.dates = async (req, res, next) => {
             for (var i = 0; i < admin.length; i++) {
                 if (admin[i].premier === unid) {
                     // Exécuter la requête correspondante à la clé 1
-                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
+                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1} })
                     //   console.log("key1")
                     //   console.log(admin[i].premier)
                     //   console.log(key1)
@@ -236,7 +236,8 @@ module.exports.dates = async (req, res, next) => {
                         name: info.name,
                         firstname: info.firstname,
                         localisation: admin[i].localisation,
-                        date: admin[i].date
+                        date: admin[i].date,
+                        activite: admin[i].activite
                     })
                 } else if (admin[i].second === unid) {
                     // Exécuter la requête correspondante à la clé 2
@@ -249,7 +250,8 @@ module.exports.dates = async (req, res, next) => {
                         name: info.name,
                         firstname: info.firstname,
                         localisation: admin[i].localisation,
-                        date: admin[i].date
+                        date: admin[i].date,
+                        activite: admin[i].activite
                     })
                 }
             }

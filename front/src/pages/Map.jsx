@@ -274,6 +274,8 @@ function MapWithLoader({ user, isDark }) {
                             "</h2><p>" +
                             date.localisation +
                             "</p><p>" +
+                            date.activite +
+                            "</p><p>" +
                             formatDate(date.date) +
                             "</p></div></div>",
                         };
