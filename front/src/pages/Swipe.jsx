@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getImage, userSwipe,swipe } from "../utils/APIRoutes";
+import { getImage, userSwipe, swipe } from "../utils/APIRoutes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader_transition from "../components/Loading";
@@ -37,6 +37,7 @@ const Swipe = ({ user, setLocate }) => {
       const response = await axios.get(userSwipe, {
         params: {
           currentIndex: nbSwipes,
+          userId: user._id,
         },
       });
       console.log(response.data);
@@ -47,42 +48,36 @@ const Swipe = ({ user, setLocate }) => {
       console.error(error);
     }
   };
-  const swp = async(side) => {
+  const swp = async (side) => {
     setCurrentIndex((prevIndex) => prevIndex + 2);
-      console.log(currentIndex);
-      setTransition(side);
-      setTimeout(() => {
-        setSwip(swip.slice(0, -1));
-        setTransition("");
-        setNbSwipes(nbSwipes + 1);
-      }, 500);
-    if(side === "swipe_right"){
+    console.log(currentIndex);
+    setTransition(side);
+    setTimeout(() => {
+      setSwip(swip.slice(0, -1));
+      setTransition("");
+      setNbSwipes(nbSwipes + 1);
+    }, 500);
+    if (side === "swipe_right") {
       const value = {
-        val : "positif",
-        from : user._id,
-        to : topCard._id,
-        createdAt : new Date()
-      }
-      const response = await axios.post(swipe,{
+        val: "positif",
+        from: user._id,
+        to: topCard._id,
+        createdAt: new Date(),
+      };
+      const response = await axios.post(swipe, {
         value,
-      })
-     
-  
-    }else if (side === "swipe_left"){
+      });
+    } else if (side === "swipe_left") {
       const value = {
-        val : "negatif",
-        from :user._id,
-        to : topCard._id,
-        createdAt : new Date()
-      }
-      const response = await axios.post(swipe,{
+        val: "negatif",
+        from: user._id,
+        to: topCard._id,
+        createdAt: new Date(),
+      };
+      const response = await axios.post(swipe, {
         value,
-      })
-    
+      });
     }
-
-    
- 
   };
 
   const formatDistance = (distanceInKm) => {

@@ -3,6 +3,14 @@ const dbo = client.db('Sparkly');
 const { ObjectId } = require('mongodb');
 const path = require("path")
 const fs = require('fs');
+const NodeGeocoder = require('node-geocoder');
+
+const options = {
+    provider: 'google',
+    apiKey: 'AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs', // Remplacez par votre clé API Google
+    formatter: null
+};
+
 
 module.exports.login = async(req, res, next) => {
 
@@ -63,24 +71,76 @@ module.exports.swipe = async(req, res, next) => {
     console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
-        // var startIndex = 0;
+
+    const userId = req.query.userId; // Passez userId dans la requête
     try {
-        // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
+        // Dans swipe ne charger que : pdp, nom, prénom, localisation, description, interests.
 
-        if (startIndex == 0) {
-            const resultat = await dbo.collection('Admin').find({}, { projection: { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(20).toArray();
+        const projection = { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1, interests: 1 }; // Add interests here
+        const limit = startIndex == 0 ? 20 : 10;
+        const user = await dbo.collection('Admin').findOne({ _id: new ObjectId(userId) }); // Obtenez l'utilisateur actuel pour comparer les intérêts
 
-            res.send(resultat);
-        } else {
-            const resultat = await dbo.collection('Admin').find({}, { projection: { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1 } }).skip(startIndex).limit(10).toArray();
+        // Trouver les utilisateurs que l'utilisateur actuel n'a pas encore swipés
+        const resultat = await dbo.collection('Admin').aggregate([{
+                $match: {
+                    _id: { $ne: new ObjectId(userId) },
+                    name: { $ne: "" }
+                }
+            }, // Exclure l'utilisateur lui-même et ceux avec un nom vide
+            {
+                $lookup: {
+                    from: "swipes",
+                    let: { userId: "$_id" },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$from", new ObjectId(userId)] },
+                                    { $eq: ["$to", "$$userId"] }
+                                ]
+                            }
+                        }
+                    }],
+                    as: "swipeData"
+                }
+            }, // Recherchez les swipes de l'utilisateur
+            {
+                $match: { "swipeData": { $eq: [] } }
+            }, // Excluez les utilisateurs qui ont été swipés
+            {
+                $project: projection
+            }, // Réappliquez la projection
+            {
+                $addFields: {
 
-            res.send(resultat);
-        }
+                    ageDifference: {
+                        $abs: { $subtract: [{ $toInt: "$age" }, { $toInt: user.age }] }
+                    },
+                    commonInterests: {
+                        $size: {
+                            $setIntersection: ["$interests", user.interests]
+                        }
+                    }
+                }
+            }, // Calculez le nombre d'intérêts communs et la différence d'âge
+            {
+                $sort: { ageDifference: -1, commonInterests: 1 }
+            }, // Trier par intérêts communs et différence d'âge
+            {
+                $skip: startIndex
+            }, // Appliquez la pagination
+            {
+                $limit: limit
+            } // Appliquez la limite
+        ]).toArray();
 
+
+        res.send(resultat);
 
     } catch (error) {
         next(error);;
     }
+
 
 };
 
@@ -390,7 +450,22 @@ module.exports.fillForm = (req, res) => {
             console.log(req.files.pdp)
             if (req.files.pdp) {
                 req.body.pdp = "/" + req.files.pdp[0].filename;
+
             }
+
+            const geocoder = NodeGeocoder(options);
+
+            // Utilisez geocoder pour convertir une adresse en coordonnées
+            geocoder.geocode(req.body.localisation)
+                .then((res) => {
+                    req.body.locationPoint = res
+                    console.log(res);
+                })
+                .catch((err) => {
+                    req.body.locationPoint = null
+                    console.log(err);
+                });
+
             const update = { $set: req.body };
 
             const options = { returnOriginal: false };
@@ -598,7 +673,7 @@ module.exports.addswipe = async(req, res) => {
                 console.log(test)
                 if ((test.from == data.to) && (test.val === "positif")) {
                     const doc = {
-                        user1: new ObjectId( data.from),
+                        user1: new ObjectId(data.from),
                         user2: new Object(data.to)
                     }
                     const doc2 = {
@@ -628,7 +703,7 @@ module.exports.addswipe = async(req, res) => {
         } else if (data.val === "negatif") {
             const test = {
                 val: "positif",
-                from:new ObjectId( data.from),
+                from: new ObjectId(data.from),
                 to: new ObjectId(data.to)
             }
             const test2 = {
@@ -668,7 +743,7 @@ module.exports.matchs = async(req, res) => {
     try {
         const admin = await dbo.collection('Matchs').find({
             $or: [{
-                [key1]:new ObjectId(val)
+                [key1]: new ObjectId(val)
             }, {
                 [key2]: new ObjectId(val)
             }]
