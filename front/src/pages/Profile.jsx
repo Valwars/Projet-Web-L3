@@ -152,7 +152,7 @@ const Profile = ({ user, locate }) => {
             <div className="profil-information">
               <h2>{profile.age + " ans - " + distance}</h2>
               <span>
-                <h2>{user.orientation}</h2>
+                <h2>{profile.orientation}</h2>
               </span>
             </div>
             <p>{profile.description}</p>
