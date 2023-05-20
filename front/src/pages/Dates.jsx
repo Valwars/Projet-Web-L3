@@ -20,7 +20,7 @@ const Dates = ({ user, locate }) => {
   const fetchData = async () => {
     setLeuser(user);
     console.log(leuser._id);
-    
+
     try {
       const response = await axios.get(datesRoute, {
         params: {
@@ -44,6 +44,30 @@ const Dates = ({ user, locate }) => {
       .getElementsByClassName("filter-order-active")[0]
       .classList.remove("filter-order-active");
     e.target.classList.add("filter-order-active");
+  };
+
+  const formatDate = (originalDate) => {
+    // Conversion de la date en objet Date
+    let date = new Date(originalDate);
+
+    // Récupération des parties de la date
+    let day = date.getDate();
+    let month = date.getMonth() + 1; // Les mois sont de 0 (janvier) à 11 (décembre)
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minutes = date.getMinutes();
+
+    // Ajout d'un zéro au début si nécessaire
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+    hour = hour < 10 ? "0" + hour : hour;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+
+    // Construction de la nouvelle chaine de caractères
+    let formattedDate =
+      hour + "h" + minutes + " - " + day + "/" + month + "/" + year;
+
+    return formattedDate;
   };
   return (
     <div className="app-page">
@@ -102,7 +126,7 @@ const Dates = ({ user, locate }) => {
                     <div>
                       <i class="fas fa-clock"></i>
 
-                      <p>{date.date}</p>
+                      <p>{formatDate(date.date)}</p>
                     </div>
                     <div>
                       <i class="fas fa-map-marker-alt"></i>

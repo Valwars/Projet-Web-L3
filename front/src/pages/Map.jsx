@@ -173,6 +173,30 @@ function MapWithLoader({ user, isDark }) {
     });
   }, []);
 
+  const formatDate = (originalDate) => {
+    // Conversion de la date en objet Date
+    let date = new Date(originalDate);
+
+    // Récupération des parties de la date
+    let day = date.getDate();
+    let month = date.getMonth() + 1; // Les mois sont de 0 (janvier) à 11 (décembre)
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minutes = date.getMinutes();
+
+    // Ajout d'un zéro au début si nécessaire
+    day = day < 10 ? "0" + day : day;
+    month = month < 10 ? "0" + month : month;
+    hour = hour < 10 ? "0" + hour : hour;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+
+    // Construction de la nouvelle chaine de caractères
+    let formattedDate =
+      hour + "h" + minutes + " - " + day + "/" + month + "/" + year;
+
+    return formattedDate;
+  };
+
   const fetch_data = async () => {
     const response = await axios.get(
       "https://maps.googleapis.com/maps/api/geocode/json",
@@ -250,7 +274,7 @@ function MapWithLoader({ user, isDark }) {
                             "</h2><p>" +
                             date.localisation +
                             "</p><p>" +
-                            date.date +
+                            formatDate(date.date) +
                             "</p></div></div>",
                         };
 
@@ -277,7 +301,8 @@ function MapWithLoader({ user, isDark }) {
                           "click",
                           function () {
                             infoWindow.close();
-                          });
+                          }
+                        );
 
                         window.google.maps.event.addListener(
                           marker,
