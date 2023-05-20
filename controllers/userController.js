@@ -7,7 +7,7 @@ const NodeGeocoder = require('node-geocoder');
 
 
 
-module.exports.login = async (req, res, next) => {
+module.exports.login = async(req, res, next) => {
 
     console.log("LOGIN")
 
@@ -31,7 +31,7 @@ module.exports.login = async (req, res, next) => {
 
 
 
-module.exports.getUser = async (req, res) => {
+module.exports.getUser = async(req, res) => {
     try {
         console.log("USER")
 
@@ -48,7 +48,7 @@ module.exports.getUser = async (req, res) => {
     }
 }
 
-module.exports.register = async (req, res, next) => {
+module.exports.register = async(req, res, next) => {
     const nouveau = req.body.nouveau;
     try {
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
@@ -62,29 +62,62 @@ module.exports.register = async (req, res, next) => {
 };
 
 
-module.exports.swipe = async (req, res, next) => {
+module.exports.swipe = async(req, res, next) => {
     console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
-    console.log(req.query.currentIndex)
-
     const userId = req.query.userId; // Passez userId dans la requête
+    console.log(req.query.currentIndex)
     try {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description, interests.
 
-        const projection = { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1, interests: 1 }; // Add interests here
+        const projection = { _id: 1, pdp: 1, name: 1, firstname: 1, age: 1, description: 1, localisation: 1, interests: 1 };
         const limit = startIndex == 0 ? 20 : 10;
         const user = await dbo.collection('Admin').findOne({ _id: new ObjectId(userId) }); // Obtenez l'utilisateur actuel pour comparer les intérêts
 
+
+        let orientationFilter = {};
+        if (user.orientation === "Hétérosexuel") {
+            orientationFilter = {
+                orientation: "Hétérosexuel",
+                sexe: user.sexe === "homme" ? "femme" : "homme"
+            };
+        } else if (user.orientation === "Homosexuel") {
+            orientationFilter = {
+                orientation: "Hétérosexuel",
+                sexe: user.sexe
+            };
+        } else if (user.orientation === "Bisexuel") {
+            orientationFilter = {
+                $or: [
+                    { orientation: "Hétérosexuel", sexe: user.sexe === "homme" ? "femme" : "homme" },
+                    { orientation: "Homosexuel", sexe: user.sexe }
+                ]
+            };
+        }
+
+        const distanceInKm = 1000; // Spécifiez la distance maximale en kilomètres
+
+
         // Trouver les utilisateurs que l'utilisateur actuel n'a pas encore swipés
         const resultat = await dbo.collection('Admin').aggregate([{
-                $match: {
-                    _id: { $ne: new ObjectId(userId) },
-                    name: { $ne: "" }
+                $geoNear: {
+                    near: {
+                        type: "Point",
+                        coordinates: user.locationPoint.coordinates
+                    },
+                    distanceField: "distance",
+                    spherical: true,
+                    maxDistance: distanceInKm * 1000, // Convertir la distance en mètres
+                    query: {
+                        _id: { $ne: new ObjectId(userId) },
+                        name: { $ne: "" },
+                        ...orientationFilter
+                    }
                 }
-            }, // Exclure l'utilisateur lui-même et ceux avec un nom vide
+            },
             {
                 $lookup: {
-                    from: "swipes",
+                    from: "Swipe",
                     let: { userId: "$_id" },
                     pipeline: [{
                         $match: {
@@ -107,19 +140,18 @@ module.exports.swipe = async (req, res, next) => {
             }, // Réappliquez la projection
             {
                 $addFields: {
-
-                    ageDifference: {
-                        $abs: { $subtract: [{ $toInt: "$age" }, { $toInt: user.age }] }
-                    },
                     commonInterests: {
                         $size: {
                             $setIntersection: ["$interests", user.interests]
                         }
+                    },
+                    ageDifference: {
+                        $abs: { $subtract: [{ $toInt: "$age" }, { $toInt: user.age }] }
                     }
                 }
-            }, // Calculez le nombre d'intérêts communs et la différence d'âge
+            },
             {
-                $sort: { ageDifference: -1, commonInterests: 1 }
+                $sort: { distance: -1, commonInterests: -1, ageDifference: 1 }
             }, // Trier par intérêts communs et différence d'âge
             {
                 $skip: startIndex
@@ -129,19 +161,15 @@ module.exports.swipe = async (req, res, next) => {
             } // Appliquez la limite
         ]).toArray();
 
-
         res.send(resultat);
 
     } catch (error) {
         next(error);;
     }
 
-
 };
 
-
-
-module.exports.getconv = async (req, res) => {
+module.exports.getconv = async(req, res) => {
 
     try {
         const { userid, searchString, order } = req.query
@@ -195,7 +223,7 @@ module.exports.getconv = async (req, res) => {
 }
 
 
-module.exports.dates = async (req, res, next) => {
+module.exports.dates = async(req, res, next) => {
 
     const { unid, searchString, order } = req.query
 
@@ -220,16 +248,16 @@ module.exports.dates = async (req, res, next) => {
         if (!admin) {
             return res.json({ status: "error" });
         } else
-            // console.log("admin : ")
-            // console.log(admin)
+        // console.log("admin : ")
+        // console.log(admin)
             for (var i = 0; i < admin.length; i++) {
                 if (admin[i].premier === unid) {
                     // Exécuter la requête correspondante à la clé 1
                     const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                    //   console.log("key1")
-                    //   console.log(admin[i].premier)
-                    //   console.log(key1)
-                    //   console.log(info)
+                        //   console.log("key1")
+                        //   console.log(admin[i].premier)
+                        //   console.log(key1)
+                        //   console.log(info)
                     tab.push({
                         _id: info._id,
                         pdp: info.pdp,
@@ -241,8 +269,8 @@ module.exports.dates = async (req, res, next) => {
                 } else if (admin[i].second === unid) {
                     // Exécuter la requête correspondante à la clé 2
                     const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                    // console.log("key2")
-                    // console.log(info)
+                        // console.log("key2")
+                        // console.log(info)
                     tab.push({
                         _id: info._id,
                         pdp: info.pdp,
@@ -253,8 +281,8 @@ module.exports.dates = async (req, res, next) => {
                     })
                 }
             }
-        // console.log("tab :")
-        //  console.log(tab)
+            // console.log("tab :")
+            //  console.log(tab)
         if (searchString) {
             tab = tab.filter(conversation => {
                 var fullName = conversation.name + ' ' + conversation.firstname;
@@ -273,7 +301,7 @@ module.exports.dates = async (req, res, next) => {
 
 
 
-module.exports.profil = async (req, res, next) => {
+module.exports.profil = async(req, res, next) => {
 
     console.log(req.query.myString);
     try {
@@ -291,7 +319,7 @@ module.exports.profil = async (req, res, next) => {
 }
 
 
-module.exports.getMessages = async (req, res, next) => {
+module.exports.getMessages = async(req, res, next) => {
     try {
         const { from, convId } = req.query;
 
@@ -320,7 +348,7 @@ module.exports.getMessages = async (req, res, next) => {
     }
 };
 
-module.exports.addMessage = async (req, res, next) => {
+module.exports.addMessage = async(req, res, next) => {
     try {
 
         const { from, message, convId } = req.body;
@@ -340,7 +368,7 @@ module.exports.addMessage = async (req, res, next) => {
 }
 
 
-module.exports.filluser = async (req, res, next) => {
+module.exports.filluser = async(req, res, next) => {
     console.log("filluser")
     console.log(req.body.values);
     // try {
@@ -354,10 +382,10 @@ module.exports.filluser = async (req, res, next) => {
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, './static/images');
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
     },
 });
@@ -378,7 +406,7 @@ const upload = multer({
 
 const upload = multer({
     storage: storage,
-    fileFilter: function (req, file, cb) {
+    fileFilter: function(req, file, cb) {
         const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
@@ -395,7 +423,7 @@ const upload = multer({
 
 const upload2 = multer({
     storage: storage,
-    fileFilter: function (req, file, cb) {
+    fileFilter: function(req, file, cb) {
         const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
@@ -410,7 +438,7 @@ const upload2 = multer({
 }).array('files', 10); // Specify the maximum number of files allowed (e.g., 5)
 
 module.exports.fillForm = (req, res) => {
-    upload(req, res, async (error) => {
+    upload(req, res, async(error) => {
         try {
             if (error instanceof multer.MulterError) {
                 console.log(error)
@@ -458,18 +486,21 @@ module.exports.fillForm = (req, res) => {
             const geocoder = NodeGeocoder(optns);
 
             // Utilisez geocoder pour convertir une adresse en coordonnées
-            geocoder.geocode(req.body.localisation)
+            await geocoder.geocode(req.body.localisation)
                 .then((res) => {
                     const coordinates = [res[0].longitude, res[0].latitude];
                     const location = {
                         type: "Point",
                         coordinates: coordinates
                     };
+
+                    console.log(location)
                     req.body.locationPoint = location
-                    console.log(res);
+
+                    console.log(req.body)
                 })
                 .catch((err) => {
-                    req.body.locationPoint = null
+                    return res.send({ status: 'error' });
                     console.log(err);
                 });
 
@@ -489,9 +520,9 @@ module.exports.fillForm = (req, res) => {
     });
 };
 
-module.exports.modifuser = async (req, res) => {
+module.exports.modifuser = async(req, res) => {
     try {
-        upload(req, res, async function (err) {
+        upload(req, res, async function(err) {
             console.log(err)
 
             if (err instanceof multer.MulterError) {
@@ -637,7 +668,7 @@ module.exports.modifuser = async (req, res) => {
 
 
             const update = {
-                $set: { ...req.body },
+                $set: {...req.body },
 
             };
             const options = { returnOriginal: false };
@@ -664,7 +695,7 @@ module.exports.modifuser = async (req, res) => {
 }
 
 
-module.exports.addswipe = async (req, res) => {
+module.exports.addswipe = async(req, res) => {
     try {
         const data = req.body.value;
 
@@ -727,7 +758,7 @@ module.exports.addswipe = async (req, res) => {
 
                 }
             }
-    
+
         } else {
             
             const ajoutswipe = await dbo.collection('Swipe').insertOne({
@@ -748,7 +779,7 @@ module.exports.addswipe = async (req, res) => {
 }
 
 
-module.exports.matchs = async (req, res) => {
+module.exports.matchs = async(req, res) => {
     //    console.log(req.query.currentuser)
     const val = req.query.currentuser;
     const { searchString, order } = req.query
@@ -799,7 +830,7 @@ module.exports.matchs = async (req, res) => {
 }
 
 
-module.exports.createDate = async (req, res) => {
+module.exports.createDate = async(req, res) => {
     console.log(req.body.date);
     try {
         const admin = await dbo.collection("Dates").insertOne(req.body.date)
@@ -811,7 +842,7 @@ module.exports.createDate = async (req, res) => {
     }
 }
 
-module.exports.createConv = async (req, res) => {
+module.exports.createConv = async(req, res) => {
     console.log("NEW CONV OMG")
 
 
