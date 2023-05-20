@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb');
 const path = require("path")
 const fs = require('fs');
 
-module.exports.login = async(req, res, next) => {
+module.exports.login = async (req, res, next) => {
 
     console.log("LOGIN")
 
@@ -26,7 +26,7 @@ module.exports.login = async(req, res, next) => {
     }
 };
 
-module.exports.addswipe = async(req, res) => {
+module.exports.addswipe = async (req, res) => {
     try {
         const data = req.body.value;
         console.log(data.val === "positif")
@@ -60,7 +60,7 @@ module.exports.addswipe = async(req, res) => {
 
 }
 
-module.exports.getUser = async(req, res) => {
+module.exports.getUser = async (req, res) => {
     try {
         console.log("USER")
 
@@ -77,7 +77,7 @@ module.exports.getUser = async(req, res) => {
     }
 }
 
-module.exports.register = async(req, res, next) => {
+module.exports.register = async (req, res, next) => {
     const nouveau = req.body.nouveau;
     try {
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
@@ -91,11 +91,11 @@ module.exports.register = async(req, res, next) => {
 };
 
 
-module.exports.swipe = async(req, res, next) => {
+module.exports.swipe = async (req, res, next) => {
     console.log("CURRENT INDEX")
     const startIndex = parseInt(req.query.currentIndex);
     console.log(req.query.currentIndex)
-        // var startIndex = 0;
+    // var startIndex = 0;
     try {
         // Dans swipe ne charger que : pdp, nom, prénom, localisation, description.
 
@@ -118,7 +118,7 @@ module.exports.swipe = async(req, res, next) => {
 
 
 
-module.exports.getconv = async(req, res) => {
+module.exports.getconv = async (req, res) => {
 
     try {
         const { userid, searchString, order } = req.query
@@ -172,7 +172,7 @@ module.exports.getconv = async(req, res) => {
 }
 
 
-module.exports.dates = async(req, res, next) => {
+module.exports.dates = async (req, res, next) => {
 
     const { unid, searchString, order } = req.query
 
@@ -197,16 +197,16 @@ module.exports.dates = async(req, res, next) => {
         if (!admin) {
             return res.json({ status: "error" });
         } else
-        // console.log("admin : ")
-        // console.log(admin)
+            // console.log("admin : ")
+            // console.log(admin)
             for (var i = 0; i < admin.length; i++) {
                 if (admin[i].premier === unid) {
                     // Exécuter la requête correspondante à la clé 1
                     const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                        //   console.log("key1")
-                        //   console.log(admin[i].premier)
-                        //   console.log(key1)
-                        //   console.log(info)
+                    //   console.log("key1")
+                    //   console.log(admin[i].premier)
+                    //   console.log(key1)
+                    //   console.log(info)
                     tab.push({
                         _id: info._id,
                         pdp: info.pdp,
@@ -218,8 +218,8 @@ module.exports.dates = async(req, res, next) => {
                 } else if (admin[i].second === unid) {
                     // Exécuter la requête correspondante à la clé 2
                     const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                        // console.log("key2")
-                        // console.log(info)
+                    // console.log("key2")
+                    // console.log(info)
                     tab.push({
                         _id: info._id,
                         pdp: info.pdp,
@@ -230,8 +230,8 @@ module.exports.dates = async(req, res, next) => {
                     })
                 }
             }
-            // console.log("tab :")
-            //  console.log(tab)
+        // console.log("tab :")
+        //  console.log(tab)
         if (searchString) {
             tab = tab.filter(conversation => {
                 var fullName = conversation.name + ' ' + conversation.firstname;
@@ -250,7 +250,7 @@ module.exports.dates = async(req, res, next) => {
 
 
 
-module.exports.profil = async(req, res, next) => {
+module.exports.profil = async (req, res, next) => {
 
     console.log(req.query.myString);
     try {
@@ -268,7 +268,7 @@ module.exports.profil = async(req, res, next) => {
 }
 
 
-module.exports.getMessages = async(req, res, next) => {
+module.exports.getMessages = async (req, res, next) => {
     try {
         const { from, convId } = req.query;
 
@@ -297,7 +297,7 @@ module.exports.getMessages = async(req, res, next) => {
     }
 };
 
-module.exports.addMessage = async(req, res, next) => {
+module.exports.addMessage = async (req, res, next) => {
     try {
 
         const { from, message, convId } = req.body;
@@ -317,7 +317,7 @@ module.exports.addMessage = async(req, res, next) => {
 }
 
 
-module.exports.filluser = async(req, res, next) => {
+module.exports.filluser = async (req, res, next) => {
     console.log("filluser")
     console.log(req.body.values);
     // try {
@@ -331,10 +331,10 @@ module.exports.filluser = async(req, res, next) => {
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './static/images');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
     },
 });
@@ -355,7 +355,7 @@ const upload = multer({
 
 const upload = multer({
     storage: storage,
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
@@ -369,7 +369,7 @@ const upload = multer({
 
 const upload2 = multer({
     storage: storage,
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         const filetypes = /jpeg|jpg|png|gif|webp|PNG/;
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(path.extname(file.originalname));
@@ -384,7 +384,7 @@ const upload2 = multer({
 }).array('files', 10); // Specify the maximum number of files allowed (e.g., 5)
 
 module.exports.fillForm = (req, res) => {
-    upload2(req, res, async(error) => {
+    upload2(req, res, async (error) => {
         try {
             if (error instanceof multer.MulterError) {
                 console.log(error)
@@ -435,9 +435,9 @@ module.exports.fillForm = (req, res) => {
     });
 };
 
-module.exports.modifuser = async(req, res) => {
+module.exports.modifuser = async (req, res) => {
     try {
-        upload(req, res, async function(err) {
+        upload(req, res, async function (err) {
             console.log(err)
 
             if (err instanceof multer.MulterError) {
@@ -583,7 +583,7 @@ module.exports.modifuser = async(req, res) => {
 
 
             const update = {
-                $set: {...req.body },
+                $set: { ...req.body },
 
             };
             const options = { returnOriginal: false };
@@ -610,10 +610,10 @@ module.exports.modifuser = async(req, res) => {
 }
 
 
-module.exports.addswipe = async(req, res) => {
+module.exports.addswipe = async (req, res) => {
     try {
         const data = req.body.value;
-
+        console.log(data.val)
 
         if (data.val === "positif") {
             const test = await dbo.collection('Swipe').findOne({ to: data.from });
@@ -623,15 +623,34 @@ module.exports.addswipe = async(req, res) => {
                 if (!ajoutswipe) return res.json({ status: "error" })
                 return res.json({ status: "ok" })
             } else if (test) {
+                if (test.from == data.to && test.val === "positif") {
+                    const doc = {
+                        user1: data.from,
+                        user2: data.to                        
+                    }
+                    const doc2 = {
+                        user1: data.to,
+                        user2: data.from                        
+                    }
+                    if (dbo.collection("Matchs").find(doc) || dbo.collection("Matchs").find(doc2)) {
+                        return res.json({ status: "ok" })
+                    } else {
+                        const doc = {
+                            user1: data.from,
+                            user2: data.to,
+                            createdAt                    
+                        }
+                        const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
+                        if (!ajoutmatch) return res.json({ status: "error" })
+                        return res.json({ status: "ok" })
+                    }
 
-                const doc = {
-                    user1: data.from,
-                    user2: data.to,
-                    createdAt: new Date()
+                } else {
+                    const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+                    if (!ajoutswipe) return res.json({ status: "error" })
+                    return res.json({ status: "ok" })
                 }
-                const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
-                if (!ajoutmatch) return res.json({ status: "error" })
-                return res.json({ status: "ok" })
+
             }
         } else if (data.val === "negatif") {
             const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
@@ -647,7 +666,7 @@ module.exports.addswipe = async(req, res) => {
 }
 
 
-module.exports.matchs = async(req, res) => {
+module.exports.matchs = async (req, res) => {
     //    console.log(req.query.currentuser)
     const val = req.query.currentuser;
     const { searchString, order } = req.query
@@ -698,19 +717,19 @@ module.exports.matchs = async(req, res) => {
 }
 
 
-module.exports.createDate = async(req, res) => {
+module.exports.createDate = async (req, res) => {
     console.log(req.body.date);
     try {
         const admin = await dbo.collection("Dates").insertOne(req.body.date)
 
-        if(!admin) return res.json({status : "error"})
-        res.json({status :"ok"})
+        if (!admin) return res.json({ status: "error" })
+        res.json({ status: "ok" })
     } catch (error) {
         console.log(error)
     }
 }
 
-module.exports.createConv = async(req, res) => {
+module.exports.createConv = async (req, res) => {
     console.log("NEW CONV OMG")
 
 
