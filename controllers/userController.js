@@ -708,9 +708,10 @@ module.exports.addswipe = async(req, res, next) => {
         const matchSwipe = await dbo.collection('Swipe').findOne({ to: new ObjectId(from), val: "positif" });
         if (matchSwipe) {
             // Créer un document match dans une autre collection
-            const match = { user1: new ObjectId(data.from), user2: new ObjectId(data.to), createdAt };
+            const match = { user1: new ObjectId(from), user2: new ObjectId(to), createdAt };
 
-            await dbo.collection('Matchs').insertOne(match);
+            const res = await dbo.collection('Matchs').insertOne(match);
+            console.log(res)
         }
 
         res.json({ status: "ok" })
@@ -718,53 +719,86 @@ module.exports.addswipe = async(req, res, next) => {
         next(error);
     }
 };
-module.exports.matchs = async(req, res) => {
+
+module.exports.matchs = async(req, res, next) => {
     //    console.log(req.query.currentuser)
     const val = req.query.currentuser;
     const { searchString, order } = req.query
 
     const sortOrder = parseInt(order, 10) || 1;
-
-    const key1 = "user1";
-    const key2 = "user2";
-    let tab = []
     try {
-        const admin = await dbo.collection('Matchs').find({
-            $or: [{
-                [key1]: new ObjectId(val)
-            }, {
-                [key2]: new ObjectId(val)
-            }]
-        }).sort({ createdAt: sortOrder }).toArray();
-
-        if (!admin) {
-            return res.json({ status: "error" })
-        } else {
-            for (var i = 0; i < admin.length; i++) {
-                if (admin[i].user1 === val) {
-                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user2) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                    tab.push(info)
-                } else if (admin[i].user2 === val) {
-                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].user1) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                    tab.push(info)
+        let matches = await dbo.collection('Matchs').aggregate([{
+                $match: {
+                    $or: [{ user1: new ObjectId(val) }, { user2: new ObjectId(val) }]
                 }
+            },
+            {
+                $lookup: {
+                    from: 'Admin',
+                    let: { user1Id: '$user1', user2Id: '$user2' },
+                    pipeline: [{
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $ne: ['$_id', new ObjectId(val)] },
+                                        {
+                                            $or: [
+                                                { $eq: ['$_id', '$$user1Id'] },
+                                                { $eq: ['$_id', '$$user2Id'] }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                name: 1,
+                                firstname: 1,
+                                pdp: 1,
+                                _id: 1
+                            }
+                        }
+                    ],
+                    as: 'matchesData'
+                }
+            },
+            {
+                $project: {
+                    matchesData: {
+                        $arrayElemAt: ['$matchesData', 0]
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: '$matchesData._id',
+                    name: '$matchesData.name',
+                    firstname: '$matchesData.firstname',
+                    pdp: '$matchesData.pdp'
+                }
+            },
+            {
+                $sort: { name: sortOrder }
             }
-
-            //  console.log(tab)
-            if (searchString) {
-                tab = tab.filter(conversation => {
-                    var fullName = conversation.name + ' ' + conversation.firstname;
-
-                    return fullName.toLowerCase().includes(searchString.toLowerCase());
-                });
-            }
+        ]).toArray();
 
 
-            res.json({ status: "ok", match: tab })
+
+        if (searchString) {
+            matches = matches.filter(conversation => {
+                const fullName = conversation.name + ' ' + conversation.firstname;
+                return fullName.toLowerCase().includes(searchString.toLowerCase());
+            });
         }
-    } catch (err) {
-        return res.json({ status: "error" })
+
+        res.json({ status: 'ok', match: matches });
+    } catch (error) {
+        next(error);
     }
+
+
+
 
 }
 
