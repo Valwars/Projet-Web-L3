@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import $ from "jquery";
-import { getImage, save, userRoute } from "../utils/APIRoutes";
+import { getImage, save, userRoute,getStat } from "../utils/APIRoutes";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -102,6 +101,26 @@ const UserProfile = ({ user, setUser }) => {
     { date: "17/02", count: 2 },
   ]);
 
+  useEffect(()=>{
+    fetch_data();
+  },[]);
+
+  const fetch_data = async ()=>{
+    console.log("fetch")
+    try {
+   console.log("dans le try")
+      const response = await axios.get(getStat,{
+        params : {
+          userid : user._id,
+        },
+      })
+      console.log("post requete ")
+      // console.log(response.data.status)
+
+    } catch (error) {
+      
+    }
+  }
   const data_match = {
     labels: nombre_match.map((item) => item.date),
     datasets: [

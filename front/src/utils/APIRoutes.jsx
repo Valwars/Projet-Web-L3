@@ -17,3 +17,4 @@ export const swipe = `${host}/api/auth/swipe`;
 export const match = `${host}/api/auth/match`;
 export const createDate = `${host}/api/auth/createDate`;
 export const createConv = `${host}/api/auth/createConv`;
+export const getStat = `${host}/api/auth/getstats`;

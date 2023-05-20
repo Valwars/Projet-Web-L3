@@ -864,3 +864,14 @@ module.exports.createConv = async(req, res) => {
     //     console.log(error)
     // }
 }
+
+
+module.exports.getstat = async(req, res) => {
+    console.log(req.query.userid)
+    console.log("bonne requête")
+    // try {
+    //     const swipe = await dbo.collection('Swipe').find({}).toArray();
+    // } catch (error) {
+        
+    // }
+}
