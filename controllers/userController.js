@@ -26,39 +26,7 @@ module.exports.login = async(req, res, next) => {
     }
 };
 
-module.exports.addswipe = async(req, res) => {
-    try {
-        const data = req.body.value;
-        console.log(data.val === "positif")
-        if (data.val === "positif") {
-            const test = await dbo.collection('Swipe').findOne({ "": data.user1, "": data.user2 });
 
-            if (!test) {
-                const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
-                if (!ajoutswipe) return res.json({ status: "error" })
-                return res.json({ status: "ok" })
-            } else {
-                console.log(test)
-                const ajoutmatch = await dbo.collection('Matchs').insertOne({
-                    user1: date.user1,
-                    user2: date.user2,
-                    createdAt: new Date()
-                })
-                if (!ajoutmatch) return res.json({ status: "error" })
-
-            }
-        } else {
-            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
-            if (!ajoutswipe) return res.json({ status: "error" })
-            return res.json({ status: "ok" })
-        }
-
-
-    } catch (err) {
-        return res.json({ status: "error" })
-    }
-
-}
 
 module.exports.getUser = async(req, res) => {
     try {
@@ -630,19 +598,19 @@ module.exports.addswipe = async(req, res) => {
                 console.log(test)
                 if ((test.from == data.to) && (test.val === "positif")) {
                     const doc = {
-                        user1: data.from,
-                        user2: data.to
+                        user1: new ObjectId( data.from),
+                        user2: new Object(data.to)
                     }
                     const doc2 = {
-                        user1: data.to,
-                        user2: data.from
+                        user1: new ObjectId(data.to),
+                        user2: new ObjectId(data.from)
                     }
                     if (dbo.collection("Matchs").find(doc) || dbo.collection("Matchs").find(doc2)) {
                         return res.json({ status: "ok" })
                     } else {
                         const doc = {
-                            user1: data.from,
-                            user2: data.to,
+                            user1: new ObjectId(data.from),
+                            user2: new ObjectId(data.to),
                             createdAt
                         }
                         const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
@@ -660,13 +628,13 @@ module.exports.addswipe = async(req, res) => {
         } else if (data.val === "negatif") {
             const test = {
                 val: "positif",
-                from: data.from,
-                to: data.to
+                from:new ObjectId( data.from),
+                to: new ObjectId(data.to)
             }
             const test2 = {
                 val: "positif",
-                from: data.to,
-                to: data.from,
+                from: new ObjectId(data.to),
+                to: new ObjectId(data.from),
             }
             if (dbo.collection("Swipe").find(test) || dbo.collection("Swipe").find(test2)) {
                 return res.json({ status: "ok" })
@@ -700,9 +668,9 @@ module.exports.matchs = async(req, res) => {
     try {
         const admin = await dbo.collection('Matchs').find({
             $or: [{
-                [key1]: val
+                [key1]:new ObjectId(val)
             }, {
-                [key2]: val
+                [key2]: new ObjectId(val)
             }]
         }).sort({ createdAt: sortOrder }).toArray();
 

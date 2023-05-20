@@ -24,7 +24,7 @@ const Dates = ({ user, locate }) => {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          unid: user._id,
+          unid: (user._id),
           searchString: searsh,
           order: sort,
         },

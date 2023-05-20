@@ -71,7 +71,7 @@ const Swipe = ({ user, setLocate }) => {
     }else if (side === "swipe_left"){
       const value = {
         val : "negatif",
-        from : user._id,
+        from :user._id,
         to : topCard._id,
         createdAt : new Date()
       }
