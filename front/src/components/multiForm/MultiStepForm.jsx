@@ -204,7 +204,7 @@ const Step3 = ({
       <div className="fields">
         <label>Photo de profil </label>
         <label htmlFor="upload-photo" className="custom-file-upload">
-          {values.pdp || "Télécharger la photo"}
+          {values.pdp.name || "Télécharger la photo"}
         </label>
         <input
           id="upload-photo"
@@ -411,7 +411,7 @@ const MultiStepForm = ({ user }) => {
   const handleProfilPic = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile && selectedFile.type.includes("image")) {
-      setValues({ ...values, pdp: selectedFile.name });
+      setValues({ ...values, pdp: selectedFile });
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedProfilePic(reader.result);
@@ -519,11 +519,11 @@ const MultiStepForm = ({ user }) => {
       formData.append("photos", values.photos[i]);
     }
 
-    formData.append("files", selectedProfilPic);
-
     for (let i = 0; i < selectedPics.length; i++) {
-      formData.append("files", selectedPics[i]);
+      formData.append("photos", selectedPics[i]);
     }
+
+    formData.append("pdp", values.pdp);
 
     const result = await axios.post(fillForm, formData, {
       headers: {
