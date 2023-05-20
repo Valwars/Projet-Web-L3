@@ -16,13 +16,13 @@ const PopupDate = ({ user, setLocate }) => {
     createdAt: undefined,
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     var uriCourant = window.location.href;
-    var indiceDepart = uriCourant.lastIndexOf('/')+1; 
-var indiceArrivee = uriCourant.length
-var nomPage = uriCourant.substring(indiceDepart, indiceArrivee);
+    var indiceDepart = uriCourant.lastIndexOf('/') + 1;
+    var indiceArrivee = uriCourant.length
+    var nomPage = uriCourant.substring(indiceDepart, indiceArrivee);
     setDate({ ...date, createdAt: new Date() });
-    setDate({...date, second : nomPage})
+    setDate({ ...date, second: nomPage })
     console.log(nomPage)
   })
 
