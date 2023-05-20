@@ -695,90 +695,29 @@ module.exports.modifuser = async(req, res) => {
 }
 
 
-module.exports.addswipe = async(req, res) => {
+module.exports.addswipe = async(req, res, next) => {
+    const { val, from, to, createdAt } = req.body;
+
+    console.log(req.body)
+
     try {
-        const data = req.body.value;
+        const swipe = { val: val, from: new ObjectId(from), to: new ObjectId(to), createdAt: createdAt };
+        await dbo.collection('Swipe').insertOne(swipe);
 
+        // Vérifier si un document swipe avec "to" égal à "from" existe
+        const matchSwipe = await dbo.collection('Swipe').findOne({ to: new ObjectId(from), val: "positif" });
+        if (matchSwipe) {
+            // Créer un document match dans une autre collection
+            const match = { user1: new ObjectId(data.from), user2: new ObjectId(data.to), createdAt };
 
-        if (data.val === "positif") {
-            const test = await dbo.collection('Swipe').findOne({ to: new ObjectId(data.from) });
-            console.log("positif")
-            if (!test) {
-                console.log("0")
-                const test1 = {
-                    val: "negatif",
-                    from: new ObjectId(data.from),
-                    to: new ObjectId(data.to)
-                }
-                const test2 = {
-                    val: "negatif",
-                    from: new ObjectId(data.to),
-                    to: new ObjectId(data.from),
-                }
-                if ((dbo.collection("Swipe").find(test1)) || (dbo.collection("Swipe").find(test2))) {
-                    // console.log("trouvé")
-                    // console.log(dbo.collection("Swipe").find(test1) || dbo.collection("Swipe").find(test2))
-                    
-                } else {
-                    console.log("2")
-                    const ajoutswipe = await dbo.collection('Swipe').insertOne({
-                        val : req.body.value.val,
-                        from: new ObjectId (req.body.value.from),
-                to: new ObjectId(req.body.value.to),
-                createdAt: req.body.value.createdAt,
-                    });
-                    if (!ajoutswipe) return res.json({ status: "error" })
-                    return res.json({ status: "ok" })
-
-                }
-            } else {
-                console.log("1")
-                if ((test.from == data.to) && (test.val === "positif")) {
-                    const doc = {
-                        user1: new ObjectId(data.from),
-                        user2: new Object(data.to)
-                    }
-                    const doc2 = {
-                        user1: new ObjectId(data.to),
-                        user2: new ObjectId(data.from)
-                    }
-                    if (dbo.collection("Matchs").find(doc) || dbo.collection("Matchs").find(doc2)) {
-                        return res.json({ status: "ok" })
-                    } else {
-                        const doc = {
-                            user1: new ObjectId(data.from),
-                            user2: new ObjectId(data.to),
-                            createdAt
-                        }
-                        const ajoutmatch = await dbo.collection('Matchs').insertOne(doc);
-                        if (!ajoutmatch) return res.json({ status: "error" })
-                        return res.json({ status: "ok" })
-                    }
-
-
-                }
-            }
-
-        } else {
-            
-            const ajoutswipe = await dbo.collection('Swipe').insertOne({
-                val : req.body.value.val,
-                from: new ObjectId (req.body.value.from),
-        to: new ObjectId(req.body.value.to),
-        createdAt: req.body.value.createdAt,
-            });
-            if (!ajoutswipe) return res.json({ status: "error" })
-            return res.json({ status: "ok" })
+            await dbo.collection('Matchs').insertOne(match);
         }
 
-
-    } catch (err) {
-        return res.json({ status: "error" })
+        res.json({ status: "ok" })
+    } catch (error) {
+        next(error);
     }
-
-}
-
-
+};
 module.exports.matchs = async(req, res) => {
     //    console.log(req.query.currentuser)
     const val = req.query.currentuser;
