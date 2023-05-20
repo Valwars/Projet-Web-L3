@@ -860,17 +860,13 @@ module.exports.createConv = async(req, res) => {
         return res.json({ status: "error" });
     }
 
-    // try {
-
-    // } catch (error) {
-    //     console.log(error)
-    // }
+ 
 }
 
 
 module.exports.getstat = async(req, res) => {
-    console.log(req.query.userid)
-    console.log("bonne requête")
+    // console.log(req.query.userid)
+    console.log("bonne requête");
     // try {
     //     const swipe = await dbo.collection('Swipe').find({}).toArray();
     // } catch (error) {

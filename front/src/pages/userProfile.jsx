@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getImage, save, userRoute,getStat } from "../utils/APIRoutes";
+import { getStat,getImage, save, userRoute } from "../utils/APIRoutes";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -29,6 +29,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 const toastOptions = {
   position: "bottom-right",
   autoClose: 6000,
@@ -109,11 +110,9 @@ const UserProfile = ({ user, setUser }) => {
     console.log("fetch")
     try {
    console.log("dans le try")
-      const response = await axios.get(getStat,{
-        params : {
-          userid : user._id,
-        },
-      })
+   const response = await axios.get(getStat, {
+   userId : user._id,
+  });
       console.log("post requete ")
       // console.log(response.data.status)
 
