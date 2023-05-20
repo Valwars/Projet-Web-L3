@@ -460,7 +460,12 @@ module.exports.fillForm = (req, res) => {
             // Utilisez geocoder pour convertir une adresse en coordonnées
             geocoder.geocode(req.body.localisation)
                 .then((res) => {
-                    req.body.locationPoint = res
+                    const coordinates = [res[0].longitude, res[0].latitude];
+                    const location = {
+                        type: "Point",
+                        coordinates: coordinates
+                    };
+                    req.body.locationPoint = location
                     console.log(res);
                 })
                 .catch((err) => {
