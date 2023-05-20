@@ -613,7 +613,7 @@ module.exports.modifuser = async (req, res) => {
 module.exports.addswipe = async (req, res) => {
     try {
         const data = req.body.value;
-        console.log(data.val)
+
 
         if (data.val === "positif") {
             const test = await dbo.collection('Swipe').findOne({ to: data.from });
@@ -623,14 +623,15 @@ module.exports.addswipe = async (req, res) => {
                 if (!ajoutswipe) return res.json({ status: "error" })
                 return res.json({ status: "ok" })
             } else if (test) {
-                if (test.from == data.to && test.val === "positif") {
+                console.log(test)
+                if ((test.from == data.to) && (test.val === "positif")) {
                     const doc = {
                         user1: data.from,
-                        user2: data.to                        
+                        user2: data.to
                     }
                     const doc2 = {
                         user1: data.to,
-                        user2: data.from                        
+                        user2: data.from
                     }
                     if (dbo.collection("Matchs").find(doc) || dbo.collection("Matchs").find(doc2)) {
                         return res.json({ status: "ok" })
@@ -638,7 +639,7 @@ module.exports.addswipe = async (req, res) => {
                         const doc = {
                             user1: data.from,
                             user2: data.to,
-                            createdAt                    
+                            createdAt
                         }
                         const ajoutmatch = await dbo.collection('Matchs').insertOne(doc)
                         if (!ajoutmatch) return res.json({ status: "error" })
@@ -653,9 +654,25 @@ module.exports.addswipe = async (req, res) => {
 
             }
         } else if (data.val === "negatif") {
-            const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
-            if (!ajoutswipe) return res.json({ status: "error" })
-            return res.json({ status: "ok" })
+            const test = {
+                val: "positif",
+                from: data.from,
+                to: data.to
+            }
+            const test2 = {
+                val: "positif",
+                from: data.to,
+                to: data.from,
+            }
+            if (dbo.collection("Swipe").find(test) || dbo.collection("Swipe").find(test2)) {
+                return res.json({ status: "ok" })
+            } else {
+                const ajoutswipe = await dbo.collection('Swipe').insertOne(req.body.value);
+                if (!ajoutswipe) return res.json({ status: "error" })
+                return res.json({ status: "ok" })
+            }
+
+
         }
 
 
