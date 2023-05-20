@@ -5,11 +5,6 @@ const path = require("path")
 const fs = require('fs');
 const NodeGeocoder = require('node-geocoder');
 
-const options = {
-    provider: 'google',
-    apiKey: 'AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs', // Remplacez par votre clé API Google
-    formatter: null
-};
 
 
 module.exports.login = async(req, res, next) => {
@@ -453,7 +448,14 @@ module.exports.fillForm = (req, res) => {
 
             }
 
-            const geocoder = NodeGeocoder(options);
+            const optns = {
+                provider: 'google',
+                apiKey: 'AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs', // Remplacez par votre clé API Google
+                formatter: null
+            };
+
+
+            const geocoder = NodeGeocoder(optns);
 
             // Utilisez geocoder pour convertir une adresse en coordonnées
             geocoder.geocode(req.body.localisation)
