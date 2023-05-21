@@ -901,24 +901,29 @@ module.exports.createConv = async(req, res) => {
 module.exports.getstat = async(req, res) => {
     const { userId, limite } = req.query;
     console.log(userId);
+
+    //let sevenDaysAgo = new Date();
+    //sevenDaysAgo.setDate(sevenDaysAgo.getDate() - limite);
     try {
         const swipe = await dbo.collection('Swipe').find({
             $or: [{
                 from: new ObjectId(userId)
             }, {
                 to: new ObjectId(userId)
-            }]
+            }],
+            
 
-
-        }).sort({createdAt:1}).limit(limite).toArray();
+        }).sort({createdAt:1}).toArray();
 
         const matchs = await dbo.collection('Matchs').find({
             $or: [{
                 user1: new ObjectId(userId)
             }, {
                 user2: new ObjectId(userId)
-            }]
-        }).limit(limite).toArray();
+            }],
+
+            
+        }).toArray();
 
 
         const conversations = await dbo.collection("Conversations").find({
@@ -926,30 +931,50 @@ module.exports.getstat = async(req, res) => {
                 user1Id: new ObjectId(userId)
             }, {
                 user2Id: new ObjectId(userId)
-            }]
-        }).sort({createdAt : 1}).limit(limite).toArray();
+            }],
+            
+        }).sort({createdAt : 1}).toArray();
         
+        let stats = [];
+        for (let i = 0; i < limite; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() - i);
+            stats.push({ createdAt: date, nombre_swipe: 0, nombre_conversations: 0, nombre_match: 0 });
+        }
+
+        // Parcourez chaque tableau et augmentez les compteurs appropriés
+        for (let swipeItem of swipe) {
+            let date = new Date(swipeItem.createdAt);
+            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats[index].nombre_swipe++;
+            }
+        }
+
+        for (let match of matchs) {
+            let date = new Date(match.createdAt);
+            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats[index].nombre_match++;
+            }
+        }
+
+        for (let conversation of conversations) {
+            let date = new Date(conversation.createdAt);
+            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats[index].nombre_conversations++;
+            }
+        }
         const resp = {
-            status : "ok" ,
-            matchs : undefined, 
-            conversations :undefined , 
-            swipe : undefined
-           }
-    
-     if (conversations) {
-                resp.conversations = conversations.length;
-            }
-    
-      if(matchs){
-                resp.matchs = matchs.length;
-            }
-    
-           
-            if (swipe) {
-                resp.swipe = swipe.length;
-            }
-            console.log(resp)
-            res.json(resp)
+            status: "ok",
+            stat: stats
+        }
+        console.log(resp)
+        
+
+        // Renvoie les statistiques
+        res.json(resp);
         
 
     } catch (error) {

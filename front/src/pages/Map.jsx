@@ -152,7 +152,7 @@ function MapWithLoader({ user, isDark }) {
           order: 1,
         },
       });
-      console.log(response.data.dates);
+      console.log(response.data);
 
       setDates(response.data.dates);
 
