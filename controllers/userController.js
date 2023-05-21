@@ -933,25 +933,26 @@ module.exports.getstat = async(req, res) => {
     console.log(userId);
 
     let sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - limite);
-
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    sevenDaysAgo = sevenDaysAgo.toISOString();
+    console.log(sevenDaysAgo)
     try {
 
         const dates = await dbo.collection('Dates').find({
-            $or: [{ 
-                premier: new ObjectId(userId) 
-            }, { 
-                second: new ObjectId(userId) 
+            $or: [{
+                premier: new ObjectId(userId)
+            }, {
+                second: new ObjectId(userId)
             }],
             createdAt: { $gte: sevenDaysAgo }
-            
+
         }).toArray();
 
 
         const swipe = await dbo.collection('Swipe').find({
             from: new ObjectId(userId),
             createdAt: { $gte: sevenDaysAgo }
-        }).sort({createdAt:1}).toArray();
+        }).sort({ createdAt: 1 }).toArray();
 
         const matchs = await dbo.collection('Matchs').find({
             $or: [{
@@ -960,7 +961,7 @@ module.exports.getstat = async(req, res) => {
                 user2: new ObjectId(userId)
             }],
             createdAt: { $gte: sevenDaysAgo }
-            
+
         }).toArray();
 
 
@@ -971,15 +972,17 @@ module.exports.getstat = async(req, res) => {
                 user2Id: new ObjectId(userId)
             }],
             createdAt: { $gte: sevenDaysAgo }
-            
-        }).sort({createdAt : 1}).toArray();
-        
+
+        }).sort({ createdAt: 1 }).toArray();
+
         let stats = [];
         for (let i = 0; i < limite; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
             stats.push({ createdAt: date, nombre_swipe: 0, nombre_conversations: 0, nombre_match: 0, nombre_date: 0 });
         }
+
+        console.log(stats)
 
         // Parcourez chaque tableau et augmentez les compteurs appropriés
         for (let swipeItem of swipe) {
@@ -989,6 +992,7 @@ module.exports.getstat = async(req, res) => {
                 stats[index].nombre_swipe++;
             }
         }
+
 
         for (let match of matchs) {
             let date = new Date(match.createdAt);
@@ -1005,7 +1009,7 @@ module.exports.getstat = async(req, res) => {
                 stats[index].nombre_conversations++;
             }
         }
-        for (let datee of dates){
+        for (let datee of dates) {
             let date = new Date(datee.createdAt);
             let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
             if (index !== -1) {
@@ -1024,11 +1028,11 @@ module.exports.getstat = async(req, res) => {
             stat: stats
         }
         console.log(resp)
-        
+
 
         // Renvoie les statistiques
         res.json(resp);
-        
+
 
     } catch (error) {
         console.log(error)
