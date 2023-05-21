@@ -345,13 +345,13 @@ input[type="radio"] {
 }
 
 .interest_form::-webkit-scrollbar-track,
-.drag-area::-webkit-scrollbar {
+.drag-area::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: transparent;
 }
 
 .interest_form::-webkit-scrollbar-thumb,
-.drag-area::-webkit-scrollbar {
+.drag-area::-webkit-scrollbar-thumb {
     background: rgba(255, 122, 122, 0.5);
     opacity: 0.4;
     border-radius: 10px;

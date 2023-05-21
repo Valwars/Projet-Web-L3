@@ -68,6 +68,27 @@
     width: 95%;
     border-radius: 20px 0px 0 20px;
     padding-left: 25px;
+    font-family: FontMedium;
+    font-weight: 500;
+    resize: none;
+    height: fit-content;
+    padding-bottom: 0;
+}
+
+.input-container textarea::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+}
+
+.input-container textarea::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+.input-container textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 122, 122, 0.5);
+    opacity: 0.4;
+    border-radius: 10px;
 }
 
 .input-container button {
