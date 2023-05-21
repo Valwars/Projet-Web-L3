@@ -997,6 +997,7 @@
         object-fit: cover;
         border-radius: 100% !important;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
     }
     /* MAP BUBLE */
     
@@ -1035,6 +1036,11 @@
         height: 100px;
         border-radius: 100%;
         object-fit: cover;
+    }
+    
+    .bubble_content h2 {
+        border-bottom: 1px solid var(--main-color);
+        padding-bottom: 10px;
     }
     /* LOADING PAGE */
     

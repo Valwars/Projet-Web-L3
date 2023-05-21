@@ -377,11 +377,6 @@ function MapWithLoader({ user, isDark }) {
                             previousInfoWindow = infoWindow;
                           }
                         );
-                        var myoverlay = new window.google.maps.OverlayView();
-                        myoverlay.draw = function () {
-                          this.getPanes().markerLayer.id = "myMarker";
-                        };
-                        myoverlay.setMap(map);
 
                         if (date._id === id) {
                           if (previousInfoWindow) {
@@ -432,6 +427,11 @@ function MapWithLoader({ user, isDark }) {
                     }
                   );
                 });
+                var myoverlay = new window.google.maps.OverlayView();
+                myoverlay.draw = function () {
+                  this.getPanes().markerLayer.id = "myMarker";
+                };
+                myoverlay.setMap(map);
               }
             }}
           ></div>
