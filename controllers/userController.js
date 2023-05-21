@@ -51,6 +51,7 @@ module.exports.getUser = async(req, res) => {
 module.exports.register = async(req, res, next) => {
     const nouveau = req.body.nouveau;
     try {
+        nouveau.createdAt = new Date();
         const ajout = await dbo.collection('Admin').insertOne(nouveau);
         console.log("ajouté");
         console.log(ajout.insertedId);
@@ -932,7 +933,7 @@ module.exports.getstat = async(req, res) => {
     const { userId, limit } = req.query;
     console.log(userId);
     console.log(limit);
-    
+
     let sevenDaysAgo_swipe = new Date();
     sevenDaysAgo_swipe.setDate(sevenDaysAgo_swipe.getDate() - limit.limit_swipe);
     let sevenDaysAgo2_swipe = sevenDaysAgo_swipe.toISOString();
@@ -963,7 +964,7 @@ module.exports.getstat = async(req, res) => {
         for (let i = 0; i < limit.limit_date; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_dates.push({ createdAt: date, nombre_date: 0});
+            stats_dates.push({ createdAt: date, nombre_date: 0 });
         }
         for (let datee of dates) {
             let date = new Date(datee.createdAt);
@@ -988,7 +989,7 @@ module.exports.getstat = async(req, res) => {
         for (let i = 0; i < limit.limit_swipe; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_swipes.push({ createdAt: date, nombre_swipe: 0});
+            stats_swipes.push({ createdAt: date, nombre_swipe: 0 });
         }
         for (let swipeItem of swipe) {
             let date = new Date(swipeItem.createdAt);
@@ -1014,11 +1015,11 @@ module.exports.getstat = async(req, res) => {
 
         }).toArray();
 
-        let  stats_matchs = [];
+        let stats_matchs = [];
         for (let i = 0; i < limit.limit_match; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_matchs.push({ createdAt: date, nombre_match: 0});
+            stats_matchs.push({ createdAt: date, nombre_match: 0 });
         }
         for (let match of matchs) {
             let date = new Date(match.createdAt);
@@ -1048,7 +1049,7 @@ module.exports.getstat = async(req, res) => {
         for (let i = 0; i < limit.limit_conversation; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_conversations.push({ createdAt: date, nombre_conversation: 0});
+            stats_conversations.push({ createdAt: date, nombre_conversation: 0 });
         }
         for (let conversation of conversations) {
             let date = new Date(conversation.createdAt);
