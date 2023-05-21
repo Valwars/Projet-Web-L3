@@ -66,7 +66,7 @@ const UserProfile = ({ user, setUser }) => {
 
   useEffect(() => {
     fetch_data();
-  }, []);
+  }, [limit]);
 
   const fetch_data = async () => {
     console.log("fetch");
@@ -663,9 +663,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_swipe}
                     />
                     <div className="btn_stats">
-                      <button onClick = {() => setLimit({...limite, limit_swipe: 7})}>1 sem</button>
-                      <button onClick = {() => setLimit({...limite, limit_swipe: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limite, limit_swipe: -1})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_swipe: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limit, limit_swipe: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limit, limit_swipe: 0})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -679,9 +679,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_match}
                     />
                     <div className="btn_stats">
-                      <button onClick = {() => setLimit({...limite, limit_match: 7})}>1 sem</button>
-                      <button onClick = {() => setLimit({...limite, limit_match: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limite, limit_match: -1})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_match: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limit, limit_match: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limit, limit_match: 0})}>Tout</button>
                     </div>
                   </div>
 
@@ -705,9 +705,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_conversation}
                     />
                     <div className="btn_stats">
-                      <button onClick = {() => setLimit({...limite, limit_conversation: 7})}>1 sem</button>
-                      <button onClick = {() => setLimit({...limite, limit_conversation: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limite, limit_conversation: -1})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_conversation: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limit, limit_conversation: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limit, limit_conversation: 0})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -720,9 +720,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_date}
                     />
                     <div className="btn_stats">
-                      <button onClick = {() => setLimit({...limite, limit_date: 7})}>1 sem</button>
-                      <button onClick = {() => setLimit({...limite,  limit_date: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limite,  limit_date: -1})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_date: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limit,  limit_date: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limit,  limit_date: 0})}>Tout</button>
                     </div>
                   </div>
 
