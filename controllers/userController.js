@@ -283,9 +283,7 @@ module.exports.dates = async(req, res, next) => {
                     }
                 }
             },
-            {
-                $sort: { date: sortOrder }
-            },
+
             {
                 $project: {
                     matchesData: {
@@ -298,7 +296,9 @@ module.exports.dates = async(req, res, next) => {
                     localisation: 1,
                     activite: 1
                 }
-            }
+            }, {
+                $sort: { date: sortOrder }
+            },
         ]).toArray();
 
         console.log(dates)
@@ -607,6 +607,8 @@ module.exports.modifuser = async(req, res) => {
 
                 console.log("OLD PICS : ")
 
+
+
                 req.body.photos.push(...oldpic)
                 console.log("FINALS PICS : ")
                 console.log(req.body.photos)
@@ -690,6 +692,34 @@ module.exports.modifuser = async(req, res) => {
 
             req.body.interests = interests;
 
+
+            const optns = {
+                provider: 'google',
+                apiKey: 'AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs', // Remplacez par votre clé API Google
+                formatter: null
+            };
+
+
+            const geocoder = NodeGeocoder(optns);
+
+            // Utilisez geocoder pour convertir une adresse en coordonnées
+            await geocoder.geocode(req.body.localisation)
+                .then((res) => {
+                    const coordinates = [res[0].longitude, res[0].latitude];
+                    const location = {
+                        type: "Point",
+                        coordinates: coordinates
+                    };
+
+                    console.log(location)
+                    req.body.locationPoint = location
+
+                    console.log(req.body)
+                })
+                .catch((err) => {
+                    return res.send({ status: 'error' });
+                    console.log(err);
+                });
 
             const update = {
                 $set: {...req.body },

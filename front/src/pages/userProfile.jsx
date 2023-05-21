@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getStat,getImage, save, userRoute } from "../utils/APIRoutes";
+import { getStat, getImage, save, userRoute } from "../utils/APIRoutes";
 import React from "react";
 import {
   Chart as ChartJS,
@@ -44,7 +44,7 @@ const UserProfile = ({ user, setUser }) => {
   const [photosLimit, setPhotosLimit] = useState(3); // Limite de photos affichées
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [limite , setLimite]= useState(7)
+  const [limite, setLimite] = useState(7);
   const [values, setValues] = useState({
     id: user._id,
     name: user.name,
@@ -58,9 +58,7 @@ const UserProfile = ({ user, setUser }) => {
     pdp: user.pdp,
   });
 
-  const [limit, setLimit] = useState({limit_match : "sem", limit_swipe :"m"});
-
-
+  const [limit, setLimit] = useState({ limit_match: "sem", limit_swipe: "m" });
 
   const [nombre_date, setnombre_date] = useState([
     { date: "10/02", count: 3 },
@@ -73,33 +71,26 @@ const UserProfile = ({ user, setUser }) => {
     { date: "17/02", count: 0 },
   ]);
 
-
-
   const [stats, setStat] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch_data();
-  },[]);
+  }, []);
 
-  const fetch_data = async ()=>{
-    console.log("fetch")
+  const fetch_data = async () => {
+    console.log("fetch");
     try {
-      console.log("dans le try")
+      console.log("dans le try");
       const response = await axios.get(getStat, {
-        params: {     
+        params: {
           userId: user._id,
-          limite: limite
         },
       });
 
-      console.log(response.data.stat)
-      setStat(response.data.stat);
-  
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      console.log(response.data.status);
+      console.log(response.data.matchs);
+    } catch (error) {}
+  };
   const data_match = {
     labels: stats.map((item) => item.createdAt),
     datasets: [
@@ -437,6 +428,7 @@ const UserProfile = ({ user, setUser }) => {
       alert("Le fichier doit être une image !");
     }
   };
+
   return (
     <div className="app-page">
       {loading ? (
@@ -622,7 +614,7 @@ const UserProfile = ({ user, setUser }) => {
               </div>
             </div>
           ) : (
-            <>
+            <div className="stats_front">
               <div className="haut-profil">
                 <img className="pdp" src={getImage + user.pdp} alt="" />
                 <h1>{user.name + " " + user.firstname}</h1>
@@ -744,7 +736,7 @@ const UserProfile = ({ user, setUser }) => {
                   </h1>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       )}{" "}

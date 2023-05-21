@@ -1445,6 +1445,14 @@
         .infos {
             flex-direction: column;
         }
+        .bubble_content {
+            width: fit-content;
+            padding-right: 25px;
+        }
+        .haut-profil {
+            margin-top: 50px;
+            width: 80%;
+        }
     }
     
     .edit_pdp {

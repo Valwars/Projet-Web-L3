@@ -3,6 +3,8 @@ import axios from "axios";
 import "./ChatContainer.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import Loader_transition from "../Loading";
+
 import {
   sendMessageRoute,
   recieveMessageRoute,
@@ -16,6 +18,8 @@ import InputMessage from "./InputMessage";
 var Push = require("push.js");
 
 const ChatContainer = ({ user, currentChat, setConv, socket }) => {
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -40,6 +44,7 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
         },
       });
       setMessages(response.data);
+      setLoading(false);
     }
     get_messages();
   }, [currentChat]);
@@ -106,50 +111,58 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <h2 onClick={() => setConv(undefined)}>Retour</h2>
-        <div className="user-details">
-          <img src={getImage + currentChat.meta.pdp} alt="" />
-          <h3>{currentChat.meta.name + " " + currentChat.meta.firstName}</h3>
-        </div>
-      </div>
-      <div className="chat-messages" id="chat">
-        {messages.length > 0 ? (
-          <>
-            {messages.map((message) => {
-              return (
-                <div id="scroll_ref" key={uuidv4()}>
-                  <div
-                    className={`message ${
-                      message.fromSelf ? "sended" : "recieved"
-                    }`}
-                  >
-                    <div className="content ">
-                      {formatMessage(message.message)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        ) : (
-          <div className="accroches">
-            {accroche.map((accroche) => {
-              return (
-                <div
-                  className="accroche"
-                  onClick={() => handleSendMsg(accroche)}
-                >
-                  <h2>{accroche}</h2>
-                </div>
-              );
-            })}
+    <>
+      {loading ? (
+        <Loader_transition></Loader_transition>
+      ) : (
+        <div className="chat-container">
+          <div className="chat-header">
+            <h2 onClick={() => setConv(undefined)}>Retour</h2>
+            <div className="user-details">
+              <img src={getImage + currentChat.meta.pdp} alt="" />
+              <h3>
+                {currentChat.meta.name + " " + currentChat.meta.firstName}
+              </h3>
+            </div>
           </div>
-        )}
-      </div>
-      <InputMessage handleSendMsg={handleSendMsg}></InputMessage>
-    </div>
+          <div className="chat-messages" id="chat">
+            {messages.length > 0 ? (
+              <>
+                {messages.map((message) => {
+                  return (
+                    <div id="scroll_ref" key={uuidv4()}>
+                      <div
+                        className={`message ${
+                          message.fromSelf ? "sended" : "recieved"
+                        }`}
+                      >
+                        <div className="content ">
+                          {formatMessage(message.message)}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <div className="accroches">
+                {accroche.map((accroche) => {
+                  return (
+                    <div
+                      className="accroche"
+                      onClick={() => handleSendMsg(accroche)}
+                    >
+                      <h2>{accroche}</h2>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <InputMessage handleSendMsg={handleSendMsg}></InputMessage>
+        </div>
+      )}
+    </>
   );
 };
 
