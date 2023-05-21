@@ -111,11 +111,13 @@ const UserProfile = ({ user, setUser }) => {
     try {
    console.log("dans le try")
    const response = await axios.get(getStat, {
-   userId : user._id,
+    params: {     
+      userId: user._id,
+    },
   });
-      console.log("post requete ")
-      // console.log(response.data.status)
-
+      
+      console.log(response.data.status)
+  console.log(response.data.matchs)
     } catch (error) {
       
     }

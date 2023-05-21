@@ -29,7 +29,7 @@ router.post("/fill", filluser)
 router.get("/", swipe)
 
 router.get("/dates", dates)
-router.get('getstats',getstat)
+router.get('/getstats',getstat)
 router.get("/profile", profil)
 router.get("/getmsg", getMessages)
 router.post("/addmsg", addMessage)
