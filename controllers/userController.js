@@ -904,30 +904,42 @@ module.exports.getstat = async(req, res) => {
     console.log(userId);
     try {
         const swipe = await dbo.collection('Swipe').find({ $or: [{
-            [from]: new ObjectId(userId)
+            ["from"]: new ObjectId(userId)
         }, {
-            [to]:  new ObjectId(userId)
+            ["to"]:  new ObjectId(userId)
         }]}).toArray();
         console.log(swipe.length)
         const matchs = await dbo.collection('Matchs').find({$or : [{
-            [user1] : new ObjectId(userId)
+            ["user1"] : new ObjectId(userId)
         }, {
-            [user2] : new ObjectId(userId)
+            ["user2"] : new ObjectId(userId)
         }]}).toArray();
         console.log(matchs.length)
         const conversations = await dbo.collection("Conversations").find({$or : [{
-            [user1Id] : new ObjectId(userId)
+            ["user1Id"] : new ObjectId(userId)
         }, {
-            [user2Id] : new ObjectId(userId)
+            ["user2Id"] : new ObjectId(userId)
         }]}).toArray();
-       
-        if (!conversations) console.log("manque conversations")
+       const resp = {
+        status : "ok" ,
+        matchs : undefined, 
+        conversations :undefined , 
+        swipe : undefined
+       }
+        if (conversations) {
+            resp.conversations = conversations.length;
+        }
 
-        if(!matchs)console.log("manque matchs")
+        if(matchs){
+            resp.matchs = matchs.length;
+        }
 
-        if (!swipe) console.log("manque swipe")
-        res.json({status : "ok" ,matchs : matchs.length, conversations : conversations.length, swipe : swipe.length})
+        if (swipe) {
+            resp.swipe = swipe.length;
+        }
+        console.log(resp)
+        res.json(resp)
     } catch (error) {
-        
+        console.error(error)
     }
 }
