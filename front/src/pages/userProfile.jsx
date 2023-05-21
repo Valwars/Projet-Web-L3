@@ -44,7 +44,7 @@ const UserProfile = ({ user, setUser }) => {
   const [photosLimit, setPhotosLimit] = useState(3); // Limite de photos affichées
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
-
+  const [limite , setLimite]= useState(7)
   const [values, setValues] = useState({
     id: user._id,
     name: user.name,
@@ -113,11 +113,12 @@ const UserProfile = ({ user, setUser }) => {
    const response = await axios.get(getStat, {
     params: {     
       userId: user._id,
+      limite :limite
     },
   });
       
       console.log(response.data.status)
-  console.log(response.data.matchs)
+
     } catch (error) {
       
     }
