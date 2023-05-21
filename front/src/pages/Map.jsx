@@ -247,6 +247,11 @@ function MapWithLoader({ user, isDark }) {
                     },
                   },
                 });
+
+                marqer.setIcon({
+                  ...marqer.getIcon(),
+                  className: "marker-icon",
+                });
                 let previousClickEvent;
                 let previousDirectionsRenderer;
                 const directionsService =
@@ -296,6 +301,10 @@ function MapWithLoader({ user, isDark }) {
                               height: 80,
                             },
                           },
+                        });
+                        marker.setIcon({
+                          ...marker.getIcon(),
+                          className: "marker-icon",
                         });
 
                         window.google.maps.event.addListener(
