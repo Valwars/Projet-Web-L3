@@ -101,6 +101,10 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
+  const formatMessage = (message) => {
+    return message.split("\n").map((line, index) => <p key={index}>{line}</p>);
+  };
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -122,7 +126,7 @@ const ChatContainer = ({ user, currentChat, setConv, socket }) => {
                     }`}
                   >
                     <div className="content ">
-                      <p>{message.message}</p>
+                      {formatMessage(message.message)}
                     </div>
                   </div>
                 </div>

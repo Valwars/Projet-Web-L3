@@ -23,7 +23,7 @@ const InputMessage = ({ handleSendMsg }) => {
             </div> */}
 
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
-        <input
+        <textarea
           type="text"
           placeholder="Entre ton message ici..."
           onChange={(e) => setMsg(e.target.value)}
