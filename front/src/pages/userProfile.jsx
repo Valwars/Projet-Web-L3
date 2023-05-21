@@ -58,6 +58,20 @@ const UserProfile = ({ user, setUser }) => {
     pdp: user.pdp,
   });
 
+  let today = new Date();
+  let signUpDate = new Date(user.createdAt); // Assumons que "user.createdAt" est au format Date.
+
+    // Obtenir la différence de temps en millisecondes
+  let timeDifference = today.getTime() - signUpDate.getTime(); 
+
+  // Convertir la différence de temps en jours
+  let tout = timeDifference / (1000 * 3600 * 24);
+
+  // Vous pouvez arrondir ce chiffre à un entier si vous ne voulez pas avoir de décimales
+  tout = Math.floor(tout);
+
+  console.log(tout);
+
   const [limit, setLimit] = useState({limit_match : 7, limit_swipe : 7, limit_conversation: 7, limit_date: 7});
   const [swipe, setNombreSwipe] = useState([]);
   const [match, setNombreMatch] = useState([]);
@@ -134,6 +148,9 @@ const UserProfile = ({ user, setUser }) => {
     ],
   };
 
+
+  let tout_swipe = limit.limit_swipe !== tout;
+  
   const options_stat_swipe = {
     responsive: true,
     plugins: {
@@ -157,6 +174,9 @@ const UserProfile = ({ user, setUser }) => {
         title: {
           display: true,
         },
+        ticks: {
+          display: tout_swipe ? true : false, 
+        },
         grid: {
           display: false,
         },
@@ -164,6 +184,7 @@ const UserProfile = ({ user, setUser }) => {
     },
   };
 
+  let tout_match = limit.limit_match !== tout;
   const options_stat_match = {
     responsive: true,
     plugins: {
@@ -187,6 +208,9 @@ const UserProfile = ({ user, setUser }) => {
         title: {
           display: true,
         },
+        ticks: {
+          display: tout_match ? true : false, 
+        },
         grid: {
           display: false,
         },
@@ -194,6 +218,7 @@ const UserProfile = ({ user, setUser }) => {
     },
   };
 
+  let tout_conversation = limit.limit_conversation !== tout;
   const options_stat_conversation = {
     responsive: true,
     plugins: {
@@ -221,6 +246,9 @@ const UserProfile = ({ user, setUser }) => {
         title: {
           display: true,
         },
+        ticks: {
+          display: tout_conversation ? true : false, 
+        },
         grid: {
           display: false,
         },
@@ -228,6 +256,7 @@ const UserProfile = ({ user, setUser }) => {
     },
   };
 
+  let tout_date = limit.limit_date !== tout;
   const options_stat_date = {
     responsive: true,
     plugins: {
@@ -250,6 +279,9 @@ const UserProfile = ({ user, setUser }) => {
       x: {
         title: {
           display: true,
+        },
+        ticks: {
+          display: tout_date ? true : false, 
         },
         grid: {
           display: false,
@@ -665,7 +697,7 @@ const UserProfile = ({ user, setUser }) => {
                     <div className="btn_stats">
                       <button onClick = {() => setLimit({...limit, limit_swipe: 7})}>1 sem</button>
                       <button onClick = {() => setLimit({...limit, limit_swipe: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limit, limit_swipe: 0})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_swipe: tout})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -681,7 +713,7 @@ const UserProfile = ({ user, setUser }) => {
                     <div className="btn_stats">
                       <button onClick = {() => setLimit({...limit, limit_match: 7})}>1 sem</button>
                       <button onClick = {() => setLimit({...limit, limit_match: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limit, limit_match: 0})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_match: tout})}>Tout</button>
                     </div>
                   </div>
 
@@ -707,7 +739,7 @@ const UserProfile = ({ user, setUser }) => {
                     <div className="btn_stats">
                       <button onClick = {() => setLimit({...limit, limit_conversation: 7})}>1 sem</button>
                       <button onClick = {() => setLimit({...limit, limit_conversation: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limit, limit_conversation: 0})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit, limit_conversation: tout})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -722,7 +754,7 @@ const UserProfile = ({ user, setUser }) => {
                     <div className="btn_stats">
                       <button onClick = {() => setLimit({...limit, limit_date: 7})}>1 sem</button>
                       <button onClick = {() => setLimit({...limit,  limit_date: 30})}>1 m</button>
-                      <button onClick = {() => setLimit({...limit,  limit_date: 0})}>Tout</button>
+                      <button onClick = {() => setLimit({...limit,  limit_date: tout})}>Tout</button>
                     </div>
                   </div>
 
