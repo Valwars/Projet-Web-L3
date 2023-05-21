@@ -58,7 +58,7 @@ const UserProfile = ({ user, setUser }) => {
     pdp: user.pdp,
   });
 
-
+  const [limit, setLimit] = useState({limit_match : "sem", limit_swipe :"m"});
 
 
 
@@ -88,7 +88,7 @@ const UserProfile = ({ user, setUser }) => {
       const response = await axios.get(getStat, {
         params: {     
           userId: user._id,
-          limite :limite
+          limite: limite
         },
       });
 
@@ -125,11 +125,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_date = {
-    labels: nombre_date.map((item) => item.date),
+    labels: stats.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de dates depuis votre inscription",
-        data: nombre_date.map((item) => item.count),
+        data: stats.map((item) => item.nombre_date),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -253,7 +253,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: nombre_date.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,
+        max: stats.reduce((max, obj) => Math.max(max, obj.nombre_date), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -740,7 +740,7 @@ const UserProfile = ({ user, setUser }) => {
                   </div>
 
                   <h1>
-                    {nombre_date.reduce((acc, curr) => acc + curr.count, 0)}
+                    {stats.reduce((acc, curr) => acc + curr.nombre_date, 0)}
                   </h1>
                 </div>
               </div>

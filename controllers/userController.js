@@ -902,17 +902,21 @@ module.exports.getstat = async(req, res) => {
     const { userId, limite } = req.query;
     console.log(userId);
 
-    //let sevenDaysAgo = new Date();
-    //sevenDaysAgo.setDate(sevenDaysAgo.getDate() - limite);
     try {
-        const swipe = await dbo.collection('Swipe').find({
-            $or: [{
-                from: new ObjectId(userId)
-            }, {
-                to: new ObjectId(userId)
-            }],
-            
 
+        const dates = await dbo.collection('Dates').find({
+            $or: [{ 
+                premier: new ObjectId(userId) 
+            }, { 
+                second: new ObjectId(userId) 
+            }],
+
+            
+        }).toArray();
+
+
+        const swipe = await dbo.collection('Swipe').find({
+            from: new ObjectId(userId)   
         }).sort({createdAt:1}).toArray();
 
         const matchs = await dbo.collection('Matchs').find({
@@ -939,7 +943,7 @@ module.exports.getstat = async(req, res) => {
         for (let i = 0; i < limite; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats.push({ createdAt: date, nombre_swipe: 0, nombre_conversations: 0, nombre_match: 0 });
+            stats.push({ createdAt: date, nombre_swipe: 0, nombre_conversations: 0, nombre_match: 0, nombre_date: 0 });
         }
 
         // Parcourez chaque tableau et augmentez les compteurs appropriés
@@ -966,6 +970,20 @@ module.exports.getstat = async(req, res) => {
                 stats[index].nombre_conversations++;
             }
         }
+        for (let datee of dates){
+            let date = new Date(datee.createdAt);
+            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats[index].nombre_date++;
+            }
+        }
+        for (let stat of stats) {
+            let date = new Date(stat.createdAt);
+            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
+            stat.createdAt = day + '/' + month;
+        }
+        stats.reverse();
         const resp = {
             status: "ok",
             stat: stats
@@ -978,6 +996,6 @@ module.exports.getstat = async(req, res) => {
         
 
     } catch (error) {
-
+        console.log(error)
     }
 }
