@@ -929,13 +929,24 @@ module.exports.createConv = async(req, res) => {
 }
 
 module.exports.getstat = async(req, res) => {
-    const { userId, limite } = req.query;
+    const { userId, limit } = req.query;
     console.log(userId);
+    console.log(limit);
+    
+    let sevenDaysAgo_swipe = new Date();
+    sevenDaysAgo_swipe.setDate(sevenDaysAgo_swipe.getDate() - limit.limit_swipe);
+    let sevenDaysAgo2_swipe = sevenDaysAgo_swipe.toISOString();
 
-    let sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    sevenDaysAgo = sevenDaysAgo.toISOString();
-    console.log(sevenDaysAgo)
+    let sevenDaysAgo_match = new Date();
+    sevenDaysAgo_match.setDate(sevenDaysAgo_match.getDate() - limit.limit_match);
+    let sevenDaysAgo2_match = sevenDaysAgo_match.toISOString();
+
+    let sevenDaysAgo_conversation = new Date();
+    sevenDaysAgo_conversation.setDate(sevenDaysAgo_conversation.getDate() - limit.limit_conversation);
+
+    let sevenDaysAgo_date = new Date();
+    sevenDaysAgo_date.setDate(sevenDaysAgo_date.getDate() - limit.limit_date);
+
     try {
 
         const dates = await dbo.collection('Dates').find({
@@ -944,15 +955,54 @@ module.exports.getstat = async(req, res) => {
             }, {
                 second: new ObjectId(userId)
             }],
-            createdAt: { $gte: sevenDaysAgo }
+            createdAt: { $gte: sevenDaysAgo_date }
 
         }).toArray();
 
+        let stats_dates = [];
+        for (let i = 0; i < limit.limit_date; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() - i);
+            stats_dates.push({ createdAt: date, nombre_date: 0});
+        }
+        for (let datee of dates) {
+            let date = new Date(datee.createdAt);
+            let index = stats_dates.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats_dates[index].nombre_date++;
+            }
+        }
+        for (let stat_date of stats_dates) {
+            let date = new Date(stat_date.createdAt);
+            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
+            stat_date.createdAt = day + '/' + month;
+        }
 
         const swipe = await dbo.collection('Swipe').find({
             from: new ObjectId(userId),
-            createdAt: { $gte: sevenDaysAgo }
+            createdAt: { $gte: sevenDaysAgo2_swipe }
         }).sort({ createdAt: 1 }).toArray();
+
+        let stats_swipes = [];
+        for (let i = 0; i < limit.limit_swipe; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() - i);
+            stats_swipes.push({ createdAt: date, nombre_swipe: 0});
+        }
+        for (let swipeItem of swipe) {
+            let date = new Date(swipeItem.createdAt);
+            let index = stats_swipes.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats_swipes[index].nombre_swipe++;
+            }
+        }
+        for (let stat_swipe of stats_swipes) {
+            let date = new Date(stat_swipe.createdAt);
+            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
+            stat_swipe.createdAt = day + '/' + month;
+        }
 
         const matchs = await dbo.collection('Matchs').find({
             $or: [{
@@ -960,10 +1010,29 @@ module.exports.getstat = async(req, res) => {
             }, {
                 user2: new ObjectId(userId)
             }],
-            createdAt: { $gte: sevenDaysAgo }
+            createdAt: { $gte: sevenDaysAgo2_match }
 
         }).toArray();
 
+        let  stats_matchs = [];
+        for (let i = 0; i < limit.limit_match; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() - i);
+            stats_matchs.push({ createdAt: date, nombre_match: 0});
+        }
+        for (let match of matchs) {
+            let date = new Date(match.createdAt);
+            let index = stats_matchs.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            if (index !== -1) {
+                stats_matchs[index].nombre_match++;
+            }
+        }
+        for (let stat_match of stats_matchs) {
+            let date = new Date(stat_match.createdAt);
+            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
+            stat_match.createdAt = day + '/' + month;
+        }
 
         const conversations = await dbo.collection("Conversations").find({
             $or: [{
@@ -971,61 +1040,41 @@ module.exports.getstat = async(req, res) => {
             }, {
                 user2Id: new ObjectId(userId)
             }],
-            createdAt: { $gte: sevenDaysAgo }
+            createdAt: { $gte: sevenDaysAgo_conversation }
 
         }).sort({ createdAt: 1 }).toArray();
 
-        let stats = [];
-        for (let i = 0; i < limite; i++) {
+        let stats_conversations = [];
+        for (let i = 0; i < limit.limit_conversation; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats.push({ createdAt: date, nombre_swipe: 0, nombre_conversations: 0, nombre_match: 0, nombre_date: 0 });
+            stats_conversations.push({ createdAt: date, nombre_conversation: 0});
         }
-
-        console.log(stats)
-
-        // Parcourez chaque tableau et augmentez les compteurs appropriés
-        for (let swipeItem of swipe) {
-            let date = new Date(swipeItem.createdAt);
-            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats[index].nombre_swipe++;
-            }
-        }
-
-
-        for (let match of matchs) {
-            let date = new Date(match.createdAt);
-            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats[index].nombre_match++;
-            }
-        }
-
         for (let conversation of conversations) {
             let date = new Date(conversation.createdAt);
-            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
+            let index = stats_conversations.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
             if (index !== -1) {
-                stats[index].nombre_conversations++;
+                stats_conversations[index].nombre_conversation++;
             }
         }
-        for (let datee of dates) {
-            let date = new Date(datee.createdAt);
-            let index = stats.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats[index].nombre_date++;
-            }
-        }
-        for (let stat of stats) {
-            let date = new Date(stat.createdAt);
+        for (let stat_conversation of stats_conversations) {
+            let date = new Date(stat_conversation.createdAt);
             let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
             let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
-            stat.createdAt = day + '/' + month;
+            stat_conversation.createdAt = day + '/' + month;
         }
-        stats.reverse();
+
+        stats_swipes.reverse();
+        stats_matchs.reverse();
+        stats_dates.reverse();
+        stats_conversations.reverse();
         const resp = {
             status: "ok",
-            stat: stats
+            stat_conversations: stats_conversations,
+            stat_swipes: stats_swipes,
+            stat_matchs: stats_matchs,
+            stat_dates: stats_dates,
+
         }
         console.log(resp)
 

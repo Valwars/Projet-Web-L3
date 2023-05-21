@@ -58,10 +58,11 @@ const UserProfile = ({ user, setUser }) => {
     pdp: user.pdp,
   });
 
-  const [limit, setLimit] = useState({limit_match : "sem", limit_swipe :"sem", limit_conversation:"sem", limit_date:"sem"});
-
-
-  const [stats, setStat] = useState([]);
+  const [limit, setLimit] = useState({limit_match : 7, limit_swipe : 7, limit_conversation: 7, limit_date: 7});
+  const [swipe, setNombreSwipe] = useState([]);
+  const [match, setNombreMatch] = useState([]);
+  const [conversation, setNombreConversation] = useState([]);
+  const [date, setNombreDate] = useState([]);
 
   useEffect(() => {
     fetch_data();
@@ -74,19 +75,23 @@ const UserProfile = ({ user, setUser }) => {
       const response = await axios.get(getStat, {
         params: {
           userId: user._id,
+          limit: limit
         },
       });
-
-      console.log(response.data.status);
-      console.log(response.data.matchs);
+      setNombreMatch(response.data.stat_matchs);
+      setNombreSwipe(response.data.stat_swipes);
+      setNombreConversation(response.data.stat_conversations);
+      setNombreDate(response.data.stat_dates);
+      console.log(response.data);
     } catch (error) {}
   };
+
   const data_match = {
-    labels: stats.map((item) => item.createdAt),
+    labels: match.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de matchs depuis votre inscription",
-        data: stats.map((item) => item.nombre_match),
+        data: match.map((item) => item.nombre_match),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -94,11 +99,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_conversation = {
-    labels: stats.map((item) => item.createdAt),
+    labels: conversation.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de conversations depuis votre inscription",
-        data: stats.map((item) => item.nombre_conversations),
+        data: conversation.map((item) => item.nombre_conversation),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -106,11 +111,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_date = {
-    labels: stats.map((item) => item.createdAt),
+    labels: date.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de dates depuis votre inscription",
-        data: stats.map((item) => item.nombre_date),
+        data: date.map((item) => item.nombre_date),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -118,11 +123,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_swipe = {
-    labels: stats.map((item) => item.createdAt),
+    labels: swipe.map((item) => item.createdAt),
     datasets: [
       {
         label: "Swipe depuis le 10 Mai 2021",
-        data: stats.map((item) => item.nombre_swipe),
+        data: swipe.map((item) => item.nombre_swipe),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -140,7 +145,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: stats.reduce((max, obj) => Math.max(max, obj.nombre_swipe), 0) + 2,
+        max: swipe.reduce((max, obj) => Math.max(max, obj.nombre_swipe), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -170,7 +175,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: stats.reduce((max, obj) => Math.max(max, obj.nombre_match), 0) + 2,
+        max: match.reduce((max, obj) => Math.max(max, obj.nombre_match), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -201,8 +206,8 @@ const UserProfile = ({ user, setUser }) => {
       y: {
         min: 0,
         max:
-          stats.reduce(
-            (max, obj) => Math.max(max, obj.nombre_conversations),
+          conversation.reduce(
+            (max, obj) => Math.max(max, obj.nombre_conversation),
             0
           ) + 2,
         ticks: {
@@ -234,7 +239,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: stats.reduce((max, obj) => Math.max(max, obj.nombre_date), 0) + 2,
+        max: date.reduce((max, obj) => Math.max(max, obj.nombre_date), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -649,7 +654,7 @@ const UserProfile = ({ user, setUser }) => {
               <div className="profile-stats">
                 <div className="stat">
                   <h1>
-                    {stats.reduce((acc, curr) => acc + curr.nombre_swipe, 0)}
+                    {swipe.reduce((acc, curr) => acc + curr.nombre_swipe, 0)}
                   </h1>
                   <div>
                     <Line
@@ -658,9 +663,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_swipe}
                     />
                     <div className="btn_stats">
-                      <button>1 sem</button>
-                      <button>1 m</button>
-                      <button>Tout</button>
+                      <button onClick = {() => setLimit({...limite, limit_swipe: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limite, limit_swipe: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limite, limit_swipe: -1})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -674,22 +679,22 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_match}
                     />
                     <div className="btn_stats">
-                      <button>1 sem</button>
-                      <button>1 m</button>
-                      <button>Tout</button>
+                      <button onClick = {() => setLimit({...limite, limit_match: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limite, limit_match: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limite, limit_match: -1})}>Tout</button>
                     </div>
                   </div>
 
                   <h1>
-                    {stats.reduce((acc, curr) => acc + curr.nombre_match, 0)}
+                    {match.reduce((acc, curr) => acc + curr.nombre_match, 0)}
                   </h1>
                 </div>
 
                 <h4>Conversations</h4>
                 <div className="stat">
                   <h1>
-                    {stats.reduce(
-                      (acc, curr) => acc + curr.nombre_conversations,
+                    {conversation.reduce(
+                      (acc, curr) => acc + curr.nombre_conversation,
                       0
                     )}
                   </h1>
@@ -700,9 +705,9 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_conversation}
                     />
                     <div className="btn_stats">
-                      <button>1 sem</button>
-                      <button>1 m</button>
-                      <button>Tout</button>
+                      <button onClick = {() => setLimit({...limite, limit_conversation: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limite, limit_conversation: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limite, limit_conversation: -1})}>Tout</button>
                     </div>
                   </div>
                 </div>
@@ -715,14 +720,14 @@ const UserProfile = ({ user, setUser }) => {
                       options={options_stat_date}
                     />
                     <div className="btn_stats">
-                      <button>1 sem</button>
-                      <button>1 m</button>
-                      <button>Tout</button>
+                      <button onClick = {() => setLimit({...limite, limit_date: 7})}>1 sem</button>
+                      <button onClick = {() => setLimit({...limite,  limit_date: 30})}>1 m</button>
+                      <button onClick = {() => setLimit({...limite,  limit_date: -1})}>Tout</button>
                     </div>
                   </div>
 
                   <h1>
-                    {stats.reduce((acc, curr) => acc + curr.nombre_date, 0)}
+                    {date.reduce((acc, curr) => acc + curr.nombre_date, 0)}
                   </h1>
                 </div>
               </div>
