@@ -729,7 +729,7 @@ module.exports.addswipe = async(req, res, next) => {
         await dbo.collection('Swipe').insertOne(swipe);
 
         // Vérifier si un document swipe avec "to" égal à "from" existe
-        const matchSwipe = await dbo.collection('Swipe').findOne({ to: new ObjectId(from), val: "positif" });
+        const matchSwipe = await dbo.collection('Swipe').findOne({ from: new ObjectId(to), to: new ObjectId(from), val: "positif" });
         if (matchSwipe) {
             // Créer un document match dans une autre collection
             const match = { user1: new ObjectId(from), user2: new ObjectId(to), createdAt };

@@ -94,22 +94,34 @@ const Matchs = ({ user, setLocate }) => {
               onChange={(e) => setSearsh(e.target.value)}
             />{" "}
           </div>
-          <div className="matchs-container">
-            {matchs.map((match) => {
-              return (
-                <div
-                  className="match"
-                  onClick={() => {
-                    setLocate("/match");
-                    navigate("/user-profile/" + match._id);
-                  }}
-                >
-                  <img src={getImage + match.pdp} alt="" />
-                  <h2>{match.name + " " + match.firstname}</h2>
-                </div>
-              );
-            })}
-          </div>
+          {matchs.length == 0 ? (
+            <>
+              <div className="no_conv">
+                {searsh.length > 0 ? (
+                  <h2>Pas de résulats correspondants !</h2>
+                ) : (
+                  <h2>Tu n'as pas encore de matchs !</h2>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="matchs-container">
+              {matchs.map((match) => {
+                return (
+                  <div
+                    className="match"
+                    onClick={() => {
+                      setLocate("/match");
+                      navigate("/user-profile/" + match._id);
+                    }}
+                  >
+                    <img src={getImage + match.pdp} alt="" />
+                    <h2>{match.name + " " + match.firstname}</h2>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>
