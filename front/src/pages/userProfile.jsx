@@ -58,18 +58,8 @@ const UserProfile = ({ user, setUser }) => {
     pdp: user.pdp,
   });
 
-  const [limit, setLimit] = useState({ limit_match: "sem", limit_swipe: "m" });
+  const [limit, setLimit] = useState({limit_match : "sem", limit_swipe :"sem", limit_conversation:"sem", limit_date:"sem"});
 
-  const [nombre_date, setnombre_date] = useState([
-    { date: "10/02", count: 3 },
-    { date: "11/02", count: 0 },
-    { date: "12/02", count: 1 },
-    { date: "13/02", count: 2 },
-    { date: "14/02", count: 0 },
-    { date: "15/02", count: 0 },
-    { date: "16/02", count: 0 },
-    { date: "17/02", count: 0 },
-  ]);
 
   const [stats, setStat] = useState([]);
 

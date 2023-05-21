@@ -932,6 +932,9 @@ module.exports.getstat = async(req, res) => {
     const { userId, limite } = req.query;
     console.log(userId);
 
+    let sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - limite);
+
     try {
 
         const dates = await dbo.collection('Dates').find({
@@ -940,13 +943,14 @@ module.exports.getstat = async(req, res) => {
             }, { 
                 second: new ObjectId(userId) 
             }],
-
+            createdAt: { $gte: sevenDaysAgo }
             
         }).toArray();
 
 
         const swipe = await dbo.collection('Swipe').find({
-            from: new ObjectId(userId)   
+            from: new ObjectId(userId),
+            createdAt: { $gte: sevenDaysAgo }
         }).sort({createdAt:1}).toArray();
 
         const matchs = await dbo.collection('Matchs').find({
@@ -955,7 +959,7 @@ module.exports.getstat = async(req, res) => {
             }, {
                 user2: new ObjectId(userId)
             }],
-
+            createdAt: { $gte: sevenDaysAgo }
             
         }).toArray();
 
@@ -966,6 +970,7 @@ module.exports.getstat = async(req, res) => {
             }, {
                 user2Id: new ObjectId(userId)
             }],
+            createdAt: { $gte: sevenDaysAgo }
             
         }).sort({createdAt : 1}).toArray();
         
