@@ -24,7 +24,7 @@ const Dates = ({ user, locate }) => {
     try {
       const response = await axios.get(datesRoute, {
         params: {
-          unid: (user._id),
+          unid: user._id,
           searchString: searsh,
           order: sort,
         },
@@ -101,46 +101,57 @@ const Dates = ({ user, locate }) => {
               onChange={(e) => setSearsh(e.target.value)}
             />{" "}
           </div>
+          {date.length == 0 ? (
+            <>
+              <div className="no_conv">
+                {searsh.length > 0 ? (
+                  <h2>Pas de résulats correspondants !</h2>
+                ) : (
+                  <h2>Tu n'as pas encore de dates !</h2>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="matchs-container">
+              {date.map((date) => {
+                // if (user.personnes[0] != undefined) {
+                return (
+                  <div
+                    className="match date_cnt"
+                    onClick={() => {
+                      // setLocate("/match");
+                      navigate("/map?id=" + date._id);
+                    }}
+                  >
+                    <div className="user-date">
+                      <div>
+                        <img src={getImage + date.pdp} alt="" />
+                        <h2>
+                          {date.name} {date.firstname}
+                        </h2>
+                      </div>
+                    </div>
 
-          <div className="matchs-container">
-            {date.map((date) => {
-              // if (user.personnes[0] != undefined) {
-              return (
-                <div
-                  className="match date_cnt"
-                  onClick={() => {
-                    // setLocate("/match");
-                    navigate("/map?id=" + date._id);
-                  }}
-                >
-                  <div className="user-date">
-                    <div>
-                      <img src={getImage + date.pdp} alt="" />
-                      <h2>
-                        {date.name} {date.firstname}
-                      </h2>
+                    <div className="dateInfo">
+                      <div>
+                        <i class="fas fa-clock"></i>
+
+                        <p>{formatDate(date.date)}</p>
+                      </div>
+                      <div>
+                        <i class="fas fa-map-marker-alt"></i>
+
+                        <p>{date.localisation}</p>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="dateInfo">
-                    <div>
-                      <i class="fas fa-clock"></i>
-
-                      <p>{formatDate(date.date)}</p>
-                    </div>
-                    <div>
-                      <i class="fas fa-map-marker-alt"></i>
-
-                      <p>{date.localisation}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-              // } else {
-              //   return null;
-              // }
-            })}
-          </div>
+                );
+                // } else {
+                //   return null;
+                // }
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

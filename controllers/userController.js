@@ -228,63 +228,84 @@ module.exports.dates = async(req, res, next) => {
     const { unid, searchString, order } = req.query
 
     const sortOrder = parseInt(order, 10) || 1;
-
-    console.log(sortOrder)
-    console.log(searchString)
-
     try {
-        const key1 = "premier";
-        const key2 = "second";
-
-        let tab = [];
-        console.log(unid)
-        const admin = await dbo.collection('Dates').find({
-            $or: [{
-                [key1]: unid
-            }, {
-                [key2]: unid
-            }]
-        }).sort({ createdAt: sortOrder }).toArray();
-        if (!admin) {
-            return res.json({ status: "error" });
-        } else
-        // console.log("admin : ")
-        // console.log(admin)
-            for (var i = 0; i < admin.length; i++) {
-                if (admin[i].premier === unid) {
-                    // Exécuter la requête correspondante à la clé 1
-                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].second) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                        //   console.log("key1")
-                        //   console.log(admin[i].premier)
-                        //   console.log(key1)
-                        //   console.log(info)
-                    tab.push({
-                        _id: info._id,
-                        pdp: info.pdp,
-                        name: info.name,
-                        firstname: info.firstname,
-                        localisation: admin[i].localisation,
-                        date: admin[i].date,
-                        activite: admin[i].activite
-                    })
-                } else if (admin[i].second === unid) {
-                    // Exécuter la requête correspondante à la clé 2
-                    const info = await dbo.collection('Admin').findOne({ _id: new ObjectId(admin[i].premier) }, { projection: { pdp: 1, name: 1, firstname: 1 } })
-                        // console.log("key2")
-                        // console.log(info)
-                    tab.push({
-                        _id: info._id,
-                        pdp: info.pdp,
-                        name: info.name,
-                        firstname: info.firstname,
-                        localisation: admin[i].localisation,
-                        date: admin[i].date,
-                        activite: admin[i].activite
-                    })
+        let dates = await dbo.collection('Dates').aggregate([{
+                $match: {
+                    $or: [{ premier: new ObjectId(unid) }, { second: new ObjectId(unid) }]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Admin',
+                    localField: 'premier',
+                    foreignField: '_id',
+                    as: 'premierData'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Admin',
+                    localField: 'second',
+                    foreignField: '_id',
+                    as: 'secondData'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Admin',
+                    let: { user1Id: '$premier', user2Id: '$second', userId: new ObjectId(unid) },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $ne: ['$_id', '$$userId'] },
+                                    {
+                                        $or: [
+                                            { $eq: ['$_id', '$$user1Id'] },
+                                            { $eq: ['$_id', '$$user2Id'] }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }],
+                    as: 'adminData'
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    date: 1,
+                    localisation: 1,
+                    activite: 1,
+                    matchesData: {
+                        $arrayElemAt: ['$adminData', 0]
+                    }
+                }
+            },
+            {
+                $sort: { date: sortOrder }
+            },
+            {
+                $project: {
+                    matchesData: {
+                        name: 1,
+                        firstname: 1,
+                        pdp: 1,
+                        _id: 1
+                    },
+                    date: 1,
+                    localisation: 1,
+                    activite: 1
                 }
             }
-            // console.log("tab :")
-            //  console.log(tab)
+        ]).toArray();
+
+        console.log(dates)
+        var tab = []
+        dates.forEach(date => {
+            tab.push({ _id: date._id, date: date.date, localisation: date.localisation, activite: date.activite, pdp: date.matchesData.pdp, name: date.matchesData.name, firstname: date.matchesData.firstname })
+        });
         if (searchString) {
             tab = tab.filter(conversation => {
                 var fullName = conversation.name + ' ' + conversation.firstname;
@@ -295,8 +316,9 @@ module.exports.dates = async(req, res, next) => {
         res.json({ status: "ok", dates: tab });
 
     } catch (error) {
-        next(error);;
+        next(error);
     }
+
 
 }
 
@@ -707,7 +729,7 @@ module.exports.addswipe = async(req, res, next) => {
         await dbo.collection('Swipe').insertOne(swipe);
 
         // Vérifier si un document swipe avec "to" égal à "from" existe
-        const matchSwipe = await dbo.collection('Swipe').findOne({ to: new ObjectId(from), val: "positif" });
+        const matchSwipe = await dbo.collection('Swipe').findOne({ from: new ObjectId(to), to: new ObjectId(from), val: "positif" });
         if (matchSwipe) {
             // Créer un document match dans une autre collection
             const match = { user1: new ObjectId(from), user2: new ObjectId(to), createdAt };
@@ -787,6 +809,7 @@ module.exports.matchs = async(req, res, next) => {
 
 
 
+
         if (searchString) {
             matches = matches.filter(conversation => {
                 const fullName = conversation.name + ' ' + conversation.firstname;
@@ -806,9 +829,21 @@ module.exports.matchs = async(req, res, next) => {
 
 
 module.exports.createDate = async(req, res) => {
+
+    const { premier, second, date, localisation, activite, createdAt } = req.body;
+
+
     console.log(req.body.date);
     try {
-        const admin = await dbo.collection("Dates").insertOne(req.body.date)
+        const admin = await dbo.collection("Dates").insertOne({
+            premier: new ObjectId(premier),
+            second: new ObjectId(second),
+            date: date,
+            localisation: localisation,
+            activite: activite,
+            createdAt: new Date()
+
+        })
 
         if (!admin) return res.json({ status: "error" })
         res.json({ status: "ok" })
@@ -860,7 +895,7 @@ module.exports.createConv = async(req, res) => {
         return res.json({ status: "error" });
     }
 
- 
+
 }
 
 

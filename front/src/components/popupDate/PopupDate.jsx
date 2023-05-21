@@ -18,22 +18,20 @@ const PopupDate = ({ user, setLocate }) => {
 
   useEffect(() => {
     var uriCourant = window.location.href;
-    var indiceDepart = uriCourant.lastIndexOf('/') + 1;
-    var indiceArrivee = uriCourant.length
+    var indiceDepart = uriCourant.lastIndexOf("/") + 1;
+    var indiceArrivee = uriCourant.length;
     var nomPage = uriCourant.substring(indiceDepart, indiceArrivee);
     setDate({ ...date, createdAt: new Date() });
-    setDate({ ...date, second: nomPage })
-    console.log(nomPage)
-  })
+    setDate({ ...date, second: nomPage });
+    console.log(nomPage);
+  });
 
   const ajoutDate = async (event) => {
     event.preventDefault();
     console.log(date);
     try {
-      const response = await axios.post(createDate, {
-        date,
-      });
-      navigate('/dates')
+      const response = await axios.post(createDate, date);
+      navigate("/dates");
     } catch (error) {
       console.log(error);
     }
