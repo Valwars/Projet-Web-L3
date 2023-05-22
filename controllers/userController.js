@@ -961,23 +961,22 @@ module.exports.getstat = async(req, res) => {
         }).toArray();
 
         let stats_dates = [];
+        let dateMap = {};
         for (let i = 0; i < limit.limit_date; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_dates.push({ createdAt: date, nombre_date: 0 });
+            let dateKey = date.toDateString(); // Clé pour faciliter la recherche
+            let formattedDate = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0');
+            dateMap[dateKey] = { createdAt: formattedDate, nombre_date: 0 };
+            stats_dates.push(dateMap[dateKey]);
         }
+        
         for (let datee of dates) {
             let date = new Date(datee.createdAt);
-            let index = stats_dates.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats_dates[index].nombre_date++;
+            let dateKey = date.toDateString();
+            if (dateMap[dateKey]) {
+                dateMap[dateKey].nombre_date++;
             }
-        }
-        for (let stat_date of stats_dates) {
-            let date = new Date(stat_date.createdAt);
-            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
-            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
-            stat_date.createdAt = day + '/' + month;
         }
 
         const swipe = await dbo.collection('Swipe').find({
@@ -986,23 +985,21 @@ module.exports.getstat = async(req, res) => {
         }).sort({ createdAt: 1 }).toArray();
 
         let stats_swipes = [];
+        let swipeMap = {};
         for (let i = 0; i < limit.limit_swipe; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_swipes.push({ createdAt: date, nombre_swipe: 0 });
+            let dateKey = date.toDateString(); // Clé pour faciliter la recherche
+            let formattedDate = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0');
+            swipeMap[dateKey] = { createdAt: formattedDate, nombre_swipe: 0 };
+            stats_swipes.push(swipeMap[dateKey]);
         }
         for (let swipeItem of swipe) {
             let date = new Date(swipeItem.createdAt);
-            let index = stats_swipes.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats_swipes[index].nombre_swipe++;
+            let dateKey = date.toDateString();
+            if (swipeMap[dateKey]) {
+                swipeMap[dateKey].nombre_swipe++;
             }
-        }
-        for (let stat_swipe of stats_swipes) {
-            let date = new Date(stat_swipe.createdAt);
-            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
-            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
-            stat_swipe.createdAt = day + '/' + month;
         }
 
         const matchs = await dbo.collection('Matchs').find({
@@ -1016,23 +1013,22 @@ module.exports.getstat = async(req, res) => {
         }).toArray();
 
         let stats_matchs = [];
+        let matchMap = {};
         for (let i = 0; i < limit.limit_match; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_matchs.push({ createdAt: date, nombre_match: 0 });
+            let dateKey = date.toDateString(); // Clé pour faciliter la recherche
+            let formattedDate = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0');
+            matchMap[dateKey] = { createdAt: formattedDate, nombre_match: 0 };
+            stats_matchs.push(matchMap[dateKey]);
         }
+        
         for (let match of matchs) {
             let date = new Date(match.createdAt);
-            let index = stats_matchs.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats_matchs[index].nombre_match++;
+            let dateKey = date.toDateString();
+            if (matchMap[dateKey]) {
+                matchMap[dateKey].nombre_match++;
             }
-        }
-        for (let stat_match of stats_matchs) {
-            let date = new Date(stat_match.createdAt);
-            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
-            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
-            stat_match.createdAt = day + '/' + month;
         }
 
         const conversations = await dbo.collection("Conversations").find({
@@ -1046,23 +1042,22 @@ module.exports.getstat = async(req, res) => {
         }).sort({ createdAt: 1 }).toArray();
 
         let stats_conversations = [];
+        let conversationMap = {};
         for (let i = 0; i < limit.limit_conversation; i++) {
             let date = new Date();
             date.setDate(date.getDate() - i);
-            stats_conversations.push({ createdAt: date, nombre_conversation: 0 });
+            let dateKey = date.toDateString(); // Clé pour faciliter la recherche
+            let formattedDate = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0');
+            conversationMap[dateKey] = { createdAt: formattedDate, nombre_conversation: 0 };
+            stats_conversations.push(conversationMap[dateKey]);
         }
+        
         for (let conversation of conversations) {
             let date = new Date(conversation.createdAt);
-            let index = stats_conversations.findIndex(stat => stat.createdAt.toDateString() === date.toDateString());
-            if (index !== -1) {
-                stats_conversations[index].nombre_conversation++;
+            let dateKey = date.toDateString();
+            if (conversationMap[dateKey]) {
+                conversationMap[dateKey].nombre_conversation++;
             }
-        }
-        for (let stat_conversation of stats_conversations) {
-            let date = new Date(stat_conversation.createdAt);
-            let day = String(date.getDate()).padStart(2, '0'); // ajoute un zéro devant si le jour est un chiffre seul
-            let month = String(date.getMonth() + 1).padStart(2, '0'); // les mois en JavaScript commencent à 0
-            stat_conversation.createdAt = day + '/' + month;
         }
 
         stats_swipes.reverse();
