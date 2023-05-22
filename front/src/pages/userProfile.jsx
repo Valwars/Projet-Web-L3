@@ -73,49 +73,12 @@ const UserProfile = ({ user, setUser }) => {
   console.log(tout);
 
   const [limit, setLimit] = useState({limit_match : 7, limit_swipe : 7, limit_conversation: 7, limit_date: 7});
-  const [swipe, setNombreSwipe] = useState([
-    { date: "10/02", count: 12 },
-    { date: "11/02", count: 4 },
-    { date: "12/02", count: 7 },
-    { date: "13/02", count: 0 },
-    { date: "14/02", count: 2 },
-    { date: "15/02", count: 3 },
-    { date: "16/02", count: 4 },
-    { date: "17/02", count: 5 },
-  ]);
+  const [swipe, setNombreSwipe] = useState([]);
+  const [match, setNombreMatch] = useState([]);
+  const [conversation, setNombreConversation] = useState([]);
+  const [date, setNombreDate] = useState([]);
 
-  const [match, setNombreMatch] = useState([
-    { date: "10/02", count: 1 },
-    { date: "11/02", count: 3 },
-    { date: "12/02", count: 0 },
-    { date: "13/02", count: 7 },
-    { date: "14/02", count: 8 },
-    { date: "15/02", count: 1 },
-    { date: "16/02", count: 2 },
-    { date: "17/02", count: 10},
-  ]);
-  const [conversation, setNombreConversation] = useState([
-    { date: "10/02", count: 5 },
-    { date: "11/02", count: 7 },
-    { date: "12/02", count: 0 },
-    { date: "13/02", count: 1},
-    { date: "14/02", count: 12 },
-    { date: "15/02", count: 3 },
-    { date: "16/02", count: 2 },
-    { date: "17/02", count: 0 },
-  ]);
-  const [date, setNombreDate] = useState([
-    { date: "10/02", count: 1 },
-    { date: "11/02", count: 3 },
-    { date: "12/02", count: 0 },
-    { date: "13/02", count: 7 },
-    { date: "14/02", count: 8 },
-    { date: "15/02", count: 1 },
-    { date: "16/02", count: 2 },
-    { date: "17/02", count: 0 },
-  ]);
-
-  /*useEffect(() => {
+  useEffect(() => {
     fetch_data();
   }, [limit]);
 
@@ -135,14 +98,14 @@ const UserProfile = ({ user, setUser }) => {
       setNombreDate(response.data.stat_dates);
       console.log(response.data);
     } catch (error) {}
-  };*/
+  };
 
   const data_match = {
-    labels: match.map((item) => item.date),
+    labels: match.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de matchs depuis votre inscription",
-        data: match.map((item) => item.count),//match.map((item) => item.nombre_match),
+        data: match.map((item) => item.nombre_match),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -150,11 +113,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_conversation = {
-    labels: conversation.map((item) => item.date),
+    labels: conversation.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de conversations depuis votre inscription",
-        data: conversation.map((item) => item.count),//conversation.map((item) => item.nombre_conversation),
+        data: conversation.map((item) => item.nombre_conversation),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -162,11 +125,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_date = {
-    labels: date.map((item) => item.date),
+    labels: date.map((item) => item.createdAt),
     datasets: [
       {
         label: "Nombre de dates depuis votre inscription",
-        data: date.map((item) => item.count),//date.map((item) => item.nombre_date),
+        data: date.map((item) => item.nombre_date),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -174,11 +137,11 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const data_swipe = {
-    labels: swipe.map((item) => item.date),
+    labels: swipe.map((item) => item.createdAt),
     datasets: [
       {
         label: "Swipe depuis le 10 Mai 2021",
-        data: swipe.map((item) => item.count),//swipe.map((item) => item.nombre_swipe),
+        data: swipe.map((item) => item.nombre_swipe),
         fill: false,
         borderColor: "#FF7A7A",
       },
@@ -199,7 +162,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: swipe.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,//swipe.reduce((max, obj) => Math.max(max, obj.nombre_swipe), 0) + 2,
+        max: swipe.reduce((max, obj) => Math.max(max, obj.nombre_swipe), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -233,7 +196,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: match.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,//match.reduce((max, obj) => Math.max(max, obj.nombre_match), 0) + 2,
+        max: match.reduce((max, obj) => Math.max(max, obj.nombre_match), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -267,7 +230,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: conversation.reduce((max, obj) => Math.max(max, obj.count),0) + 2,//conversation.reduce((max, obj) => Math.max(max, obj.nombre_conversation),0) + 2,
+        max: conversation.reduce((max, obj) => Math.max(max, obj.nombre_conversation),0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -301,7 +264,7 @@ const UserProfile = ({ user, setUser }) => {
     scales: {
       y: {
         min: 0,
-        max: date.reduce((max, obj) => Math.max(max, obj.count), 0) + 2,//date.reduce((max, obj) => Math.max(max, obj.nombre_date), 0) + 2,
+        max: date.reduce((max, obj) => Math.max(max, obj.nombre_date), 0) + 2,
         ticks: {
           stepSize: 1,
         },
@@ -719,7 +682,7 @@ const UserProfile = ({ user, setUser }) => {
               <div className="profile-stats">
                 <div className="stat">
                   <h1>
-                    {swipe.reduce((acc, curr) => acc + curr.count, 0)}
+                    {swipe.reduce((acc, curr) => acc + curr.nombre_swipe, 0)}
                   </h1>
                   <div>
                     <Line
@@ -751,14 +714,14 @@ const UserProfile = ({ user, setUser }) => {
                   </div>
 
                   <h1>
-                    {match.reduce((acc, curr) => acc + curr.count, 0)}
+                    {match.reduce((acc, curr) => acc + curr.nombre_match, 0)}
                   </h1>
                 </div>
 
                 <h4>Conversations</h4>
                 <div className="stat">
                   <h1>
-                    {conversation.reduce((acc, curr) => acc + curr.count,0)}
+                    {conversation.reduce((acc, curr) => acc + curr.nombre_conversation,0)}
                   </h1>
                   <div>
                     <Line
@@ -789,7 +752,7 @@ const UserProfile = ({ user, setUser }) => {
                   </div>
 
                   <h1>
-                    {date.reduce((acc, curr) => acc + curr.count, 0)}
+                    {date.reduce((acc, curr) => acc + curr.nombre_date, 0)}
                   </h1>
                 </div>
               </div>
