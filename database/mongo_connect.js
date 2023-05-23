@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const url_db = 'mongodb+srv://valwars:0SBdCbgxuKaSw8Ta@l3-web.c0vkjhr.mongodb.net/?retryWrites=true&w=majority';
+const url_db = '';//Mettre votre url mongo
 const client = new MongoClient(url_db);
 
 client.connect((err) => {

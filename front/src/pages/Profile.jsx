@@ -52,7 +52,7 @@ const Profile = ({ user, locate }) => {
       const response1 = await client.geocode({
         params: {
           address: user.localisation,
-          key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
+          key: "",//Votre clé API google maps, je ne met pas la mienne pour une question de sécurité
         },
       });
 

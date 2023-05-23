@@ -505,7 +505,7 @@ module.exports.fillForm = (req, res) => {
 
             const optns = {
                 provider: 'google',
-                apiKey: 'AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs', // Remplacez par votre clé API Google
+                apiKey: '', //Votre clé API google maps, je ne met pas la mienne pour une question de sécurité
                 formatter: null
             };
 
