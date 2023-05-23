@@ -164,7 +164,7 @@ function MapWithLoader({ user, isDark }) {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
+      apiKey: "",//Votre clé API google maps, je ne met pas la mienne pour une question de sécurité
       version: "weekly",
     });
 
@@ -203,7 +203,7 @@ function MapWithLoader({ user, isDark }) {
       {
         params: {
           address: user.localisation,
-          key: "AIzaSyC1p-dG6m6l-oTrsuCansySfat8R7N0yHs",
+          key: "",//Votre clé API google maps, je ne met pas la mienne pour une question de sécurité
         },
       }
     );
