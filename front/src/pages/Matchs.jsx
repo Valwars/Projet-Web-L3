@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader_transition from "../components/Loading";
-import { getImage, match } from "../utils/APIRoutes";
+import { deleteR, getImage, match } from "../utils/APIRoutes";
 import axios from "axios";
 
 const Matchs = ({ user, setLocate }) => {
@@ -62,6 +62,24 @@ const Matchs = ({ user, setLocate }) => {
       .classList.remove("filter-order-active");
     e.target.classList.add("filter-order-active");
   };
+
+  const delete_document = async (item) => {
+    const result = await axios.post(deleteR, {
+      collection: "Matchs",
+      user2: item._id,
+      user1: user._id,
+    });
+
+    if (result.data.status === "ok") {
+      setMatch(matchs.filter((i) => i._id !== item._id));
+    }
+  };
+
+  const handleContextMenu = (event, item) => {
+    event.preventDefault();
+    delete_document(item);
+  };
+
   return (
     <div className="app-page">
       {loading ? (
@@ -109,6 +127,7 @@ const Matchs = ({ user, setLocate }) => {
               {matchs.map((match) => {
                 return (
                   <div
+                    onContextMenu={(e) => handleContextMenu(e, match)}
                     className="match"
                     onClick={() => {
                       setLocate("/match");

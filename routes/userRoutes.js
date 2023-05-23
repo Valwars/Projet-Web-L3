@@ -15,7 +15,8 @@ const {
     matchs,
     createDate,
     createConv,
-    getstat
+    getstat,
+    deleteR
 
 } = require("../controllers/userController.js");
 
@@ -29,7 +30,7 @@ router.post("/fill", filluser)
 router.get("/", swipe)
 
 router.get("/dates", dates)
-router.get('/getstats',getstat)
+router.get('/getstats', getstat)
 router.get("/profile", profil)
 router.get("/getmsg", getMessages)
 router.post("/addmsg", addMessage)
@@ -43,5 +44,6 @@ router.get("/getconv", getconv)
 
 router.post("/save", modifuser)
 router.post("/fillForm", fillForm)
+router.post("/delete", deleteR)
 
 module.exports = router;

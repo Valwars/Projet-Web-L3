@@ -43,8 +43,9 @@ const Register_Form = ({ setUser }) => {
       const id = create.data.id;
 
       if (status === "ok") {
-        navigate("/login");
         toast.success("Utilisateur créé !", toastOptions);
+
+        navigate("/login");
       }
     } catch (error) {
       console.error(error);

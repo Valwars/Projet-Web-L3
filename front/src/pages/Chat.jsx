@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContainer from "../components/Chat/ChatContainer";
 import { io } from "socket.io-client";
-import { getImage, getconv, host } from "../utils/APIRoutes";
+import { deleteR, getImage, getconv, host } from "../utils/APIRoutes";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
 
@@ -48,6 +48,24 @@ const Chat = ({ user }) => {
       .getElementsByClassName("filter-order-active")[0]
       .classList.remove("filter-order-active");
     e.target.classList.add("filter-order-active");
+  };
+
+  const delete_document = async (item) => {
+    const result = await axios.post(deleteR, {
+      collection: "Conversations",
+      id: item.conversationId,
+    });
+
+    if (result.data.status === "ok") {
+      setConv(
+        conversations.filter((i) => i.conversationId !== item.conversationId)
+      );
+    }
+  };
+
+  const handleContextMenu = (event, item) => {
+    event.preventDefault();
+    delete_document(item);
   };
   return (
     <div className="app-page chat-page">
@@ -106,6 +124,7 @@ const Chat = ({ user }) => {
                     {conversations.map((conv) => {
                       return (
                         <div
+                          onContextMenu={(e) => handleContextMenu(e, conv)}
                           className="match"
                           onClick={() => setSelected(conv)}
                         >

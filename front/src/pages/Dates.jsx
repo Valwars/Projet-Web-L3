@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader_transition from "../components/Loading";
-import { getImage, datesRoute } from "../utils/APIRoutes";
+import { getImage, datesRoute, deleteR } from "../utils/APIRoutes";
 import UserProfile from "./userProfile";
 const Dates = ({ user, locate }) => {
   const navigate = useNavigate();
@@ -69,6 +69,22 @@ const Dates = ({ user, locate }) => {
 
     return formattedDate;
   };
+
+  const delete_document = async (item) => {
+    const result = await axios.post(deleteR, {
+      collection: "Dates",
+      id: item._id,
+    });
+
+    if (result.data.status === "ok") {
+      setDate(date.filter((i) => i._id !== item._id));
+    }
+  };
+
+  const handleContextMenu = (event, item) => {
+    event.preventDefault();
+    delete_document(item);
+  };
   return (
     <div className="app-page">
       {loading ? (
@@ -117,6 +133,7 @@ const Dates = ({ user, locate }) => {
                 // if (user.personnes[0] != undefined) {
                 return (
                   <div
+                    onContextMenu={(e) => handleContextMenu(e, date)}
                     className="match date_cnt"
                     onClick={() => {
                       // setLocate("/match");

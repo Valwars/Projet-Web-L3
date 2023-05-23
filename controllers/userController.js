@@ -212,7 +212,7 @@ module.exports.getconv = async(req, res) => {
                 return fullName.toLowerCase().includes(searchString.toLowerCase()) || fullName2.toLowerCase().includes(searchString.toLowerCase());
             });
         }
-
+        console.log(mappedConversations)
 
         res.send({ status: "ok", conversations: mappedConversations });
 
@@ -314,6 +314,8 @@ module.exports.dates = async(req, res, next) => {
                 return fullName.toLowerCase().includes(searchString.toLowerCase());
             });
         }
+
+
         res.json({ status: "ok", dates: tab });
 
     } catch (error) {
@@ -847,7 +849,7 @@ module.exports.matchs = async(req, res, next) => {
                 return fullName.toLowerCase().includes(searchString.toLowerCase());
             });
         }
-
+        console.log(matches)
         res.json({ status: 'ok', match: matches });
     } catch (error) {
         next(error);
@@ -970,7 +972,7 @@ module.exports.getstat = async(req, res) => {
             dateMap[dateKey] = { createdAt: formattedDate, nombre_date: 0 };
             stats_dates.push(dateMap[dateKey]);
         }
-        
+
         for (let datee of dates) {
             let date = new Date(datee.createdAt);
             let dateKey = date.toDateString();
@@ -1022,7 +1024,7 @@ module.exports.getstat = async(req, res) => {
             matchMap[dateKey] = { createdAt: formattedDate, nombre_match: 0 };
             stats_matchs.push(matchMap[dateKey]);
         }
-        
+
         for (let match of matchs) {
             let date = new Date(match.createdAt);
             let dateKey = date.toDateString();
@@ -1051,7 +1053,7 @@ module.exports.getstat = async(req, res) => {
             conversationMap[dateKey] = { createdAt: formattedDate, nombre_conversation: 0 };
             stats_conversations.push(conversationMap[dateKey]);
         }
-        
+
         for (let conversation of conversations) {
             let date = new Date(conversation.createdAt);
             let dateKey = date.toDateString();
@@ -1081,5 +1083,56 @@ module.exports.getstat = async(req, res) => {
 
     } catch (error) {
         console.log(error)
+    }
+}
+
+
+module.exports.deleteR = async(req, res) => {
+    try {
+        const collection = dbo.collection(req.body.collection);
+
+
+        if (req.body.collection === "Matchs") {
+
+            console.log(req.body.user1)
+            console.log(req.body.user2)
+
+            const result = await collection.deleteOne({
+                $or: [
+                    { user1: new ObjectId(req.body.user1), user2: new ObjectId(req.body.user2) },
+                    { user1: new ObjectId(req.body.user2), user2: new ObjectId(req.body.user1) }
+                ]
+            });
+            const collect2 = dbo.collection("Dates");
+
+            await collect2.deleteOne({
+                $or: [
+                    { premier: new ObjectId(req.body.user1), second: new ObjectId(req.body.user2) },
+                    { premier: new ObjectId(req.body.user2), second: new ObjectId(req.body.user1) }
+                ]
+            });
+
+            const collect3 = dbo.collection("Conversations");
+
+            await collect3.deleteOne({
+                $or: [
+                    { user1Id: new ObjectId(req.body.user1), user2Id: new ObjectId(req.body.user2) },
+                    { user1Id: new ObjectId(req.body.user2), user2Id: new ObjectId(req.body.user1) }
+                ]
+            });
+
+            return res.json({ status: "ok" });
+
+
+        }
+
+        const result = await collection.deleteOne({ _id: new ObjectId(req.body.id) });
+
+        return res.json({ status: "ok" });
+
+    } catch (err) {
+        return res.json({ status: "error" });
+
+        console.log('Something went wrong', err);
     }
 }
