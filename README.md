@@ -1,6 +1,11 @@
 # Projet-Web-L3
 
-Projet web :
+***** A LIRE SI VOUS VOULEZ TESTER .*****
+
+SECURITÉ :
+Pour des raisons de sécurité nous avons caché les liens et clés (MONGO + Google API).
+
+Vous pouvez tester l'appli avec un cluster vide.
 
 Concernant la clé d'API GOOGLE, on viens de faire un push pour cacher la notre pour éviter les abus. 
 Vous pouvez en générer une vous même et l'ajouter au projet.
